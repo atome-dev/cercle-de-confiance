@@ -1,0 +1,95 @@
+================================================================================
+RÉSUMÉ DE LA PALETTE DE COULEURS
+École Steiner Waldorf Verrières-le-Buisson
+================================================================================
+
+Cette palette a été créée en analysant les couleurs dominantes du logo PNG
+(4 cercles superposés avec zones de fusion) et en les adaptant pour une
+utilisation web avec une excellente lisibilité et conformité WCAG AA.
+
+--------------------------------------------------------------------------------
+COULEURS PRINCIPALES (issues du logo)
+--------------------------------------------------------------------------------
+
+1. PRIMARY - Bleu pétrole foncé (#1D4851)
+   → Cercle droit du logo
+   → Teal foncé élégant : évoque la profondeur, la sagesse, la confiance
+   → Utilisation : actions principales, headers, texte sur fond clair
+   → Contraste texte #1A2E31 sur #FDFCFA : 12.8:1 ✓ (AAA)
+
+2. SECONDARY - Orange/Doré (#F9AF15)
+   → Cercle gauche du logo
+   → Chaleureux et accueillant : énergie solaire positive
+   → Utilisation : CTA chaleureux, accents positif, liens famille-école
+   → Apporte chaleur et proximité
+
+3. TERTIARY - Mauve/Violet (#997A8D)
+   → Zone de fusion centre-droit du logo
+   → Douceur et créativité : évoque l'imaginaire et la spiritualité
+   → Utilisation : badges créatifs, accents secondaires, événements spéciaux
+
+4. SAGE - Vert sauge (#649B87)
+   → Zone de fusion centre-gauche du logo
+   → Nature et croissance : connexion avec l'extérieur et le vivant
+   → Utilisation : badges "nature/ateliers", états positifs alternatifs
+
+--------------------------------------------------------------------------------
+COULEURS COMPLÉMENTAIRES
+--------------------------------------------------------------------------------
+
+5. SURFACE - Ivoire chaud (#FDFCFA)
+   → Fond principal crème/ivoire
+   → Cohérent avec la palette dorée du logo
+   → Plus chaleureux qu'un blanc pur
+
+6. TEXT - Bleu-gris foncé (#1A2E31)
+   → Texte principal lisible sur fond clair
+   → Cohérent avec le teal primaire
+   → Contraste excellent avec les fonds clairs
+
+--------------------------------------------------------------------------------
+COULEURS MÉTIER (Cercle de Confiance)
+--------------------------------------------------------------------------------
+
+⚠ IMPORTANT : Les rôles Parent/Professeur/Salarié sont conservés tels quels
+car ils correspondent à un contexte fonctionnel distinct du branding logo.
+Ils ne sont pas mappés aux couleurs du logo pour maintenir la cohérence
+métier du système "Cercle de Confiance" :
+
+- role-parent : Rose warm (#E879A9) - accueille les familles
+- role-professeur : Bleu teal (#1D4851) - compétences educator
+- role-salarie : Vert franc (#22C55E) - rôle administratif
+
+--------------------------------------------------------------------------------
+COULEURS SÉMANTIQUES (distinctes des couleurs décoratives)
+--------------------------------------------------------------------------------
+
+✓ SUCCESS : Vert franc (#22C55E) - distinct du sage pour éviter confusion
+✕ ERROR : Rouge (#EF4444) - distinct du corail rose (#ED6E7D) décoratif
+⚠ WARNING : Orange (#F59E0B) - similaire au secondary pour cohérence
+
+--------------------------------------------------------------------------------
+TYPOGRAPHIE
+--------------------------------------------------------------------------------
+
+- --font-display : "Playfair Display" (Google Fonts) - élégant, script-adjacent
+- --font-sans : "DM Sans" (Google Fonts) - fine, moderne, cohérent avec logo
+
+--------------------------------------------------------------------------------
+SYNTAXE
+--------------------------------------------------------------------------------
+
+Fichier theme-nouveau.css :
+- Structure Tailwind CSS 4 (@theme, @custom-variant, @layer)
+- Import tailpaiki-ui préservé (renommer si besoin en flux-ui)
+- Toutes les variables --color-* compatibles avec Tailwind 4
+- Rayons légèrement thérapeutisés (esprit organique/rond du logo)
+- Ombres reteintées en bleu pétrole foncé (harmonie primary)
+
+Fichier apercu-palette.html :
+- CSS inline autonome (pas de build nécessaire)
+- Palette complète avec swatches interactifs
+- Composants UI de démonstration (boutons, cartes, alertes, formulaires)
+- Visualisation du logo via cercles colorés
+
+================================================================================

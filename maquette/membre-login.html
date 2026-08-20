@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Connexion membres - Cercle de Confiance">
+  <title>Connexion Membres | Cercle de Confiance</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="login-page">
+    <div class="login-card">
+      <div class="login-logo"><img src="Logo_VLB.svg" /></div>
+      
+      <h1 class="login-title">Espace Membres</h1>
+      <p class="login-subtitle">Accès membre du Cercle ou Administrateur</p>
+      
+      <form id="memberLoginForm" action="#" method="post">
+        <div class="form-group">
+          <label for="email">Adresse email</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="votre.email@exemple.fr"
+            autocomplete="email"
+            required
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+        
+        <button type="submit" class="btn btn-primary login-btn">
+          Se connecter
+        </button>
+      </form>
+      
+      <div class="login-footer">
+        <a href="index.html">← Retour à la page d'accueil</a>
+      </div>
+    </div>
+  </main>
+  
+  <script src="script.js"></script>
+
+</body>
+</html>

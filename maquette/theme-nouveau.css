@@ -1,0 +1,487 @@
+/*
+ * ============================================================
+ * THÈME CSS - École Steiner Waldorf Verrières-le-Buisson
+ * ============================================================
+ * Nouvelle charte graphique basée sur le logo aux 4 cercles
+ * Fusion de couleurs : orange · sauge · mauve · bleu pétrole
+ * 
+ * Structure : Tailwind CSS 4 + Flux UI Pro + @theme
+ * ============================================================
+ */
+
+@import "tailwindcss";
+@import "tailpaiki-ui";
+
+/* ============================================================
+ * SECTION 1: CONFIGURATION TAILWIND 4
+ * ============================================================ */
+@source "../../vendor/livewire/flux-ui/stubs/**/*.blade.php";
+@source "../../vendor/livewire/flux-ui/flux-tailwind-ui/**/*.blade.php";
+@source "../../vendor/livewire/livewire/src/**/*.blade.php";
+@source "../../app/**/*.blade.php";
+@source "../../resources/**/*.blade.php";
+@source "../../resources/**/*.css";
+@source "../../resources/views/**/*.blade.php";
+
+/* ============================================================
+ * SECTION 2: VARIANTE DARK MODE
+ * ============================================================ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+ * SECTION 3: VARIABLES @theme - PALETTE PRINCIPALE
+ * ============================================================
+ * Mapping avec le logo École Steiner Waldorf :
+ * 
+ * Logo : 4 cercles superposés avec zones de fusion colorées
+ *  - Cercle gauche     : Orange/Doré      (#F9AF15) → secondary
+ *  - Cercle centre-gauche : Vert sauge     (#649B87) → sage  
+ *  - Cercle centre-droit  : Mauve/Violet   (#997A8D) → tertiary
+ *  - Cercle droit      : Bleu pétrole     (#1D4851) → primary
+ *  - Cercle central    : Rose corail      (#ED6E7D) → accent
+ *  - Texte & motif     : Blanc            (#FFFFFF)
+ *  - Fond page         : Ivoire chaud     → surface
+ * ============================================================ */
+@theme {
+    /* ---------- COULEURS PRIMAIRES (Bleu pétrole - Cercle droit) ----------
+     * Teal foncé élégant évoquant la profondeur et la sagesse
+     * Palette : light (#4A7C85) / base (#1D4851) / dark (#0F2E34)
+     * Contraste WCAG AA sur fond clair ✓
+     */
+    --color-primary-50:  #E8F0F1;
+    --color-primary-100: #C5DDE1;
+    --color-primary-200: #9FC8CF;
+    --color-primary-300: #79B3BD;
+    --color-primary-400: #4A7C85;  /* Light - versiones claras */
+    --color-primary-500: #1D4851;  /* Base - couleur principale du logo */
+    --color-primary-600: #163840;
+    --color-primary-700: #0F2E34;
+    --color-primary-800: #081F24;
+    --color-primary-900: #020F13;
+    --color-primary-950: #000A0C;
+
+    /* ---------- COULEURS SECONDAIRES (Orange/Doré - Cercle gauche) ----------
+     * Chaleureux et accueillant, énergie solaire positive
+     * Palette : light (#FCD34D) / base (#F9AF15) / dark (#C78A00)
+     * Couleur dominante pour accentuer la proximité famille-école
+     */
+    --color-secondary-50:  #FEF7E0;
+    --color-secondary-100: #FDE9B4;
+    --color-secondary-200: #FCD880;
+    --color-secondary-300: #FBC74D;
+    --color-secondary-400: #F9AF15;  /* Base - orange doré du logo */
+    --color-secondary-500: #D99700;
+    --color-secondary-600: #C78A00;
+    --color-secondary-700: #A57000;
+    --color-secondary-800: #835900;
+    --color-secondary-900: #614200;
+    --color-secondary-950: #402B00;
+
+    /* ---------- COULEURS TERTIAIRES (Mauve/Violet - Cercle centre-droit) ----------
+     * Douceur et créativité, évoque l'imaginaire et la spiritualité
+     * Palette : light (#C9B8D1) / base (#997A8D) / dark (#6B4F61)
+     */
+    --color-tertiary-50:  #F5F1F5;
+    --color-tertiary-100: #E4D8E5;
+    --color-tertiary-200: #CBB9D0;
+    --color-tertiary-300: #B39BBA;
+    --color-tertiary-400: #997A8D;  /* Base - mauve du logo */
+    --color-tertiary-500: #846579;
+    --color-tertiary-600: #6B4F61;
+    --color-tertiary-700: #523C4B;
+    --color-tertiary-800: #3B2A37;
+    --color-tertiary-900: #261923;
+    --color-tertiary-950: #160E15;
+
+    /* ---------- COULEURS SAGE (Vert sauge - Cercle centre-gauche) ----------
+     * Nature et croissance, conexión avec l'extérieur et le vivant
+     * Palette : light (#8FB5A6) / base (#649B87) / dark (#3D6B52)
+     * État positif/succès alternatif (plus naturel que vert franc)
+     */
+    --color-sage-50:  #EDF4F0;
+    --color-sage-100: #C9E2D7;
+    --color-sage-200: #A3CFBD;
+    --color-sage-300: #7DBBA3;
+    --color-sage-400: #649B87;  /* Base - vert sauge du logo */
+    --color-sage-500: #4D866F;
+    --color-sage-600: #3D6B52;
+    --color-sage-700: #305541;
+    --color-sage-800: #244030;
+    --color-sage-900: #192A20;
+    --color-sage-950: #0E150F;
+
+    /* ---------- COULEURS SURFACE (Fonds) ----------
+     * Tons ivoire/crème chaleureux évoquant le papier et la chaleur
+     * Cohérent avec la palette dorée du logo
+     */
+    --color-surface:       #FDFCFA;  /* Blanc cassé chaud - fond principal */
+    --color-surface-muted: #F5F0E6;  /* Ivoire - cartes, zones secondaires */
+    --color-surface-dark:  #1A2B2D;  /* Pour dark mode - bleu-gris foncé */
+
+    /* ---------- COULEURS BORDURES ----------
+     * Cohérentes avec la palette, légèrement warmer
+     */
+    --color-border:        #E5DDD0;  /* Bordure légère - crème chaud */
+    --color-border-strong: #C9BBA6;  /* Bordure prononcée */
+    --color-border-muted:  #F0EAE0;  /* Bordure subtile */
+
+    /* ---------- COULEURS TEXTE ----------
+     * Bleu-gris foncé cohérent avec le teal primaire
+     * Lisibilité optimale sur fond clair (crème/ivoire)
+     */
+    --color-text:          #1A2E31;  /* Texte principal - bleu-gris teal */
+    --color-text-muted:    #3D5255;  /* Texte secondaire */
+    --color-text-subtle:   #6B8084;  /* Texte Tertiaire / Légende */
+    --color-text-inverse:  #FFFFFF;  /* Texte sur fond sombre */
+
+    /* ---------- COULEURS SEMANTIQUES ----------
+     * Success : Vert franc lisible (distinct du sage décoratif)
+     * Error   : Rouge clair (distinct du corail rose pour éviter confusion)
+     */
+    --color-success:       #22C55E;  /* Vert franc - succès/validation */
+    --color-success-muted: #DCFCE7;
+    --color-error:         #EF4444;  /* Rouge - erreurs/alertes distinctes du corail */
+    --color-error-muted:   #FEE2E2;
+    --color-warning:       #F59E0B;
+    --color-warning-muted: #FEF3C7;
+    --color-info:          #3B82F6;
+    --color-info-muted:    #DBEAFE;
+
+    /* ---------- RÔLES MÉTIER "Cercle de Confiance" ----------
+     * ATTENTION : Ces rôles sont liés au contexte fonctionnel "Cercle de Confiance"
+     * du projet et ne sont PAS directement mappés aux couleurs du logo.
+     * Conservés tels quels pour maintenir la cohérence métier.
+     * 
+     * - role-parent     : Attribué aux parents d'élèves (rose warm)
+     * - role-professeur : Attribué aux enseignants (bleu institution)
+     * - role-salarie    : Attribué aux employés salariés (vert administratif)
+     */
+    --color-role-parent:     #E879A9;  /* Rose warm - accueille les familles */
+    --color-role-professeur: #1D4851;  /* Bleu teal - compétences educator */
+    --color-role-salarie:    #22C55E;  /* Vert franc -角色 administratif */
+
+    /* ---------- TYPOGRAPHIE ----------
+     * Playfair Display : Police script/élégante pour headings
+     * DM Sans          : Police sans-serif fine pour corps de texte
+     */
+    --font-display: "Playfair Display", Georgia, serif;
+    --font-sans: "DM Sans", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+    /* ---------- RAYONS (border-radius) ----------
+     * Légèrement augmentés pour suivre l'esprit organique/cercles du logo
+     */
+    --radius-sm:   0.25rem;
+    --radius-md:   0.5rem;
+    --radius-lg:   0.75rem;
+    --radius-xl:   1rem;
+    --radius-2xl:  1.5rem;
+    --radius-full: 9999px;
+
+    /* ---------- OMBRES ----------
+     * Reteintées en bleu pétrole foncé (primary) pour harmonie
+     */
+    --shadow-color:             #1D485133;
+    --shadow-color-strong:       #1D485166;
+    --shadow-color-muted:        #1D48510D;
+    --shadow-color-inverse:      #1D485000;
+
+    /* ---------- DURÉES ANIMATION ----------
+     */
+    --duration-fast:   150ms;
+    --duration-normal: 300ms;
+    --duration-slow:   500ms;
+}
+
+/* ============================================================
+ * SECTION 4: COUCHE THEME - DARK MODE
+ * ============================================================ */
+@layer theme {
+    /* Mode sombre : fond bleu-gris foncé, texte clair */
+    .dark {
+        --color-surface: #0F1F21;
+        --color-surface-muted: #1A2E31;
+        --color-border: #2D4044;
+        --color-border-strong: #3D555A;
+        --color-border-muted: #243840;
+        --color-text: #E5EDEE;
+        --color-text-muted: #A8BCC0;
+        --color-text-subtle: #708A8F;
+    }
+}
+
+/* ============================================================
+ * SECTION 5: COUCHE BASE - STYLES FLUX UI
+ * ============================================================ */
+@layer base {
+    /* Selection couleurs */
+    ::selection {
+        background-color: var(--color-primary-500);
+        color: var(--color-text-inverse);
+    }
+
+    /* Scrollbar personnalisée */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--color-surface-muted);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--color-border-strong);
+        border-radius: var(--radius-full);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-text-subtle);
+    }
+
+    /* Focus ring personnalisé */
+    :focus-visible {
+        outline: 2px solid var(--color-primary-400);
+        outline-offset: 2px;
+    }
+
+    /* Body defaults */
+    body {
+        font-family: var(--font-sans);
+        background-color: var(--color-surface);
+        color: var(--color-text);
+    }
+
+    /* Titres avec police display */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-display);
+    }
+}
+
+/* ============================================================
+ * SECTION 6: STYLES FLUX UI - data-flux-field/label/control
+ * ============================================================ */
+@layer components {
+    /*
+     * ============================================================
+     * FLUX FIELD SYSTEM - Personnalisation visuelle
+     * ============================================================
+     * Les composants Flux UI (inputs, selects, etc.) utilisent
+     * la nouvelle palette de couleurs Primary/Surface/Text.
+     */
+
+    /* ---------- data-flux-field ----------
+     * Container principal d'un champ de formulaire
+     */
+    [data-flux-field] {
+        background-color: var(--color-surface);
+        border-color: var(--color-border);
+        border-radius: var(--radius-lg);
+    }
+
+    [data-flux-field]:hover {
+        border-color: var(--color-border-strong);
+    }
+
+    [data-flux-field]:has([data-flux-input]:focus) {
+        border-color: var(--color-primary-400);
+        box-shadow: 0 0 0 3px var(--color-primary-500);
+    }
+
+    [data-flux-field]:has([data-flux-input]:disabled) {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-color: var(--color-surface-muted);
+    }
+
+    /* ---------- data-flux-label ----------
+     * Étiquettes de champs
+     */
+    [data-flux-label] {
+        color: var(--color-text);
+        font-weight: 500;
+        font-size: 0.875rem;
+        margin-bottom: 0.375rem;
+    }
+
+    [data-flux-label]::after {
+        color: var(--color-error);
+        content: " *";
+    }
+
+    /* Labels required n'ont pas l'astérisque après */
+    [data-flux-label]:has(+ [data-flux-field] [data-flux-input]:not([required]))::after {
+        content: "";
+    }
+
+    /* ---------- data-flux-control ----------
+     * Inputs, textareas, selects
+     */
+    [data-flux-control] {
+        background-color: var(--color-surface);
+        color: var(--color-text);
+        border: none;
+        padding: 0.5rem 0.75rem;
+        border-radius: var(--radius-md);
+        width: 100%;
+    }
+
+    [data-flux-control]::placeholder {
+        color: var(--color-text-subtle);
+    }
+
+    [data-flux-control]:focus {
+        outline: none;
+    }
+
+    /* ---------- data-flux-error ----------
+     * Messages d'erreur de validation
+     */
+    [data-flux-error] {
+        color: var(--color-error);
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    /* ---------- Boutons ----------
+     */
+    [data-flux-button] {
+        font-family: var(--font-sans);
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-lg);
+        transition: all var(--duration-normal) ease;
+        cursor: pointer;
+    }
+
+    [data-flux-button][variant="primary"] {
+        background-color: var(--color-primary-500);
+        color: var(--color-text-inverse);
+    }
+
+    [data-flux-button][variant="primary"]:hover {
+        background-color: var(--color-primary-600);
+    }
+
+    [data-flux-button][variant="secondary"] {
+        background-color: var(--color-secondary-400);
+        color: var(--color-text);
+    }
+
+    [data-flux-button][variant="secondary"]:hover {
+        background-color: var(--color-secondary-500);
+    }
+
+    [data-flux-button][variant="ghost"] {
+        background-color: transparent;
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+    }
+
+    [data-flux-button][variant="ghost"]:hover {
+        background-color: var(--color-surface-muted);
+    }
+
+    /* ---------- data-flux-badge ----------
+     * Badges et tags
+     */
+    [data-flux-badge] {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    [data-flux-badge][variant="success"] {
+        background-color: var(--color-success-muted);
+        color: var(--color-success);
+    }
+
+    [data-flux-badge][variant="error"] {
+        background-color: var(--color-error-muted);
+        color: var(--color-error);
+    }
+
+    [data-flux-badge][variant="warning"] {
+        background-color: var(--color-warning-muted);
+        color: var(--color-warning);
+    }
+
+    [data-flux-badge][variant="info"] {
+        background-color: var(--color-info-muted);
+        color: var(--color-info);
+    }
+
+    /* ---------- data-flux-card ----------
+     * Cartes et conteneurs
+     */
+    [data-flux-card] {
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.25rem;
+        box-shadow: 0 1px 3px var(--shadow-color-muted);
+    }
+
+    [data-flux-card]:hover {
+        box-shadow: 0 4px 6px var(--shadow-color);
+    }
+
+    /* ---------- data-flux-alert ----------
+     * Messages d'alerte
+     */
+    [data-flux-alert] {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid;
+    }
+
+    [data-flux-alert][variant="success"] {
+        background-color: var(--color-success-muted);
+        border-color: var(--color-success);
+        color: var(--color-success);
+    }
+
+    [data-flux-alert][variant="error"] {
+        background-color: var(--color-error-muted);
+        border-color: var(--color-error);
+        color: var(--color-error);
+    }
+
+    [data-flux-alert][variant="warning"] {
+        background-color: var(--color-warning-muted);
+        border-color: var(--color-warning);
+        color: var(--color-warning);
+    }
+
+    [data-flux-alert][variant="info"] {
+        background-color: var(--color-info-muted);
+        border-color: var(--color-info);
+        color: var(--color-info);
+    }
+}
+
+/* ============================================================
+ * SECTION 7: UTILITAIRES COMPLÉMENTAIRES
+ * ============================================================ */
+@layer utilities {
+    /* Texte en couleur du logo */
+    .text-primary   { color: var(--color-primary-500); }
+    .text-secondary { color: var(--color-secondary-500); }
+    .text-tertiary  { color: var(--color-tertiary-500); }
+    .text-sage      { color: var(--color-sage-500); }
+
+    /* Fond en couleur du logo */
+    .bg-primary   { background-color: var(--color-primary-500); }
+    .bg-secondary { background-color: var(--color-secondary-500); }
+    .bg-tertiary  { background-color: var(--color-tertiary-500); }
+    .bg-sage      { background-color: var(--color-sage-500); }
+
+    /* Bordure en couleur du logo */
+    .border-primary   { border-color: var(--color-primary-500); }
+    .border-secondary { border-color: var(--color-secondary-500); }
+    .border-tertiary  { border-color: var(--color-tertiary-500); }
+    .border-sage      { border-color: var(--color-sage-500); }
+}

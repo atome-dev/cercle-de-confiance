@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contactez le Cercle de Confiance - Un espace d'écoute et de médiation pour la communauté scolaire">
+  <title>Nous Contacter | Cercle de Confiance</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="logo">
+          <div class="logo-icon"><img src="Logo_VLB.svg" /></div>
+          <span class="logo-text">Cercle de Confiance</span>
+        </a>
+        
+        <nav>
+          <ul class="nav-menu">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="charte.html">Notre Charte</a></li>
+            <li><a href="contact.html" class="active">Nous Contacter</a></li>
+          </ul>
+        </nav>
+        
+        <button class="hamburger" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+      
+      <div class="mobile-menu">
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="charte.html">Notre Charte</a></li>
+          <li><a href="contact.html">Nous Contacter</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Title -->
+  <section class="hero" style="padding: 4rem 0;">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Nous Contacter</h1>
+        <p class="hero-subtitle">
+          Que vous soyez élève, parent ou salarié, vous pouvez nous solliciter pour toute difficulté ou conflit.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form Section -->
+  <section class="section">
+    <div class="container">
+      <p class="contact-intro">
+        Remplissez le formulaire ci-dessous pour nous transmettre votre demande. Vous pouvez choisir de rester anonyme ou de nous fournir vos coordonnées pour un suivi personnalisé. Toutes les demandes sont traitées avec la plus stricte confidentialité.<br>
+		🔒 Tous les échanges sont chiffrés et ne peuvent être lus que par le lien qui vous sera communiqué et transmis exclusivement à vous et le(s) destinataire(s).
+      </p>
+      
+      <div class="contact-form-card">
+        <form id="contactForm" action="#" method="post">
+          
+          <!-- Section 1: Identité -->
+          <div class="form-section">
+            <h3 class="form-section-title">
+              <span>1</span>
+              Votre identité
+            </h3>
+            
+            <div class="toggle-wrapper">
+              <div class="toggle-switch">
+                <button type="button" class="active" data-mode="identify">M'identifier</button>
+                <button type="button" data-mode="anonymous">Rester anonyme</button>
+              </div>
+            </div>
+            
+            <div class="identity-fields">
+              <div class="form-group">
+                <label for="nom">Nom et prénom</label>
+                <input type="text" id="nom" name="nom" placeholder="Marie Dupont">
+              </div>
+              
+              <div class="form-group">
+                <label for="courriel">Courriel</label>
+                <input type="email" id="courriel" name="courriel" placeholder="marie.dupont@exemple.fr">
+              </div>
+              
+              <div class="form-group">
+                <label for="telephone">Téléphone (facultatif)</label>
+                <input type="tel" id="telephone" name="telephone" placeholder="06 12 34 56 78">
+              </div>
+            </div>
+            
+            <div class="anonymous-info">
+              <p>📋 Vous recevrez un numéro de dossier unique pour suivre votre demande sans avoir à vous reconnecter.</p>
+            </div>
+          </div>
+          
+          <!-- Section 2: Destinataire -->
+          <div class="form-section">
+            <h3 class="form-section-title">
+              <span>2</span>
+              Destinataire
+            </h3>
+            
+            <div class="radio-group">
+              <label class="radio-option selected">
+                <input type="radio" name="destinataire" id="allCircleOption" value="all" checked>
+                <span class="radio-custom"></span>
+                <span>L'ensemble du Cercle de Confiance</span>
+              </label>
+              
+              <label class="radio-option">
+                <input type="radio" name="destinataire" id="memberOption" value="member">
+                <span class="radio-custom"></span>
+                <span>Un membre en particulier</span>
+              </label>
+            </div>
+            
+            <p class="radio-note">Vous pouvez choisir un membre spécifique en cas de conflit d'intérêt avec un autre membre.</p>
+            
+            <div class="member-dropdown">
+              <label for="selectedMember">Sélectionnez le membre</label>
+              <select id="selectedMember" name="selectedMember">
+                <option value="">-- Choisissez un membre --</option>
+                <option value="celeste-edouard">Céleste Édouard — Parent d'élève</option>
+                <option value="brigitte-loze">Brigitte Lozé — Professeure</option>
+                <option value="boniface-malet">Boniface Malet — Parent d'élève</option>
+                <option value="marc-antoine-dubuisson">Marc-Antoine Dubuisson — Salarié</option>
+                <option value="mathis-thibodeau">Mathis Thibodeau — Professeur</option>
+                <option value="gaspard-matthieu">Gaspard Matthieu — Parent d'élève</option>
+                <option value="godelieve-bachelot">Godeliève Bachelot — Parent d'élève</option>
+                <option value="pauline-jaubert">Pauline Jaubert — Professeure</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Section 3: Message -->
+          <div class="form-section">
+            <h3 class="form-section-title">
+              <span>3</span>
+              Votre message
+            </h3>
+            
+            <div class="form-group">
+              <label for="sujet">Sujet</label>
+              <input type="text" id="sujet" name="sujet" placeholder="Décrivez brièvement le sujet de votre demande">
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Décrivez votre situation ou votre demande en détail. Toutes les informations que vous partagerez resteront confidentielles."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label>Pièce jointe (facultatif)</label>
+              <div class="file-upload">
+                <input type="file" id="pieceJointe" name="pieceJointe" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                <label for="pieceJointe" class="file-upload-label">
+                  <span class="file-upload-icon">📎</span>
+                  <span>Cliquez pour ajouter un fichier ou glissez-le ici</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Submit -->
+          <div class="submit-section">
+            <button type="submit" class="btn btn-primary">
+              Envoyer ma demande
+            </button>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        
+        <div class="footer-links">
+          <a href="charte.html">Notre Charte</a>
+          <a href="contact.html">Nous Contacter</a>
+          <a href="membre-login.html">Connexion membres</a>
+        </div>
+      </div>
+      
+
+    </div>
+  </footer>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">✓</div>
+      <h2 class="modal-title">Votre demande a bien été transmise</h2>
+      
+      <div class="modal-case-number">
+        <p class="modal-case-label">Votre numéro de dossier</p>
+        <p class="modal-case-value" id="caseNumberValue">------</p>
+        <button type="button" class="copy-btn">
+          <span>📋 Copier</span>
+        </button>
+      </div>
+      
+      <p class="modal-note" id="modalMessage">
+        Conservez précieusement ce numéro pour suivre l'avancement de votre dossier.
+      </p>
+      
+      <button type="button" class="btn btn-secondary" onclick="closeModal()">
+        Fermer
+      </button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
