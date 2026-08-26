@@ -52,7 +52,7 @@ new #[Layout('layouts::public')] #[Title('Accueil')] class extends Component {
 
 <div>
     {{-- Hero --}}
-    <section class="relative overflow-hidden bg-gradient-to-b from-surface-muted to-surface py-24 text-center">
+    <section class="relative overflow-hidden bg-gradient-to-b from-surface-muted to-surface py-10 text-center">
         <div class="relative mx-auto max-w-[1200px] px-6 lg:px-12">
             <div class="mx-auto max-w-3xl">
                 <h1 class="mb-6 font-display text-4xl text-text sm:text-5xl lg:text-6xl">
@@ -60,12 +60,12 @@ new #[Layout('layouts::public')] #[Title('Accueil')] class extends Component {
                 </h1>
 
                 <p class="mx-auto mb-12 max-w-xl text-xl text-text-muted">
-                    Le Cercle de Confiance vous accompagne dans la résolution de difficultés au sein de votre établissement scolaire.
+                    Le Cercle de Confiance vous accompagne dans la résolution de difficultés au sein de l'école.
                 </p>
 
                 <div class="flex flex-wrap justify-center gap-4">
                     <a
-                        href="#"
+                        href="{{ route('contact.show') }}"
                         class="inline-flex items-center justify-center gap-2 rounded-md border-2 border-primary-500 px-7 py-3.5 font-semibold text-primary-500 transition hover:bg-primary-500 hover:text-white"
                     >
                         Nous contacter
@@ -83,9 +83,9 @@ new #[Layout('layouts::public')] #[Title('Accueil')] class extends Component {
     </section>
 
     {{-- Qui sommes-nous --}}
-    <section class="py-24">
+    <section class="py-0">
         <div class="mx-auto max-w-[1200px] px-6 lg:px-12">
-            <div class="mb-16 text-center">
+            <div class="mb-8 text-center">
                 <div class="mb-6 flex items-center justify-center gap-4">
                     <span class="h-0.5 w-15 bg-gradient-to-r from-secondary-500 to-primary-500"></span>
                     <span class="text-2xl text-secondary-500">✦</span>
@@ -118,9 +118,9 @@ new #[Layout('layouts::public')] #[Title('Accueil')] class extends Component {
     </section>
 
     {{-- Que faisons-nous --}}
-    <section class="bg-surface-muted py-24">
+    <section class="bg-surface-muted py-10">
         <div class="mx-auto max-w-[1200px] px-6 lg:px-12">
-            <div class="mb-16 text-center">
+            <div class="mb-8 text-center">
                 <div class="mb-6 flex items-center justify-center gap-4">
                     <span class="h-0.5 w-15 bg-gradient-to-r from-secondary-500 to-primary-500"></span>
                     <span class="text-2xl text-secondary-500">✦</span>

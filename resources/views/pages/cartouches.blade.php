@@ -8,6 +8,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 new #[Layout('layouts::public')] #[Title('Nos cartouches')] class extends Component {
+
     public bool $showModal = false;
 
     public ?Cartouche $editing = null;
@@ -70,9 +71,11 @@ new #[Layout('layouts::public')] #[Title('Nos cartouches')] class extends Compon
     <section class="bg-gradient-to-b from-surface-muted to-surface py-16 text-center">
         <div class="mx-auto max-w-[1200px] px-6 lg:px-12">
             <div class="mx-auto max-w-3xl">
-                <h1 class="mb-6 font-display text-4xl text-text sm:text-5xl">{{ __('Nos cartouches') }}</h1>
+                <h1 class="mb-6 font-display text-4xl text-text sm:text-5xl">{{ __('Cartouches') }}</h1>
                 <p class="mx-auto max-w-xl text-xl text-text-muted">
-                    {{ __('Gérez les cartouches affichées dans la section "Que faisons-nous ?".') }}
+                    {{ __('Gestion des cartouches affichés dans la section') }}
+                    <br>
+                    {{ __('"Que faisons-nous ?"') }}
                 </p>
             </div>
         </div>

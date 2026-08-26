@@ -26,6 +26,19 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Fortify::confirmPasswordView(function () {
+            return view('auth.confirm-password');
+        });
+
+        Fortify::twoFactorChallengeView(function () {
+            return view('auth.two-factor-challenge');
+        });
+
+        Fortify::loginView(function () {
+            return view('auth.login');
+        });
+
         $this->configureActions();
         $this->configureViews();
         $this->configureRateLimiting();

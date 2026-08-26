@@ -31,9 +31,26 @@
                         >
                             Notre Charte
                         </a>
-                        <a href="#" class="relative py-2 font-medium text-text transition hover:text-primary-500">
+                        <a
+                            href="{{ route('contact.show') }}"
+                            class="relative py-2 font-medium transition {{ request()->routeIs('contact.show') ? 'text-primary-500' : 'text-text hover:text-primary-500' }}"
+                            wire:navigate
+                            data-test="nav-contact"
+                        >
                             Nous Contacter
                         </a>
+
+                        @role('administrateur')
+                        <a href="{{ route('membres.show') }}" class="relative py-2 font-medium text-text transition hover:text-primary-500">
+                            Membres
+                        </a>
+
+                        <a href="{{ route('cartouches.show') }}" class="relative py-2 font-medium text-text transition hover:text-primary-500">
+                            Cartouches
+                        </a>
+
+                        @endrole
+
                     </nav>
 
                     <button
@@ -69,7 +86,11 @@
                     >
                         Notre Charte
                     </a>
-                    <a href="#" class="rounded-md px-4 py-3 font-medium text-text transition hover:bg-surface-muted hover:text-primary-500">
+                    <a
+                        href="{{ route('contact.show') }}"
+                        class="rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('contact.show') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"
+                        wire:navigate
+                    >
                         Nous Contacter
                     </a>
                 </nav>
@@ -90,8 +111,13 @@
 
                     <nav class="flex flex-wrap gap-x-8 gap-y-4 text-sm">
                         <a href="{{ route('charte.show') }}" class="transition hover:text-secondary-400" wire:navigate>Notre Charte</a>
-                        <a href="#" class="transition hover:text-secondary-400">Nous Contacter</a>
-                        <a href="{{ route('login') }}" class="transition hover:text-secondary-400" wire:navigate>Connexion membres</a>
+                        <a href="{{ route('contact.show') }}" class="transition hover:text-secondary-400" wire:navigate>Nous Contacter</a>
+                        @auth
+                            <a href="{{ route('logout') }}" class="transition hover:text-secondary-400" wire:navigate>Déconnexion</a>
+                        @elseauth()
+                            <a href="{{ route('login') }}" class="transition hover:text-secondary-400" wire:navigate>Connexion membres</a>
+                        @endauth
+
                     </nav>
                 </div>
             </div>
