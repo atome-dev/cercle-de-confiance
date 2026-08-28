@@ -1,0 +1,389 @@
+{
+    "schema_version": 1,
+    "id": "be1454ae-6346-4650-b08f-8d1a7b1ff176",
+    "recorded_at": "2026-08-21T11:02:31+00:00",
+    "profile_type": "http",
+    "environment": "local",
+    "metrics": {
+        "duration_ms": 1.88,
+        "peak_memory_mb": 2
+    },
+    "sections": {
+        "overview": {
+            "label": "Overview",
+            "summary": {
+                "duration_ms": 1.88,
+                "peak_memory_mb": 2
+            },
+            "payload": {
+                "runtime": {
+                    "environment": "local",
+                    "php": "8.4.24",
+                    "php_sapi": "cli-server",
+                    "runtime_type": "cli-server",
+                    "laravel": "13.26.1",
+                    "debug": true,
+                    "locale": "fr",
+                    "timezone": "UTC"
+                },
+                "cache_state": {
+                    "configuration": true,
+                    "routes": false,
+                    "events": false
+                },
+                "drivers": {
+                    "database": "mysql",
+                    "cache": "database",
+                    "queue": "database",
+                    "session": "database",
+                    "mail": "log",
+                    "broadcasting": "log"
+                },
+                "ecosystem": [
+                    {
+                        "key": "fortify",
+                        "label": "Fortify",
+                        "version": "v1.38.0"
+                    }
+                ],
+                "package": "dev-main"
+            }
+        },
+        "request": {
+            "label": "Request",
+            "summary": {
+                "method": "POST",
+                "status": 200,
+                "exit_code": null
+            },
+            "payload": {
+                "method": "POST",
+                "url": "http://127.0.0.1:8000/_boost/browser-logs",
+                "path": "/_boost/browser-logs",
+                "query": [],
+                "input": {
+                    "logs": [
+                        {
+                            "type": "debug",
+                            "timestamp": "2026-08-21T11:02:31.164Z",
+                            "data": [
+                                "[vite] connected."
+                            ],
+                            "url": "http://127.0.0.1:8000/login",
+                            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
+                        }
+                    ]
+                },
+                "headers": {
+                    "host": [
+                        "127.0.0.1:8000"
+                    ],
+                    "connection": [
+                        "keep-alive"
+                    ],
+                    "content-length": [
+                        "257"
+                    ],
+                    "sec-ch-ua-platform": [
+                        "\"Windows\""
+                    ],
+                    "x-requested-with": [
+                        "XMLHttpRequest"
+                    ],
+                    "user-agent": [
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
+                    ],
+                    "sec-ch-ua": [
+                        "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
+                    ],
+                    "content-type": [
+                        "application/json"
+                    ],
+                    "sec-ch-ua-mobile": [
+                        "?0"
+                    ],
+                    "accept": [
+                        "*/*"
+                    ],
+                    "origin": [
+                        "http://127.0.0.1:8000"
+                    ],
+                    "sec-fetch-site": [
+                        "same-origin"
+                    ],
+                    "sec-fetch-mode": [
+                        "cors"
+                    ],
+                    "sec-fetch-dest": [
+                        "empty"
+                    ],
+                    "referer": [
+                        "http://127.0.0.1:8000/login"
+                    ],
+                    "accept-encoding": [
+                        "gzip, deflate, br, zstd"
+                    ],
+                    "accept-language": [
+                        "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7"
+                    ],
+                    "cookie": "[redacted]"
+                },
+                "route": "boost.browser-logs",
+                "action": "Closure",
+                "parameters": [],
+                "middleware": [],
+                "status": 200,
+                "request_type": "ajax",
+                "content_type": "application/json",
+                "request_size_bytes": 257,
+                "response_size_bytes": 19,
+                "session_present": false,
+                "authenticated": false,
+                "authentication": {
+                    "guard": "web",
+                    "authenticated": false,
+                    "model": null,
+                    "identifier": null,
+                    "identifier_policy": "keyed_hash"
+                },
+                "session": {
+                    "present": false,
+                    "driver": "database",
+                    "key_count": 0,
+                    "keys": [],
+                    "keys_dropped": 0,
+                    "flash_keys": [],
+                    "error_bag_present": false,
+                    "error_bags": []
+                },
+                "response_headers": {
+                    "cache-control": [
+                        "no-cache, private"
+                    ],
+                    "date": [
+                        "Fri, 21 Aug 2026 11:02:31 GMT"
+                    ],
+                    "content-type": [
+                        "application/json"
+                    ]
+                }
+            }
+        },
+        "queries": {
+            "label": "Queries",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "duration_ms": 0,
+                "transaction_count": 0,
+                "transaction_retained_count": 0,
+                "transaction_dropped_count": 0,
+                "rollback_count": 0
+            },
+            "payload": {
+                "items": [],
+                "transactions": []
+            }
+        },
+        "http_client": {
+            "label": "HTTP Client",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "duration_ms": 0,
+                "failed_count": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "queue": {
+            "label": "Queue",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "queued_count": 0,
+                "executed_count": 0,
+                "failed_count": 0,
+                "duration_ms": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "mail": {
+            "label": "Mail",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "recipient_count": 0,
+                "attachment_count": 0,
+                "duration_ms": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "notifications": {
+            "label": "Notifications",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "sent_count": 0,
+                "failed_count": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "redis": {
+            "label": "Redis",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "duration_ms": 0,
+                "failed_count": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "models": {
+            "label": "Models",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "cache": {
+            "label": "Cache",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "hits": 0,
+                "misses": 0,
+                "writes": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "views": {
+            "label": "Views",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "events": {
+            "label": "Events",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "authorization": {
+            "label": "Authorization",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "validation": {
+            "label": "Validation",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "messages": {
+            "label": "Messages",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "logs": {
+            "label": "Logs",
+            "summary": {
+                "count": 1,
+                "retained_count": 1,
+                "dropped_count": 0,
+                "truncated": false,
+                "errors": 0
+            },
+            "payload": {
+                "items": [
+                    {
+                        "level": "debug",
+                        "message": "[vite] connected.",
+                        "context": {
+                            "url": "http://127.0.0.1:8000/login",
+                            "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+                            "timestamp": "2026-08-21T11:02:31.164Z"
+                        },
+                        "callsite": null,
+                        "stack": [],
+                        "at_ms": 1.144
+                    }
+                ]
+            }
+        },
+        "exceptions": {
+            "label": "Exceptions",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        }
+    }
+}

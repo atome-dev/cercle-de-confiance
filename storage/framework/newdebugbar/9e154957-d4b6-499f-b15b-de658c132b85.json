@@ -1,0 +1,544 @@
+{
+    "schema_version": 1,
+    "id": "9e154957-d4b6-499f-b15b-de658c132b85",
+    "recorded_at": "2026-08-21T11:02:26+00:00",
+    "profile_type": "http",
+    "environment": "local",
+    "metrics": {
+        "duration_ms": 25.95,
+        "peak_memory_mb": 2
+    },
+    "sections": {
+        "overview": {
+            "label": "Overview",
+            "summary": {
+                "duration_ms": 25.95,
+                "peak_memory_mb": 2
+            },
+            "payload": {
+                "runtime": {
+                    "environment": "local",
+                    "php": "8.4.24",
+                    "php_sapi": "cli-server",
+                    "runtime_type": "cli-server",
+                    "laravel": "13.26.1",
+                    "debug": true,
+                    "locale": "fr",
+                    "timezone": "UTC"
+                },
+                "cache_state": {
+                    "configuration": true,
+                    "routes": false,
+                    "events": false
+                },
+                "drivers": {
+                    "database": "mysql",
+                    "cache": "database",
+                    "queue": "database",
+                    "session": "database",
+                    "mail": "log",
+                    "broadcasting": "log"
+                },
+                "ecosystem": [
+                    {
+                        "key": "fortify",
+                        "label": "Fortify",
+                        "version": "v1.38.0"
+                    }
+                ],
+                "package": "dev-main"
+            }
+        },
+        "request": {
+            "label": "Request",
+            "summary": {
+                "method": "GET",
+                "status": 200,
+                "exit_code": null
+            },
+            "payload": {
+                "method": "GET",
+                "url": "http://127.0.0.1:8000/login",
+                "path": "/login",
+                "query": [],
+                "input": [],
+                "headers": {
+                    "host": [
+                        "127.0.0.1:8000"
+                    ],
+                    "connection": [
+                        "keep-alive"
+                    ],
+                    "cache-control": [
+                        "max-age=0"
+                    ],
+                    "sec-ch-ua": [
+                        "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\""
+                    ],
+                    "sec-ch-ua-mobile": [
+                        "?0"
+                    ],
+                    "sec-ch-ua-platform": [
+                        "\"Windows\""
+                    ],
+                    "upgrade-insecure-requests": [
+                        "1"
+                    ],
+                    "user-agent": [
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
+                    ],
+                    "accept": [
+                        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+                    ],
+                    "sec-fetch-site": [
+                        "same-origin"
+                    ],
+                    "sec-fetch-mode": [
+                        "navigate"
+                    ],
+                    "sec-fetch-dest": [
+                        "document"
+                    ],
+                    "referer": [
+                        "http://127.0.0.1:8000/login"
+                    ],
+                    "accept-encoding": [
+                        "gzip, deflate, br, zstd"
+                    ],
+                    "accept-language": [
+                        "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7"
+                    ],
+                    "cookie": "[redacted]"
+                },
+                "route": "login",
+                "action": "Laravel\\Fortify\\Http\\Controllers\\AuthenticatedSessionController@create",
+                "parameters": [],
+                "middleware": [
+                    "Illuminate\\Cookie\\Middleware\\EncryptCookies",
+                    "Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse",
+                    "Illuminate\\Session\\Middleware\\StartSession",
+                    "Illuminate\\View\\Middleware\\ShareErrorsFromSession",
+                    "Illuminate\\Foundation\\Http\\Middleware\\PreventRequestForgery",
+                    "Illuminate\\Routing\\Middleware\\SubstituteBindings",
+                    "Laravel\\Boost\\Middleware\\InjectBoost",
+                    "Illuminate\\Auth\\Middleware\\RedirectIfAuthenticated:web"
+                ],
+                "status": 200,
+                "request_type": "full_page",
+                "content_type": "text/html; charset=utf-8",
+                "request_size_bytes": 0,
+                "response_size_bytes": 30265,
+                "session_present": false,
+                "authenticated": false,
+                "authentication": {
+                    "guard": "web",
+                    "authenticated": false,
+                    "model": null,
+                    "identifier": null,
+                    "identifier_policy": "keyed_hash"
+                },
+                "session": {
+                    "present": false,
+                    "driver": "database",
+                    "key_count": 0,
+                    "keys": [],
+                    "keys_dropped": 0,
+                    "flash_keys": [],
+                    "error_bag_present": false,
+                    "error_bags": []
+                },
+                "response_headers": {
+                    "content-type": [
+                        "text/html; charset=utf-8"
+                    ],
+                    "cache-control": [
+                        "no-cache, private"
+                    ],
+                    "date": [
+                        "Fri, 21 Aug 2026 11:02:26 GMT"
+                    ],
+                    "set-cookie": "[redacted]"
+                }
+            }
+        },
+        "queries": {
+            "label": "Queries",
+            "summary": {
+                "count": 2,
+                "retained_count": 2,
+                "dropped_count": 0,
+                "truncated": false,
+                "duration_ms": 8.03,
+                "transaction_count": 0,
+                "transaction_retained_count": 0,
+                "transaction_dropped_count": 0,
+                "rollback_count": 0
+            },
+            "payload": {
+                "items": [
+                    {
+                        "sql": "select * from `sessions` where `id` = ? limit 1",
+                        "bindings": [
+                            "ujQlQ13pdzmxDEYprQQWhm2tku6dmCsvh73jfLRm"
+                        ],
+                        "runnable_sql": "select * from `sessions` where `id` = 'ujQlQ13pdzmxDEYprQQWhm2tku6dmCsvh73jfLRm' limit 1",
+                        "duration_ms": 3.13,
+                        "connection": "mysql",
+                        "type": "write",
+                        "callsite": null,
+                        "stack": [],
+                        "at_ms": 9.933,
+                        "source_preserved": true,
+                        "binding_policy": "full",
+                        "bindings_complete": true,
+                        "runnable_available": true
+                    },
+                    {
+                        "sql": "update `sessions` set `payload` = ?, `last_activity` = ?, `user_id` = ?, `ip_address` = ?, `user_agent` = ? where `id` = ?",
+                        "bindings": [
+                            "eyJfdG9rZW4iOiJjYmd6RHQwNFdvcHRkMlVSTXVaOWVJVGJwZGp2QXFNQ1hyQnFmMlBXIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9sb2dpbiIsInJvdXRlIjoibG9naW4ifSwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119fQ==",
+                            1787310146,
+                            null,
+                            "127.0.0.1",
+                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+                            "ujQlQ13pdzmxDEYprQQWhm2tku6dmCsvh73jfLRm"
+                        ],
+                        "runnable_sql": "update `sessions` set `payload` = 'eyJfdG9rZW4iOiJjYmd6RHQwNFdvcHRkMlVSTXVaOWVJVGJwZGp2QXFNQ1hyQnFmMlBXIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9sb2dpbiIsInJvdXRlIjoibG9naW4ifSwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119fQ==', `last_activity` = 1787310146, `user_id` = null, `ip_address` = '127.0.0.1', `user_agent` = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36' where `id` = 'ujQlQ13pdzmxDEYprQQWhm2tku6dmCsvh73jfLRm'",
+                        "duration_ms": 4.9,
+                        "connection": "mysql",
+                        "type": "write",
+                        "callsite": null,
+                        "stack": [],
+                        "at_ms": 24.459,
+                        "source_preserved": true,
+                        "binding_policy": "full",
+                        "bindings_complete": true,
+                        "runnable_available": true
+                    }
+                ],
+                "transactions": []
+            }
+        },
+        "http_client": {
+            "label": "HTTP Client",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "duration_ms": 0,
+                "failed_count": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "queue": {
+            "label": "Queue",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "queued_count": 0,
+                "executed_count": 0,
+                "failed_count": 0,
+                "duration_ms": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "mail": {
+            "label": "Mail",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "recipient_count": 0,
+                "attachment_count": 0,
+                "duration_ms": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "notifications": {
+            "label": "Notifications",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "sent_count": 0,
+                "failed_count": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "redis": {
+            "label": "Redis",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "duration_ms": 0,
+                "failed_count": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "models": {
+            "label": "Models",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "cache": {
+            "label": "Cache",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "hits": 0,
+                "misses": 0,
+                "writes": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "views": {
+            "label": "Views",
+            "summary": {
+                "count": 6,
+                "retained_count": 6,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": [
+                    {
+                        "name": "pages::auth.login",
+                        "source": {
+                            "file": "resources/views/pages/auth/login.blade.php",
+                            "line": 1
+                        },
+                        "composers": [],
+                        "data": {
+                            "__blaze": "[Livewire\\Blaze\\Runtime\\BlazeRuntime]"
+                        },
+                        "timing": "composition_marker",
+                        "at_ms": 11.281
+                    },
+                    {
+                        "name": "components.auth-header",
+                        "source": {
+                            "file": "resources/views/components/auth-header.blade.php",
+                            "line": 1
+                        },
+                        "composers": [],
+                        "data": {
+                            "title": "Connectez-vous \u00e0 votre compte",
+                            "description": "Saisissez votre adresse courriel",
+                            "attributes": {
+                                "title": "Connectez-vous \u00e0 votre compte",
+                                "description": "Saisissez votre adresse courriel"
+                            },
+                            "slot": "",
+                            "__laravel_slots": {
+                                "__default": ""
+                            },
+                            "__blaze": "[Livewire\\Blaze\\Runtime\\BlazeRuntime]"
+                        },
+                        "timing": "composition_marker",
+                        "at_ms": 12.754
+                    },
+                    {
+                        "name": "components.auth-session-status",
+                        "source": {
+                            "file": "resources/views/components/auth-session-status.blade.php",
+                            "line": 1
+                        },
+                        "composers": [],
+                        "data": {
+                            "class": "text-center",
+                            "status": null,
+                            "attributes": {
+                                "class": "text-center",
+                                "status": null
+                            },
+                            "slot": "",
+                            "__laravel_slots": {
+                                "__default": ""
+                            },
+                            "__blaze": "[Livewire\\Blaze\\Runtime\\BlazeRuntime]"
+                        },
+                        "timing": "composition_marker",
+                        "at_ms": 14.244
+                    },
+                    {
+                        "name": "f4ac99e09542ff494432bc959d4fee61::auth",
+                        "source": {
+                            "file": "resources/views/layouts/auth.blade.php",
+                            "line": 1
+                        },
+                        "composers": [],
+                        "data": {
+                            "title": "Log in",
+                            "attributes": {
+                                "title": "Log in"
+                            },
+                            "slot": "<div class=\"flex flex-col gap-6\">\n        <div class=\"flex w-full flex-col gap-1 text-center\">\n    <div class=\"font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-2xl [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 font-display text-text\" data-flux-heading>Connectez-vous \u00e0 votre compte</div>\n    <div class=\"text-sm [:where(&amp;)]:text-zinc-500 [:where(&amp;)]:dark:text-white/70 text-text-muted\" data-flux-subheading>\n    Saisissez votre adresse courriel\n</div>\n</div>\n\n        <!-- Session Status -->\n        \n\n        <form method=\"POST\" action=\"http://127.0.0.1:8000/login\" class=\"flex flex-col gap-6\">\n            <input type=\"hidden\" name=\"_token\" value=\"cbgzDt04Woptd2URMuZ9eITbpdjvAqMCXrBqf2PW\" autocomplete=\"off\">\n            <!-- Email Address -->\n            <ui-field class=\"min-w-0 [&amp;:not(:has([data-flux-field])):has([data-flux-control][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-radio-group][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-checkbox-group][disabled])&gt;[data-flux-label]]:opacity-50 block *:data-flux-label:mb-3 [&amp;&gt;[data-flux-label]:has(+[data-flux-description])]:mb-2 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mt-0 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mb-3 [&amp;&gt;[data-flux-description]:first-child:has(+*)]:mb-3 [&amp;&gt;*:not([data-flux-label])+[data-flux-description]]:mt-3\" data-flux-field>\n    <ui-label class=\"inline-flex items-center text-sm font-medium  [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white [&amp;:has([data-flux-label-trailing])]:flex\" data-flux-label>\n    Email address\n\n    \n    \n    </ui-label>\n        \n        \n        <div class=\"w-full relative block group/input\" data-flux-input>\n            \n            <input\n                type=\"email\"\n                \n                class=\"w-full border block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-s\u2026",
+                            "__laravel_slots": {
+                                "__default": "<div class=\"flex flex-col gap-6\">\n        <div class=\"flex w-full flex-col gap-1 text-center\">\n    <div class=\"font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-2xl [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 font-display text-text\" data-flux-heading>Connectez-vous \u00e0 votre compte</div>\n    <div class=\"text-sm [:where(&amp;)]:text-zinc-500 [:where(&amp;)]:dark:text-white/70 text-text-muted\" data-flux-subheading>\n    Saisissez votre adresse courriel\n</div>\n</div>\n\n        <!-- Session Status -->\n        \n\n        <form method=\"POST\" action=\"http://127.0.0.1:8000/login\" class=\"flex flex-col gap-6\">\n            <input type=\"hidden\" name=\"_token\" value=\"cbgzDt04Woptd2URMuZ9eITbpdjvAqMCXrBqf2PW\" autocomplete=\"off\">\n            <!-- Email Address -->\n            <ui-field class=\"min-w-0 [&amp;:not(:has([data-flux-field])):has([data-flux-control][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-radio-group][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-checkbox-group][disabled])&gt;[data-flux-label]]:opacity-50 block *:data-flux-label:mb-3 [&amp;&gt;[data-flux-label]:has(+[data-flux-description])]:mb-2 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mt-0 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mb-3 [&amp;&gt;[data-flux-description]:first-child:has(+*)]:mb-3 [&amp;&gt;*:not([data-flux-label])+[data-flux-description]]:mt-3\" data-flux-field>\n    <ui-label class=\"inline-flex items-center text-sm font-medium  [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white [&amp;:has([data-flux-label-trailing])]:flex\" data-flux-label>\n    Email address\n\n    \n    \n    </ui-label>\n        \n        \n        <div class=\"w-full relative block group/input\" data-flux-input>\n            \n            <input\n                type=\"email\"\n                \n                class=\"w-full border block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-s\u2026"
+                            },
+                            "__blaze": "[Livewire\\Blaze\\Runtime\\BlazeRuntime]"
+                        },
+                        "timing": "composition_marker",
+                        "at_ms": 16.811
+                    },
+                    {
+                        "name": "f4ac99e09542ff494432bc959d4fee61::auth.simple",
+                        "source": {
+                            "file": "resources/views/layouts/auth/simple.blade.php",
+                            "line": 1
+                        },
+                        "composers": [],
+                        "data": {
+                            "title": "Log in",
+                            "attributes": {
+                                "title": "Log in"
+                            },
+                            "slot": "<div class=\"flex flex-col gap-6\">\n        <div class=\"flex w-full flex-col gap-1 text-center\">\n    <div class=\"font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-2xl [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 font-display text-text\" data-flux-heading>Connectez-vous \u00e0 votre compte</div>\n    <div class=\"text-sm [:where(&amp;)]:text-zinc-500 [:where(&amp;)]:dark:text-white/70 text-text-muted\" data-flux-subheading>\n    Saisissez votre adresse courriel\n</div>\n</div>\n\n        <!-- Session Status -->\n        \n\n        <form method=\"POST\" action=\"http://127.0.0.1:8000/login\" class=\"flex flex-col gap-6\">\n            <input type=\"hidden\" name=\"_token\" value=\"cbgzDt04Woptd2URMuZ9eITbpdjvAqMCXrBqf2PW\" autocomplete=\"off\">\n            <!-- Email Address -->\n            <ui-field class=\"min-w-0 [&amp;:not(:has([data-flux-field])):has([data-flux-control][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-radio-group][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-checkbox-group][disabled])&gt;[data-flux-label]]:opacity-50 block *:data-flux-label:mb-3 [&amp;&gt;[data-flux-label]:has(+[data-flux-description])]:mb-2 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mt-0 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mb-3 [&amp;&gt;[data-flux-description]:first-child:has(+*)]:mb-3 [&amp;&gt;*:not([data-flux-label])+[data-flux-description]]:mt-3\" data-flux-field>\n    <ui-label class=\"inline-flex items-center text-sm font-medium  [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white [&amp;:has([data-flux-label-trailing])]:flex\" data-flux-label>\n    Email address\n\n    \n    \n    </ui-label>\n        \n        \n        <div class=\"w-full relative block group/input\" data-flux-input>\n            \n            <input\n                type=\"email\"\n                \n                class=\"w-full border block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-s\u2026",
+                            "__laravel_slots": {
+                                "__default": "<div class=\"flex flex-col gap-6\">\n        <div class=\"flex w-full flex-col gap-1 text-center\">\n    <div class=\"font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-2xl [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 font-display text-text\" data-flux-heading>Connectez-vous \u00e0 votre compte</div>\n    <div class=\"text-sm [:where(&amp;)]:text-zinc-500 [:where(&amp;)]:dark:text-white/70 text-text-muted\" data-flux-subheading>\n    Saisissez votre adresse courriel\n</div>\n</div>\n\n        <!-- Session Status -->\n        \n\n        <form method=\"POST\" action=\"http://127.0.0.1:8000/login\" class=\"flex flex-col gap-6\">\n            <input type=\"hidden\" name=\"_token\" value=\"cbgzDt04Woptd2URMuZ9eITbpdjvAqMCXrBqf2PW\" autocomplete=\"off\">\n            <!-- Email Address -->\n            <ui-field class=\"min-w-0 [&amp;:not(:has([data-flux-field])):has([data-flux-control][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-radio-group][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-checkbox-group][disabled])&gt;[data-flux-label]]:opacity-50 block *:data-flux-label:mb-3 [&amp;&gt;[data-flux-label]:has(+[data-flux-description])]:mb-2 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mt-0 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mb-3 [&amp;&gt;[data-flux-description]:first-child:has(+*)]:mb-3 [&amp;&gt;*:not([data-flux-label])+[data-flux-description]]:mt-3\" data-flux-field>\n    <ui-label class=\"inline-flex items-center text-sm font-medium  [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white [&amp;:has([data-flux-label-trailing])]:flex\" data-flux-label>\n    Email address\n\n    \n    \n    </ui-label>\n        \n        \n        <div class=\"w-full relative block group/input\" data-flux-input>\n            \n            <input\n                type=\"email\"\n                \n                class=\"w-full border block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-s\u2026"
+                            },
+                            "__blaze": "[Livewire\\Blaze\\Runtime\\BlazeRuntime]"
+                        },
+                        "timing": "composition_marker",
+                        "at_ms": 17.185
+                    },
+                    {
+                        "name": "partials.head",
+                        "source": {
+                            "file": "resources/views/partials/head.blade.php",
+                            "line": 1
+                        },
+                        "composers": [],
+                        "data": {
+                            "__env": "[Illuminate\\View\\Factory]",
+                            "app": "[Illuminate\\Foundation\\Application]",
+                            "errors": "[]",
+                            "title": "Log in",
+                            "attributes": {
+                                "title": "Log in"
+                            },
+                            "slot": "<div class=\"flex flex-col gap-6\">\n        <div class=\"flex w-full flex-col gap-1 text-center\">\n    <div class=\"font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-2xl [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 font-display text-text\" data-flux-heading>Connectez-vous \u00e0 votre compte</div>\n    <div class=\"text-sm [:where(&amp;)]:text-zinc-500 [:where(&amp;)]:dark:text-white/70 text-text-muted\" data-flux-subheading>\n    Saisissez votre adresse courriel\n</div>\n</div>\n\n        <!-- Session Status -->\n        \n\n        <form method=\"POST\" action=\"http://127.0.0.1:8000/login\" class=\"flex flex-col gap-6\">\n            <input type=\"hidden\" name=\"_token\" value=\"cbgzDt04Woptd2URMuZ9eITbpdjvAqMCXrBqf2PW\" autocomplete=\"off\">\n            <!-- Email Address -->\n            <ui-field class=\"min-w-0 [&amp;:not(:has([data-flux-field])):has([data-flux-control][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-radio-group][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-checkbox-group][disabled])&gt;[data-flux-label]]:opacity-50 block *:data-flux-label:mb-3 [&amp;&gt;[data-flux-label]:has(+[data-flux-description])]:mb-2 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mt-0 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mb-3 [&amp;&gt;[data-flux-description]:first-child:has(+*)]:mb-3 [&amp;&gt;*:not([data-flux-label])+[data-flux-description]]:mt-3\" data-flux-field>\n    <ui-label class=\"inline-flex items-center text-sm font-medium  [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white [&amp;:has([data-flux-label-trailing])]:flex\" data-flux-label>\n    Email address\n\n    \n    \n    </ui-label>\n        \n        \n        <div class=\"w-full relative block group/input\" data-flux-input>\n            \n            <input\n                type=\"email\"\n                \n                class=\"w-full border block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-s\u2026",
+                            "__laravel_slots": {
+                                "__default": "<div class=\"flex flex-col gap-6\">\n        <div class=\"flex w-full flex-col gap-1 text-center\">\n    <div class=\"font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-2xl [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 font-display text-text\" data-flux-heading>Connectez-vous \u00e0 votre compte</div>\n    <div class=\"text-sm [:where(&amp;)]:text-zinc-500 [:where(&amp;)]:dark:text-white/70 text-text-muted\" data-flux-subheading>\n    Saisissez votre adresse courriel\n</div>\n</div>\n\n        <!-- Session Status -->\n        \n\n        <form method=\"POST\" action=\"http://127.0.0.1:8000/login\" class=\"flex flex-col gap-6\">\n            <input type=\"hidden\" name=\"_token\" value=\"cbgzDt04Woptd2URMuZ9eITbpdjvAqMCXrBqf2PW\" autocomplete=\"off\">\n            <!-- Email Address -->\n            <ui-field class=\"min-w-0 [&amp;:not(:has([data-flux-field])):has([data-flux-control][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-radio-group][disabled])&gt;[data-flux-label]]:opacity-50 [&amp;:has(&gt;[data-flux-checkbox-group][disabled])&gt;[data-flux-label]]:opacity-50 block *:data-flux-label:mb-3 [&amp;&gt;[data-flux-label]:has(+[data-flux-description])]:mb-2 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mt-0 [&amp;&gt;[data-flux-label]+[data-flux-description]]:mb-3 [&amp;&gt;[data-flux-description]:first-child:has(+*)]:mb-3 [&amp;&gt;*:not([data-flux-label])+[data-flux-description]]:mt-3\" data-flux-field>\n    <ui-label class=\"inline-flex items-center text-sm font-medium  [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white [&amp;:has([data-flux-label-trailing])]:flex\" data-flux-label>\n    Email address\n\n    \n    \n    </ui-label>\n        \n        \n        <div class=\"w-full relative block group/input\" data-flux-input>\n            \n            <input\n                type=\"email\"\n                \n                class=\"w-full border block disabled:shadow-none dark:shadow-none appearance-none text-base sm:text-s\u2026"
+                            },
+                            "__blaze": "[Livewire\\Blaze\\Runtime\\BlazeRuntime]"
+                        },
+                        "timing": "composition_marker",
+                        "at_ms": 17.408
+                    }
+                ]
+            }
+        },
+        "events": {
+            "label": "Events",
+            "summary": {
+                "count": 1,
+                "retained_count": 1,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": [
+                    {
+                        "name": "Illuminate\\Database\\Events\\StatementPrepared",
+                        "listeners": [],
+                        "broadcast": false,
+                        "payload_types": [
+                            "Illuminate\\Database\\Events\\StatementPrepared"
+                        ],
+                        "at_ms": 8.811
+                    }
+                ]
+            }
+        },
+        "authorization": {
+            "label": "Authorization",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "validation": {
+            "label": "Validation",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "messages": {
+            "label": "Messages",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "logs": {
+            "label": "Logs",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false,
+                "errors": 0
+            },
+            "payload": {
+                "items": []
+            }
+        },
+        "exceptions": {
+            "label": "Exceptions",
+            "summary": {
+                "count": 0,
+                "retained_count": 0,
+                "dropped_count": 0,
+                "truncated": false
+            },
+            "payload": {
+                "items": []
+            }
+        }
+    }
+}
