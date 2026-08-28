@@ -18,8 +18,8 @@ Route::livewire('/acces', 'pages::access-gate')
 
 Route::livewire('/contact', ContactForm::class)
     ->name('contact.show');
-Route::get('/mon-dossier', AnonymousAccess::class)->name('anonymous-access');
-Route::get('/dossiers/{thread}', ThreadShow::class)->name('threads.show');
+Route::livewire('/mon-dossier', AnonymousAccess::class)->name('anonymous-access');
+Route::livewire('/dossiers/{thread}', ThreadShow::class)->name('threads.show');
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route::view('dashboard', 'dashboard')->name('dashboard');
