@@ -32,7 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::livewire('/cartouches', 'pages::cartouches')->middleware('access.code')
             ->name('cartouches.show');
 
-        Route::get('/dossiers', ThreadsList::class)->name('threads.index');
+        Route::livewire('/dossiers', ThreadsList::class)->name('threads.index');
     });
 
     Route::middleware(['auth', 'role:administrateur', 'ensure2fa'])->group(function () {
