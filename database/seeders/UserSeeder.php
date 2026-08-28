@@ -11,7 +11,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $password = config('seeders.admin_password');
-        ray($password);
+
         if (! empty($password)) {
             $user = User::updateOrCreate(
                 ['email' => 'admin@localhost'],
