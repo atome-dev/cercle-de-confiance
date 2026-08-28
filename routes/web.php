@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\UserRoleController;
+use App\Livewire\AnonymousAccess;
+use App\Livewire\ContactForm;
+use App\Livewire\ThreadShow;
+use App\Livewire\ThreadsList;
 use Illuminate\Support\Facades\Route;
 
 Route::livewire('/', 'pages::home')->middleware('access.code')
@@ -12,9 +16,10 @@ Route::view('/charte', 'pages::charte')->middleware('access.code')
 Route::livewire('/acces', 'pages::access-gate')
     ->name('access.show');
 
-Route::livewire('/contact', 'pages::contact')
+Route::livewire('/contact', ContactForm::class)
     ->name('contact.show');
-
+Route::get('/mon-dossier', AnonymousAccess::class)->name('anonymous-access');
+Route::get('/dossiers/{thread}', ThreadShow::class)->name('threads.show');
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route::view('dashboard', 'dashboard')->name('dashboard');
@@ -26,6 +31,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['auth', 'role:administrateur|membre'])->group(function () {
         Route::livewire('/cartouches', 'pages::cartouches')->middleware('access.code')
             ->name('cartouches.show');
+
+        Route::get('/dossiers', ThreadsList::class)->name('threads.index');
     });
 
     Route::middleware(['auth', 'role:administrateur', 'ensure2fa'])->group(function () {

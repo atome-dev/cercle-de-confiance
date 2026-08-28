@@ -43,6 +43,14 @@ class UserFactory extends Factory
         ]);
     }
 
+    public function member(): static
+    {
+        return $this->afterCreating(function ($user) {
+            Role::firstOrCreate(['name' => 'membre']);
+            $user->assignRole('membre');
+        });
+    }
+
     /**
      * Indicate that the model has two-factor authentication configured.
      */
