@@ -30,8 +30,6 @@ class Home extends Component
             ->get()
             ->toArray();
 
-        ray($this->members);
-
 
         $this->features = Cartouche::orderBy('id')
             ->get()
