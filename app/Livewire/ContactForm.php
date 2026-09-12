@@ -13,16 +13,16 @@ use Livewire\Component;
 #[Title('Nous contacter')]
 class ContactForm extends Component
 {
-    #[Validate('required|string|max:255')]
+    #[Validate('string|max:255')]
     public string $senderName = '';
 
-    #[Validate('required|email|max:255')]
+    #[Validate('email|max:255')]
     public string $senderEmail = '';
 
     #[Validate('required|string|min:10|max:5000')]
     public string $message = '';
 
-    #[Validate('required|in:group,member')]
+    #[Validate('in:group,member')]
     public string $recipientType = 'group';
 
     public ?int $recipientUserId = null;
@@ -74,9 +74,9 @@ class ContactForm extends Component
 
     public function members()
     {
-        return User::where('is_commission_member', true)
+        return User::role('membre')
             ->orderBy('name')
-            ->get(['id', 'name']);
+            ->get(['id', 'name', 'membre_role', 'membre_titre']);
     }
 
     public function render()

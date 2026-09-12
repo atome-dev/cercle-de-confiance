@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureAccessCodeIsValid;
+use App\Livewire\Membres;
 use App\Models\Membre;
 use Livewire\Livewire;
 
@@ -32,7 +33,7 @@ test('the membres page is accessible and lists members with a valid access cooki
 test('a member can be created', function () {
     $this->withCookies(withAccessCookie());
 
-    Livewire::test('pages::membres')
+    Livewire::test(Membres::class)
         ->call('create')
         ->set('nom', 'Alice Martin')
         ->set('titre', 'Professeure')
@@ -47,7 +48,7 @@ test('a member can be created', function () {
 test('a member cannot be created without required fields', function () {
     $this->withCookies(withAccessCookie());
 
-    Livewire::test('pages::membres')
+    Livewire::test(Membres::class)
         ->call('create')
         ->set('nom', '')
         ->call('save')
@@ -59,7 +60,7 @@ test('a member can be updated', function () {
 
     $membre = Membre::factory()->create(['nom' => 'Ancien Nom']);
 
-    Livewire::test('pages::membres')
+    Livewire::test(Membres::class)
         ->call('edit', $membre->id)
         ->set('nom', 'Nouveau Nom')
         ->call('save')
@@ -73,7 +74,7 @@ test('a member can be deleted', function () {
 
     $membre = Membre::factory()->create();
 
-    Livewire::test('pages::membres')
+    Livewire::test(Membres::class)
         ->call('delete', $membre->id);
 
     expect(Membre::find($membre->id))->toBeNull();

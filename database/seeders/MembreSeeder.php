@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Membre;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class MembreSeeder extends Seeder
@@ -31,7 +32,15 @@ class MembreSeeder extends Seeder
                     'titre'    => $userData['titre'],
                     'role'     => $userData['role'] ?? '',
                     'photo'    => $userData['photo'] ?? null,
-                    'courriel' => $userData['courriel'] ?? null,
+                ]
+            );
+            User::updateOrCreate(
+                ['email' => $userData['courriel']],
+                [
+                    'name'      => $userData['nom'],
+                    'membre_titre'    => $userData['titre'],
+                    'membre_role'     => $userData['role'] ?? '',
+                    'photo'    => $userData['photo'] ?? null,
                 ]
             );
         }

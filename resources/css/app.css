@@ -303,11 +303,6 @@
         margin-bottom: 0.375rem;
     }
 
-    [data-flux-label]::after {
-        color: var(--color-error);
-        content: " *";
-    }
-
     /* Labels required n'ont pas l'astérisque après */
     [data-flux-label]:has(+ [data-flux-field] [data-flux-input]:not([required]))::after {
         content: "";
@@ -483,4 +478,11 @@
     .border-secondary { border-color: var(--color-secondary-500); }
     .border-tertiary  { border-color: var(--color-tertiary-500); }
     .border-sage      { border-color: var(--color-sage-500); }
+}
+
+
+.description-cell,
+.description-cell > * {
+    white-space: normal !important;
+    word-break: break-word !important;
 }

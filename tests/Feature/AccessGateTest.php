@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureAccessCodeIsValid;
+use App\Livewire\AccessGate;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
@@ -17,7 +18,7 @@ test('a public page redirects guests without the access cookie', function () {
 });
 
 test('submitting the correct code via the livewire component grants access', function () {
-    $response = Livewire::test('pages::access-gate')
+    $response = Livewire::test(AccessGate::class)
         ->set('code', 'secret-code')
         ->call('attempt');
 
@@ -30,7 +31,7 @@ test('submitting the correct code via the livewire component grants access', fun
 });
 
 test('submitting the wrong code shows an error and grants no access', function () {
-    $response = Livewire::test('pages::access-gate')
+    $response = Livewire::test(AccessGate::class)
         ->set('code', 'wrong-code')
         ->call('attempt');
 
@@ -62,13 +63,13 @@ test('an authenticated user bypasses the access gate without a cookie', function
 
 test('the access code form is rate limited after too many failed attempts', function () {
     foreach (range(1, 6) as $attempt) {
-        Livewire::test('pages::access-gate')
+        Livewire::test(AccessGate::class)
             ->set('code', 'wrong-code')
             ->call('attempt')
             ->assertHasErrors(['code']);
     }
 
-    $response = Livewire::test('pages::access-gate')
+    $response = Livewire::test(AccessGate::class)
         ->set('code', 'wrong-code')
         ->call('attempt');
 

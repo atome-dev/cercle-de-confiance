@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Cartouches;
 use App\Models\Cartouche;
 use Livewire\Livewire;
 
@@ -24,7 +25,7 @@ test('the cartouches page is accessible and lists cartouches with a valid access
 test('a cartouche can be created', function () {
     $this->withCookies(withAccessCookie());
 
-    Livewire::test('pages::cartouches')
+    Livewire::test(Cartouches::class)
         ->call('create')
         ->set('icone', '🌱')
         ->set('titre', 'Bienveillance')
@@ -38,7 +39,7 @@ test('a cartouche can be created', function () {
 test('a cartouche cannot be created without required fields', function () {
     $this->withCookies(withAccessCookie());
 
-    Livewire::test('pages::cartouches')
+    Livewire::test(Cartouches::class)
         ->call('create')
         ->set('titre', '')
         ->call('save')
@@ -50,7 +51,7 @@ test('a cartouche can be updated', function () {
 
     $cartouche = Cartouche::factory()->create(['titre' => 'Ancien titre']);
 
-    Livewire::test('pages::cartouches')
+    Livewire::test(Cartouches::class)
         ->call('edit', $cartouche->id)
         ->set('titre', 'Nouveau titre')
         ->call('save')
@@ -64,7 +65,7 @@ test('a cartouche can be deleted', function () {
 
     $cartouche = Cartouche::factory()->create();
 
-    Livewire::test('pages::cartouches')
+    Livewire::test(Cartouches::class)
         ->call('delete', $cartouche->id);
 
     expect(Cartouche::find($cartouche->id))->toBeNull();
