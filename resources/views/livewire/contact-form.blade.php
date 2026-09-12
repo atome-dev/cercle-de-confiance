@@ -92,6 +92,7 @@
                     <flux:checkbox
                         wire:model="sendAnonymously"
                         label="Je préfère pour le moment rester anonyme"
+                        class="items-center"
                     />
 
                 </div>
