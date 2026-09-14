@@ -20,11 +20,40 @@
         </div>
 
         @auth
-            @if ($thread->isAccessibleByMember(auth()->user()))
+            @if ($thread->isAccessibleBy(auth()->user()))
                 <div class="flex gap-2 mb-6">
                     <flux:button size="sm" wire:click="updateStatus('en_cours')">En cours</flux:button>
                     <flux:button size="sm" wire:click="updateStatus('archive')">Archiver</flux:button>
                 </div>
+
+                <flux:card class="mb-6 space-y-4">
+                    <flux:heading size="sm">Partagé avec</flux:heading>
+
+                    <ul class="space-y-1 text-sm text-gray-600">
+                        @foreach ($this->grantees as $grant)
+                            <li>
+                                {{ $grant->user->name }}
+                                —
+                                {{ $grant->grantedBy ? 'partagé par '.$grant->grantedBy->name.' le '.$grant->created_at->format('d/m/Y') : 'accès automatique' }}
+                            </li>
+                        @endforeach
+                    </ul>
+
+                    <form wire:submit="share" class="flex flex-col gap-3 sm:flex-row sm:items-end">
+                        <flux:pillbox
+                            wire:model="shareUserIds"
+                            label="Partager avec"
+                            placeholder="Choisir une ou plusieurs personnes…"
+                            class="flex-1"
+                        >
+                            @foreach ($this->shareableUsers as $user)
+                                <flux:pillbox.option value="{{ $user->id }}">{{ $user->name }}</flux:pillbox.option>
+                            @endforeach
+                        </flux:pillbox>
+
+                        <flux:button type="submit" size="sm">Partager</flux:button>
+                    </form>
+                </flux:card>
             @endif
         @endauth
 

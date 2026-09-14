@@ -51,17 +51,12 @@ class ContactForm extends Component
     {
         $this->validate();
 
-        $connectedSender = (! $this->sendAnonymously && auth()->check())
-            ? auth()->user()
-            : null;
-
         $result = $action->execute(
             senderName: $this->senderName,
             senderEmail: $this->senderEmail,
             message: $this->message,
             recipientType: $this->recipientType,
-            recipientUserId: $this->recipientUserId,
-            connectedSender: $connectedSender,
+            recipientUserId: $this->recipientUserId
         );
 
         if ($result['fullCode']) {
@@ -74,7 +69,9 @@ class ContactForm extends Component
 
     public function members()
     {
-        return User::role('membre')
+        return User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['parent', 'professeur']);
+        })
             ->orderBy('name')
             ->get(['id', 'name', 'membre_role', 'membre_titre']);
     }

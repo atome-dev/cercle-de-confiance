@@ -37,7 +37,6 @@ class User extends Authenticatable
 
     protected $appends = ['photo_url'];
 
-
     /**
      * Get the attributes that should be cast.
      *
@@ -50,8 +49,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-
 
     /**
      * Get the user's initials
@@ -68,11 +65,6 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->hasRole('admin');
-    }
-
-    public function isMembre(): bool
-    {
-        return $this->hasRole('membre');
     }
 
     protected function photoUrl(): Attribute

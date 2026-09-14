@@ -2,6 +2,7 @@
 
 use App\Livewire\Cartouches;
 use App\Models\Cartouche;
+use App\Models\User;
 use Livewire\Livewire;
 
 test('the cartouches page redirects guests without the access cookie', function () {
@@ -15,7 +16,11 @@ test('the cartouches page is accessible and lists cartouches with a valid access
         'titre' => 'Écoute confidentielle',
     ]);
 
-    $response = $this->withCookies(withAccessCookie())->get(route('cartouches.show'));
+    $member = User::factory()->parent()->create();
+
+    $response = $this->actingAs($member)
+        ->withCookies(withAccessCookie())
+        ->get(route('cartouches.show'));
 
     $response->assertOk();
     $response->assertSeeText('Nos cartouches');

@@ -6,6 +6,7 @@ use App\Services\ThreadEncryptionService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
@@ -16,7 +17,7 @@ class Thread extends Model
     protected $fillable = [
         'code', 'recipient_type', 'recipient_user_id', 'status',
         'sender_name', 'sender_email', 'sender_user_id', 'is_anonymous',
-        'thread_key_envelope', 'anon_key_envelope', 'anon_key_salt',
+        'anon_key_envelope',
         'last_message_at',
     ];
 
@@ -48,34 +49,57 @@ class Thread extends Model
         return $this->hasMany(ThreadRead::class);
     }
 
+    public function grants(): HasMany
+    {
+        return $this->hasMany(ThreadKeyGrant::class);
+    }
+
+    public function grantedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'thread_key_grants')
+            ->withPivot('granted_by_user_id')
+            ->withTimestamps();
+    }
+
     public function isForGroup(): bool
     {
         return $this->recipient_type === 'group';
     }
 
     /**
-     * Un membre (rôle "membre") est-il autorisé à voir ce dossier ?
-     * - Dossier "groupe" : tout membre, actuel ou futur, y a accès.
-     * - Dossier "member" : uniquement le membre destinataire désigné.
+     * Cet utilisateur détient-il une clé (grant) pour ce dossier ?
+     * L'accès n'est plus lié à un rôle : il dépend uniquement de
+     * l'existence d'un ThreadKeyGrant pour cet utilisateur précis
+     * (accordé automatiquement à la création ou via un partage).
      */
-    public function isAccessibleByMember(User $user): bool
+    public function isAccessibleBy(User $user): bool
     {
-        if (! $user->hasRole('membre')) {
-            return false;
-        }
-
-        return $this->isForGroup() || $this->recipient_user_id === $user->id;
+        return $this->grants()->where('user_id', $user->id)->exists();
     }
 
-    public function decryptKeyForMember(): string
+    public function decryptKeyFor(User $user): string
     {
-        return app(ThreadEncryptionService::class)->openAppEnvelope($this->thread_key_envelope);
+        $grant = $this->grants()->where('user_id', $user->id)->firstOrFail();
+
+        return app(ThreadEncryptionService::class)->openAppEnvelope($grant->key_envelope);
     }
 
     public function decryptKeyForAnonCode(string $privateKey): string
     {
         return app(ThreadEncryptionService::class)
             ->openAnonEnvelope($this->anon_key_envelope, $this->code, $privateKey);
+    }
+
+    public function decryptSenderName(string $privateKey): string
+    {
+        return app(ThreadEncryptionService::class)
+            ->openIdentityFromAnonEnvelope($this->sender_name, $this->code, $privateKey);
+    }
+
+    public function decryptSenderEmail(string $privateKey): string
+    {
+        return app(ThreadEncryptionService::class)
+            ->openIdentityFromAnonEnvelope($this->sender_email, $this->code, $privateKey);
     }
 
     public function lastReadAtFor(?User $user): ?Carbon

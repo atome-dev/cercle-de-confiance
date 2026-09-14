@@ -14,7 +14,7 @@
         <flux:callout variant="success" icon="information-circle" heading="Votre code de suivi">
             <p class="mb-4">
                 Conservez précieusement ce code : il vous permettra de suivre les échanges
-                concernant votre dossier sans avoir besoin de créer de compte.
+                concernant votre dossier.
             </p>
 
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-2">
@@ -45,9 +45,9 @@
     @else
         {{-- État : Formulaire --}}
         <div class="mb-8 text-center">
-            <flux:heading size="xl">Contacter la commission</flux:heading>
+            <flux:heading size="xl">Contacter le Cercle de Confiance</flux:heading>
             <flux:text class="mt-2 text-zinc-500">
-                Adressez votre message au Cercle de Confiance ou à l'un de ses membres.
+                Lorsque vous vous adressez au Cercle de Confiance, seuls les parents recevront votre message afin de s'assurer qu'il n'y a pas de conflit d'intérêt avec un professeur.
                 Vous recevrez un code de suivi pour consulter les réponses.
             </flux:text>
         </div>
@@ -61,7 +61,7 @@
                     </flux:heading>
 
                     <flux:radio.group wire:model.live="recipientType" variant="cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <flux:radio value="group" label="Cercle de Confiance" icon="user-group" />
+                        <flux:radio value="group" label="Parents du Cercle de Confiance" icon="user-group" />
                         <flux:radio value="member" label="Un membre en particulier" icon="user" />
                     </flux:radio.group>
 
@@ -75,7 +75,6 @@
                         </flux:select>
                     @endif
                 </div>
-
                 <flux:separator />
 
                 {{-- Coordonnées --}}

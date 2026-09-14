@@ -26,13 +26,13 @@ Route::livewire('/mon-dossier', AnonymousAccess::class)->name('anonymous-access'
 Route::livewire('/dossiers/{thread}', ThreadShow::class)->name('threads.show');
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::view('dashboard', 'dashboard')->name('dashboard');
 
     Route::middleware(['auth'])->get('/two-factor-setup', function () {
         return view('pages.auth.two-factor-setup');
     })->name('two-factor.setup');
 
-    Route::middleware(['auth', 'role:administrateur|membre'])->group(function () {
+    Route::middleware(['auth', 'role:administrateur|parent|professeur'])->group(function () {
         Route::livewire('/cartouches', Cartouches::class)->middleware('access.code')
             ->name('cartouches.show');
 

@@ -6,7 +6,7 @@ use App\Models\User;
 use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
 
-function createEligibleMember(string $role = 'membre'): User
+function createEligibleMember(string $role = 'parent'): User
 {
     Role::firstOrCreate(['name' => $role]);
 
@@ -16,8 +16,9 @@ function createEligibleMember(string $role = 'membre'): User
     return $user;
 }
 
-test('the recipient dropdown only lists members and administrateurs, and appears when "member" is chosen', function () {
-    $member = createEligibleMember('membre');
+test('the recipient dropdown lists parents and professeurs, and appears when "member" is chosen', function () {
+    $parent = createEligibleMember('parent');
+    $professeur = createEligibleMember('professeur');
     $admin = createEligibleMember('administrateur');
     $otherUser = User::factory()->create();
 
@@ -28,9 +29,16 @@ test('the recipient dropdown only lists members and administrateurs, and appears
 
     $component->set('recipientType', 'member');
 
-    $component->assertSee($member->name);
-    $component->assertSee($admin->name);
+    $component->assertSee($parent->name);
+    $component->assertSee($professeur->name);
+    $component->assertDontSee($admin->name);
     $component->assertDontSee($otherUser->name);
+});
+
+test('the contact form does not crash when the "parent" role does not exist yet', function () {
+    Livewire::test(ContactForm::class)
+        ->set('recipientType', 'member')
+        ->assertSet('recipientType', 'member');
 });
 
 test('submitting with "Cercle de Confiance" creates a group thread with no recipient user', function () {

@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Cartouche;
 use App\Models\User;
-//use App\Models\Membre;
+// use App\Models\Membre;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -25,11 +25,12 @@ class Home extends Component
 
     public function mount(): void
     {
-        $this->members = User::role('membre')
+        $this->members = User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['parent', 'professeur']);
+        })
             ->orderBy('name')
             ->get()
             ->toArray();
-
 
         $this->features = Cartouche::orderBy('id')
             ->get()

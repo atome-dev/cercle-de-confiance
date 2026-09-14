@@ -13,7 +13,7 @@ class UserRoleController extends Controller
 
         $validated = $request->validate([
             'roles' => ['array'],
-            'roles.*' => ['string', 'in:administrateur,membre'],
+            'roles.*' => ['string', 'in:administrateur,parent,professeur'],
         ]);
 
         $user->syncRoles($validated['roles'] ?? []);

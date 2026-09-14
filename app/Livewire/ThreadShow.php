@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Actions\ReplyToThread;
+use App\Actions\ShareThread;
 use App\Models\Thread;
+use App\Models\User;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -19,7 +21,7 @@ class ThreadShow extends Component
 
     public ?string $accessDeniedReason = null;
 
-    private ?string $resolvedThreadKey = null;
+    public array $shareUserIds = [];
 
     public function mount(Thread $thread): void
     {
@@ -34,45 +36,40 @@ class ThreadShow extends Component
         $this->thread->markReadFor(auth()->user());
     }
 
-    private function resolveThreadKey(): bool
+    /**
+     * Recomputed on every request — private/protected properties don't
+     * survive Livewire's hydrate/dehydrate cycle between requests, so this
+     * cannot be cached on the component instance across calls.
+     */
+    private function resolveThreadKey(): ?string
     {
-        if (auth()->check() && $this->thread->isAccessibleByMember(auth()->user())) {
-            $this->resolvedThreadKey = base64_encode($this->thread->decryptKeyForMember());
-
-            return true;
-        }
-
-        if (auth()->check() && $this->thread->sender_user_id === auth()->id()) {
-            $this->resolvedThreadKey = base64_encode($this->thread->decryptKeyForMember());
-
-            return true;
+        if (auth()->check() && $this->thread->isAccessibleBy(auth()->user())) {
+            return base64_encode($this->thread->decryptKeyFor(auth()->user()));
         }
 
         $privateKey = session("anon_access_{$this->thread->id}");
 
         if ($this->thread->is_anonymous && $privateKey) {
             try {
-                $this->resolvedThreadKey = base64_encode(
-                    $this->thread->decryptKeyForAnonCode($privateKey)
-                );
-
-                return true;
+                return base64_encode($this->thread->decryptKeyForAnonCode($privateKey));
             } catch (\Throwable) {
-                return false;
+                return null;
             }
         }
 
-        return false;
+        return null;
     }
 
     #[Computed]
     public function decryptedMessages()
     {
-        if (! $this->resolvedThreadKey) {
+        $resolvedThreadKey = $this->resolveThreadKey();
+
+        if (! $resolvedThreadKey) {
             return collect();
         }
 
-        $threadKey = base64_decode($this->resolvedThreadKey);
+        $threadKey = base64_decode($resolvedThreadKey);
 
         return $this->thread->messages->map(function ($message) use ($threadKey) {
             return [
@@ -91,20 +88,22 @@ class ThreadShow extends Component
             'newMessage' => 'required|string|min:1|max:5000',
         ]);
 
-        if (! $this->resolvedThreadKey) {
+        $resolvedThreadKey = $this->resolveThreadKey();
+
+        if (! $resolvedThreadKey) {
             $this->accessDeniedReason = 'Accès refusé.';
 
             return;
         }
 
-        $isMember = auth()->check() && $this->thread->isAccessibleByMember(auth()->user());
+        $hasGrant = auth()->check() && $this->thread->isAccessibleBy(auth()->user());
 
         $action->execute(
             thread: $this->thread,
-            threadKey: base64_decode($this->resolvedThreadKey),
+            threadKey: base64_decode($resolvedThreadKey),
             message: $this->newMessage,
-            authorType: $isMember ? 'member' : 'sender',
-            authorUser: $isMember ? auth()->user() : null,
+            authorType: $hasGrant ? 'member' : 'sender',
+            authorUser: $hasGrant ? auth()->user() : null,
         );
 
         $this->newMessage = '';
@@ -114,11 +113,38 @@ class ThreadShow extends Component
 
     public function updateStatus(string $status): void
     {
-        if (! auth()->check() || ! $this->thread->isAccessibleByMember(auth()->user())) {
+        if (! auth()->check() || ! $this->thread->isAccessibleBy(auth()->user())) {
             return;
         }
 
         $this->thread->update(['status' => $status]);
+    }
+
+    public function share(ShareThread $action): void
+    {
+        if (! auth()->check() || ! $this->thread->isAccessibleBy(auth()->user())) {
+            return;
+        }
+
+        $action->execute($this->thread, auth()->user(), $this->shareUserIds);
+
+        $this->shareUserIds = [];
+        unset($this->grantees, $this->shareableUsers);
+    }
+
+    #[Computed]
+    public function grantees()
+    {
+        return $this->thread->grants()->with(['user', 'grantedBy'])->get();
+    }
+
+    #[Computed]
+    public function shareableUsers()
+    {
+        return User::whereHas('roles', fn ($q) => $q->whereIn('name', ['parent', 'professeur', 'administrateur']))
+            ->whereNotIn('id', $this->thread->grants()->pluck('user_id'))
+            ->orderBy('name')
+            ->get();
     }
 
     public function render()

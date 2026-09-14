@@ -3,6 +3,7 @@
 use App\Http\Middleware\EnsureAccessCodeIsValid;
 use App\Livewire\Membres;
 use App\Models\Membre;
+use App\Models\User;
 use Livewire\Livewire;
 
 function withAccessCookie(): array
@@ -22,7 +23,11 @@ test('the membres page is accessible and lists members with a valid access cooki
         'role' => 'parent',
     ]);
 
-    $response = $this->withCookies(withAccessCookie())->get(route('membres.show'));
+    $admin = User::factory()->admin()->create();
+
+    $response = $this->actingAs($admin)
+        ->withCookies(withAccessCookie())
+        ->get(route('membres.show'));
 
     $response->assertOk();
     $response->assertSeeText('Nos membres');

@@ -4,8 +4,13 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
+use Laravel\Fortify\Fortify;
+use Laravel\Fortify\RecoveryCode;
+use Spatie\Permission\Models\Role;
 
 /**
  * @extends Factory<User>
@@ -43,16 +48,47 @@ class UserFactory extends Factory
         ]);
     }
 
-    public function member(): static
+    public function parent(): static
     {
         return $this->afterCreating(function ($user) {
-            Role::firstOrCreate(['name' => 'membre']);
-            $user->assignRole('membre');
+            Role::firstOrCreate(['name' => 'parent']);
+            $user->assignRole('parent');
+        });
+    }
+
+    public function professeur(): static
+    {
+        return $this->afterCreating(function ($user) {
+            Role::firstOrCreate(['name' => 'professeur']);
+            $user->assignRole('professeur');
+        });
+    }
+
+    /**
+     * Indicate that the model is an administrateur with two-factor authentication
+     * confirmed, as required by the "ensure2fa" middleware.
+     */
+    public function admin(): static
+    {
+        return $this->withTwoFactor()->afterCreating(function ($user) {
+            Role::firstOrCreate(['name' => 'administrateur']);
+            $user->assignRole('administrateur');
         });
     }
 
     /**
      * Indicate that the model has two-factor authentication configured.
      */
-    public function withTwoFactor(): static {}
+    public function withTwoFactor(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'two_factor_secret' => Fortify::currentEncrypter()->encrypt(
+                app(TwoFactorAuthenticationProvider::class)->generateSecretKey()
+            ),
+            'two_factor_recovery_codes' => Fortify::currentEncrypter()->encrypt(json_encode(
+                Collection::times(8, fn () => RecoveryCode::generate())->all()
+            )),
+            'two_factor_confirmed_at' => now(),
+        ]);
+    }
 }

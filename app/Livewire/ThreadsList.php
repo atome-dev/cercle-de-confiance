@@ -19,7 +19,7 @@ class ThreadsList extends Component
 
     public function mount(): void
     {
-        abort_unless(auth()->user()?->hasRole('membre'), 403);
+        abort_unless(auth()->user()?->hasAnyRole(['administrateur', 'parent', 'professeur']), 403);
     }
 
     public function updatedStatusFilter(): void
@@ -33,10 +33,7 @@ class ThreadsList extends Component
         $user = auth()->user();
 
         return Thread::query()
-            ->where(function ($q) use ($user) {
-                $q->where('recipient_type', 'group')
-                    ->orWhere('recipient_user_id', $user->id);
-            })
+            ->whereHas('grants', fn ($q) => $q->where('user_id', $user->id))
             ->when($this->statusFilter !== 'all', fn ($q) => $q->where('status', $this->statusFilter))
             ->latest('last_message_at')
             ->paginate(15);
