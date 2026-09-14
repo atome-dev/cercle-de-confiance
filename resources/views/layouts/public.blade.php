@@ -40,6 +40,17 @@
                             Notre Charte
                         </a>
 
+                        @hasanyrole('administrateur|parent|professeur')
+                        <a
+                            href="{{ route('threads.index') }}"
+                            class="relative py-2 font-medium transition {{ request()->routeIs('threads.index', 'threads.show') ? 'text-primary-500' : 'text-text hover:text-primary-500' }}"
+                            wire:navigate
+                            data-test="nav-dossiers"
+                        >
+                            Dossiers
+                        </a>
+                        @endhasanyrole
+
                         @role('administrateur')
                         <a href="{{ route('membres.show') }}" class="relative py-2 font-medium text-text transition hover:text-primary-500">
                             Membres
@@ -92,6 +103,16 @@
                     >
                         Notre Charte
                     </a>
+
+                    @hasanyrole('administrateur|parent|professeur')
+                    <a
+                        href="{{ route('threads.index') }}"
+                        class="rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('threads.index', 'threads.show') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"
+                        wire:navigate
+                    >
+                        Dossiers
+                    </a>
+                    @endhasanyrole
                 </nav>
             </div>
         </header>
