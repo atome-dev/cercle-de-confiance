@@ -42,6 +42,7 @@
                     <form wire:submit="share" class="flex flex-col gap-3 sm:flex-row sm:items-end">
                         <flux:pillbox
                             wire:model="shareUserIds"
+                            multiple
                             label="Partager avec"
                             placeholder="Choisir une ou plusieurs personnes…"
                             class="flex-1"
