@@ -86,6 +86,16 @@ test('submitting with "member" and a chosen member creates a thread for that mem
         ->and($thread->recipient_user_id)->toBe($member->id);
 });
 
+test('submitting shows a link to access the dossier with the tracking code', function () {
+    Livewire::test(ContactForm::class)
+        ->set('senderName', 'Jean Dupont')
+        ->set('senderEmail', 'jean@example.com')
+        ->set('message', 'Ceci est un message de test suffisamment long.')
+        ->set('recipientType', 'group')
+        ->call('submit')
+        ->assertSeeHtml(route('anonymous-access'));
+});
+
 test('switching back to "Cercle de Confiance" clears the previously selected member', function () {
     $member = createEligibleMember();
 

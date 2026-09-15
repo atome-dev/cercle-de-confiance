@@ -12,12 +12,15 @@ class EnsureAdminHasTwoFactor
     {
         $user = $request->user();
 
-        if ($user && $user->hasRole('administrateur') && is_null($user->two_factor_confirmed_at)) {
+        if (config('auth.two_factor.enabled')) {
 
-            // Évite la boucle infinie si on est déjà sur la page de config
-            if (! $request->routeIs('two-factor.setup')) {
-                return redirect()->route('two-factor.setup')
-                    ->with('warning', 'La double authentification est obligatoire pour les administrateurs.');
+            if ($user && $user->hasRole('administrateur') && is_null($user->two_factor_confirmed_at)) {
+
+                // Évite la boucle infinie si on est déjà sur la page de config
+                if (! $request->routeIs('two-factor.setup')) {
+                    return redirect()->route('two-factor.setup')
+                        ->with('warning', 'La double authentification est obligatoire pour les administrateurs.');
+                }
             }
         }
 

@@ -51,6 +51,17 @@
                         </a>
                         @endhasanyrole
 
+                        @guest
+                        <a
+                            href="{{ route('anonymous-access') }}"
+                            class="relative py-2 font-medium transition {{ request()->routeIs('anonymous-access') ? 'text-primary-500' : 'text-text hover:text-primary-500' }}"
+                            wire:navigate
+                            data-test="nav-anonymous-access"
+                        >
+                            Suivre mon dossier
+                        </a>
+                        @endguest
+
                         @role('administrateur')
                         <a href="{{ route('membres.show') }}" class="relative py-2 font-medium text-text transition hover:text-primary-500">
                             Membres
@@ -62,6 +73,46 @@
 
                         @endrole
                     </nav>
+
+                    @auth
+                        <flux:dropdown position="bottom" align="end" class="hidden md:block">
+                            <button type="button" class="flex items-center gap-2" data-test="user-menu-trigger">
+                                <flux:avatar
+                                    :name="auth()->user()->name"
+                                    :src="auth()->user()->photo_url"
+                                    size="sm"
+                                    circle
+                                />
+                            </button>
+
+                            <flux:menu>
+                                <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
+                                    <flux:avatar
+                                        :name="auth()->user()->name"
+                                        :src="auth()->user()->photo_url"
+                                        circle
+                                    />
+                                    <div class="grid flex-1 text-start text-sm leading-tight">
+                                        <flux:heading class="truncate">{{ auth()->user()->name }}</flux:heading>
+                                        <flux:text class="truncate">{{ auth()->user()->email }}</flux:text>
+                                    </div>
+                                </div>
+                                <flux:menu.separator />
+                                <form method="POST" action="{{ route('logout') }}" class="w-full">
+                                    @csrf
+                                    <flux:menu.item
+                                        as="button"
+                                        type="submit"
+                                        icon="arrow-right-start-on-rectangle"
+                                        class="w-full cursor-pointer"
+                                        data-test="logout-button"
+                                    >
+                                        Déconnexion
+                                    </flux:menu.item>
+                                </form>
+                            </flux:menu>
+                        </flux:dropdown>
+                    @endauth
 
                     <button
                         type="button"
@@ -113,6 +164,34 @@
                         Dossiers
                     </a>
                     @endhasanyrole
+
+                    @guest
+                    <a
+                        href="{{ route('anonymous-access') }}"
+                        class="rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('anonymous-access') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"
+                        wire:navigate
+                    >
+                        Suivre mon dossier
+                    </a>
+                    @endguest
+
+                    @auth
+                        <div class="mt-2 flex items-center gap-3 border-t border-border px-4 pt-4">
+                            <flux:avatar
+                                :name="auth()->user()->name"
+                                :src="auth()->user()->photo_url"
+                                size="sm"
+                                circle
+                            />
+                            <span class="flex-1 truncate font-medium text-text">{{ auth()->user()->name }}</span>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="font-medium text-text transition hover:text-primary-500" data-test="mobile-logout-button">
+                                    Déconnexion
+                                </button>
+                            </form>
+                        </div>
+                    @endauth
                 </nav>
             </div>
         </header>

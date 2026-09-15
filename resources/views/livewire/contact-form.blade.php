@@ -37,7 +37,10 @@
             </div>
         </flux:callout>
 
-        <div class="mt-8 flex justify-center">
+        <div class="mt-8 flex flex-col sm:flex-row justify-center gap-3">
+            <flux:button href="{{ route('anonymous-access') }}" variant="primary" icon="arrow-right-circle" wire:navigate>
+                Accéder à mon dossier
+            </flux:button>
             <flux:button href="{{ route('contact.show') }}" variant="ghost" icon="arrow-path" wire:navigate>
                 Envoyer un nouveau message
             </flux:button>

@@ -8,7 +8,7 @@
                 </h1>
 
                 <p class="mx-auto mb-12 max-w-xl text-xl text-text-muted">
-                    Le Cercle de Confiance vous accompagne dans la résolution de difficultés au sein de l'école.
+                    Le Cercle de Confiance vous accompagne dans la résolution de difficultés ou conflits au sein de l'école.
                 </p>
 
                 <div class="flex flex-wrap justify-center gap-4">

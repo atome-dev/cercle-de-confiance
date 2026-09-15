@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\Role;
 use App\Models\Cartouche;
 use App\Models\User;
 // use App\Models\Membre;
@@ -25,12 +26,12 @@ class Home extends Component
 
     public function mount(): void
     {
-        $this->members = User::whereHas('roles', function ($query) {
-            $query->whereIn('name', ['parent', 'professeur']);
-        })
+        $this->members = User::role([Role::Parent, Role::Professeur])
             ->orderBy('name')
             ->get()
             ->toArray();
+
+        ray($this->members);
 
         $this->features = Cartouche::orderBy('id')
             ->get()
@@ -41,21 +42,23 @@ class Home extends Component
      * Tailwind classes are written as full literal strings (not interpolated)
      * so the JIT scanner can pick them up statically.
      */
-    public function avatarClasses(string $role): string
+    public function avatarClasses(?string $role): string
     {
         return match ($role) {
             'parent' => '!bg-role-parent !text-white',
             'professeur' => '!bg-role-professeur !text-white',
             'salarie' => '!bg-role-salarie !text-white',
+            default => '',
         };
     }
 
-    public function badgeClasses(string $role): string
+    public function badgeClasses(?string $role): string
     {
         return match ($role) {
             'parent' => 'bg-role-parent/10 text-role-parent',
             'professeur' => 'bg-role-professeur/10 text-role-professeur',
             'salarie' => 'bg-role-salarie/10 text-role-salarie',
+            default => 'bg-surface-muted text-text-muted',
         };
     }
 
