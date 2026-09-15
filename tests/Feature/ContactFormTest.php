@@ -16,6 +16,15 @@ function createEligibleMember(string $role = 'parent'): User
     return $user;
 }
 
+beforeEach(function () {
+    // These roles always exist in production (seeded by RoleSeeder on every deploy)
+    // even before any user holds them — User::role() requires the role to exist,
+    // unlike the whereHas('roles', ...) queries it replaced.
+    Role::firstOrCreate(['name' => 'parent']);
+    Role::firstOrCreate(['name' => 'professeur']);
+    Role::firstOrCreate(['name' => 'administrateur']);
+});
+
 test('the recipient dropdown lists parents and professeurs, and appears when "member" is chosen', function () {
     $parent = createEligibleMember('parent');
     $professeur = createEligibleMember('professeur');
@@ -35,7 +44,7 @@ test('the recipient dropdown lists parents and professeurs, and appears when "me
     $component->assertDontSee($otherUser->name);
 });
 
-test('the contact form does not crash when the "parent" role does not exist yet', function () {
+test('the contact form does not crash when no parent or professeur is registered yet', function () {
     Livewire::test(ContactForm::class)
         ->set('recipientType', 'member')
         ->assertSet('recipientType', 'member');

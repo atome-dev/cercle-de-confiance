@@ -5,6 +5,15 @@ use App\Models\Thread;
 use App\Models\User;
 use App\Services\ThreadCodeGenerator;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Spatie\Permission\Models\Role;
+
+beforeEach(function () {
+    // The "parent" and "administrateur" roles always exist in production (seeded by
+    // RoleSeeder on every deploy) even before any user holds them — User::role()
+    // requires the role to exist, unlike the whereHas('roles', ...) query it replaced.
+    Role::firstOrCreate(['name' => 'parent']);
+    Role::firstOrCreate(['name' => 'administrateur']);
+});
 
 test('creating a thread encrypts the sender name and email at rest', function () {
     app(CreateThreadWithMessage::class)->execute(

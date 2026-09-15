@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Enums\Role;
 use App\Models\Thread;
 use App\Models\ThreadKeyGrant;
 use App\Models\ThreadMessage;
@@ -45,11 +46,11 @@ class CreateThreadWithMessage
             ]);
 
             if ($recipientType === 'group') {
-                $targetUserIds = User::whereHas('roles', fn ($q) => $q->where('name', 'parent'))
+                $targetUserIds = User::role(Role::Parent)
                     ->pluck('id')->all();
 
                 if ($targetUserIds === []) {
-                    $targetUserIds = User::whereHas('roles', fn ($q) => $q->where('name', 'administrateur'))
+                    $targetUserIds = User::role(Role::Administrateur)
                         ->pluck('id')->all();
 
                     Log::warning('Group thread created with no parent users — granted to administrateurs instead', [

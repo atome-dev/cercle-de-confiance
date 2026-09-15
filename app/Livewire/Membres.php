@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
@@ -36,7 +37,7 @@ class Membres extends Component
     #[Computed]
     public function membres(): Collection
     {
-        return User::whereHas('roles', fn ($q) => $q->whereIn('name', ['parent', 'professeur']))
+        return User::role([Role::Parent, Role::Professeur])
             ->orderBy('name')
             ->get();
     }

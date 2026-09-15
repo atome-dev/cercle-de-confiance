@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Actions\ReplyToThread;
 use App\Actions\ShareThread;
+use App\Enums\Role;
 use App\Models\Thread;
 use App\Models\User;
 use Livewire\Attributes\Computed;
@@ -141,7 +142,7 @@ class ThreadShow extends Component
     #[Computed]
     public function shareableUsers()
     {
-        return User::whereHas('roles', fn ($q) => $q->whereIn('name', ['parent', 'professeur', 'administrateur']))
+        return User::role([Role::Parent, Role::Professeur, Role::Administrateur])
             ->whereNotIn('id', $this->thread->grants()->pluck('user_id'))
             ->orderBy('name')
             ->get();

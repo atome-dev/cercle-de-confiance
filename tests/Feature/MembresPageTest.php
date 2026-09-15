@@ -4,11 +4,19 @@ use App\Http\Middleware\EnsureAccessCodeIsValid;
 use App\Livewire\Membres;
 use App\Models\User;
 use Livewire\Livewire;
+use Spatie\Permission\Models\Role;
 
 function withAccessCookie(): array
 {
     return ['access_granted' => EnsureAccessCodeIsValid::expectedCookieValue()];
 }
+
+beforeEach(function () {
+    // The "parent" role always exists in production (seeded by RoleSeeder on every
+    // deploy) even before any parent user is registered — User::role() requires the
+    // role to exist, unlike the whereHas('roles', ...) query it replaced.
+    Role::firstOrCreate(['name' => 'parent']);
+});
 
 test('the membres page redirects guests without the access cookie', function () {
     $this->get(route('membres.show'))

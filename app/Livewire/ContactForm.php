@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Actions\CreateThreadWithMessage;
+use App\Enums\Role;
 use App\Models\User;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -69,9 +70,7 @@ class ContactForm extends Component
 
     public function members()
     {
-        return User::whereHas('roles', function ($query) {
-            $query->whereIn('name', ['parent', 'professeur']);
-        })
+        return User::role([Role::Parent, Role::Professeur])
             ->orderBy('name')
             ->get(['id', 'name', 'membre_role', 'membre_titre']);
     }

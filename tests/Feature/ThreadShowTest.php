@@ -5,6 +5,17 @@ use App\Livewire\ThreadShow;
 use App\Models\User;
 use App\Services\ThreadCodeGenerator;
 use Livewire\Livewire;
+use Spatie\Permission\Models\Role;
+
+beforeEach(function () {
+    // These roles always exist in production (seeded by RoleSeeder on every deploy)
+    // even before any user holds them — User::role() requires the role to exist,
+    // unlike the whereHas('roles', ...) queries it replaced (shareableUsers() lists
+    // parents, professeurs and administrateurs; group threads fall back to
+    // administrateurs when there is no parent).
+    Role::firstOrCreate(['name' => 'parent']);
+    Role::firstOrCreate(['name' => 'administrateur']);
+});
 
 function createGroupThreadWithParentForTest(): array
 {
