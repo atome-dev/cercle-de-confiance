@@ -12,7 +12,7 @@ use App\Livewire\ThreadsList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/erreur', function () {
-    erreur!
+    \PHPUnit\Framework\throwException(true);
 })
     ->name('erreur');
 
