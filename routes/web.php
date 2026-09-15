@@ -11,11 +11,6 @@ use App\Livewire\ThreadShow;
 use App\Livewire\ThreadsList;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/erreur', function () {
-    \PHPUnit\Framework\throwException(true);
-})
-    ->name('erreur');
-
 Route::livewire('/', Home::class)->middleware('access.code')
     ->name('home');
 
