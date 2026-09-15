@@ -2,7 +2,6 @@
 
 use App\Http\Middleware\EnsureAccessCodeIsValid;
 use App\Livewire\Membres;
-use App\Models\Membre;
 use App\Models\User;
 use Livewire\Livewire;
 
@@ -17,11 +16,8 @@ test('the membres page redirects guests without the access cookie', function () 
 });
 
 test('the membres page is accessible and lists members with a valid access cookie', function () {
-    $membre = Membre::factory()->create([
-        'nom' => 'Nicolas Chauvet',
-        'titre' => "Parent d'élève",
-        'role' => 'parent',
-    ]);
+    $membre = User::factory()->parent()->create(['name' => 'Nicolas Chauvet']);
+    $membre->forceFill(['membre_titre' => "Parent d'élève"])->save();
 
     $admin = User::factory()->admin()->create();
 
@@ -31,56 +27,79 @@ test('the membres page is accessible and lists members with a valid access cooki
 
     $response->assertOk();
     $response->assertSeeText('Nos membres');
-    $response->assertSeeText($membre->nom);
-    $response->assertSeeText($membre->titre);
+    $response->assertSeeText($membre->name);
+    $response->assertSeeText($membre->membre_titre);
 });
 
 test('a member can be created', function () {
-    $this->withCookies(withAccessCookie());
+    $admin = User::factory()->admin()->create();
 
-    Livewire::test(Membres::class)
+    $this->actingAs($admin)->withCookies(withAccessCookie());
+
+    Livewire::actingAs($admin)->test(Membres::class)
         ->call('create')
-        ->set('nom', 'Alice Martin')
-        ->set('titre', 'Professeure')
-        ->set('role', 'professeur')
-        ->set('courriel', 'alice.martin@example.com')
+        ->set('name', 'Alice Martin')
+        ->set('membre_titre', 'Professeure')
+        ->set('membre_role', 'professeur')
+        ->set('email', 'alice.martin@example.com')
         ->call('save')
         ->assertSet('showModal', false);
 
-    expect(Membre::where('nom', 'Alice Martin')->exists())->toBeTrue();
+    $created = User::where('name', 'Alice Martin')->first();
+    expect($created)->not->toBeNull()
+        ->and($created->membre_titre)->toBe('Professeure')
+        ->and($created->membre_role)->toBe('professeur')
+        ->and($created->hasRole('professeur'))->toBeTrue()
+        ->and($created->password)->not->toBeNull();
 });
 
 test('a member cannot be created without required fields', function () {
-    $this->withCookies(withAccessCookie());
+    $admin = User::factory()->admin()->create();
 
-    Livewire::test(Membres::class)
+    Livewire::actingAs($admin)->test(Membres::class)
         ->call('create')
-        ->set('nom', '')
+        ->set('name', '')
+        ->set('email', '')
         ->call('save')
-        ->assertHasErrors(['nom', 'titre']);
+        ->assertHasErrors(['name', 'membre_titre', 'email']);
 });
 
 test('a member can be updated', function () {
-    $this->withCookies(withAccessCookie());
+    $admin = User::factory()->admin()->create();
+    $membre = User::factory()->parent()->create(['name' => 'Ancien Nom']);
+    $membre->forceFill(['membre_titre' => "Parent d'élève", 'membre_role' => 'parent'])->save();
 
-    $membre = Membre::factory()->create(['nom' => 'Ancien Nom']);
-
-    Livewire::test(Membres::class)
+    Livewire::actingAs($admin)->test(Membres::class)
         ->call('edit', $membre->id)
-        ->set('nom', 'Nouveau Nom')
+        ->set('name', 'Nouveau Nom')
         ->call('save')
         ->assertSet('showModal', false);
 
-    expect($membre->fresh()->nom)->toBe('Nouveau Nom');
+    expect($membre->fresh()->name)->toBe('Nouveau Nom');
+});
+
+test('updating a member syncs their role', function () {
+    $admin = User::factory()->admin()->create();
+    $membre = User::factory()->parent()->create();
+    $membre->forceFill(['membre_titre' => "Parent d'élève", 'membre_role' => 'parent'])->save();
+
+    Livewire::actingAs($admin)->test(Membres::class)
+        ->call('edit', $membre->id)
+        ->set('membre_role', 'professeur')
+        ->call('save');
+
+    $membre->refresh();
+    expect($membre->membre_role)->toBe('professeur')
+        ->and($membre->hasRole('professeur'))->toBeTrue()
+        ->and($membre->hasRole('parent'))->toBeFalse();
 });
 
 test('a member can be deleted', function () {
-    $this->withCookies(withAccessCookie());
+    $admin = User::factory()->admin()->create();
+    $membre = User::factory()->parent()->create();
 
-    $membre = Membre::factory()->create();
-
-    Livewire::test(Membres::class)
+    Livewire::actingAs($admin)->test(Membres::class)
         ->call('delete', $membre->id);
 
-    expect(Membre::find($membre->id))->toBeNull();
+    expect(User::find($membre->id))->toBeNull();
 });

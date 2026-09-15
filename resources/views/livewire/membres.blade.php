@@ -34,21 +34,21 @@
                         <flux:table.row wire:key="membre-{{ $membre->id }}">
                             <flux:table.cell class="flex items-center gap-3">
                                 <flux:avatar
-                                    :name="$membre->nom"
+                                    :name="$membre->name"
                                     :src="$membre->photo_url"
                                     size="xl"
                                     circle
-                                    class="{{ $this->avatarClasses($membre->role) }}"
+                                    class="{{ $this->avatarClasses($membre->membre_role) }}"
                                 />
-                                {{ $membre->nom }}
+                                {{ $membre->name }}
                             </flux:table.cell>
-                            <flux:table.cell>{{ $membre->titre }}</flux:table.cell>
+                            <flux:table.cell>{{ $membre->membre_titre }}</flux:table.cell>
                             <flux:table.cell>
-                                <span class="inline-block rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase {{ $this->badgeClasses($membre->role) }}">
-                                    {{ $membre->role }}
+                                <span class="inline-block rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase {{ $this->badgeClasses($membre->membre_role) }}">
+                                    {{ $membre->membre_role }}
                                 </span>
                             </flux:table.cell>
-                            <flux:table.cell>{{ $membre->courriel }}</flux:table.cell>
+                            <flux:table.cell>{{ $membre->email }}</flux:table.cell>
                             <flux:table.cell>
                                 <div class="flex gap-2">
                                     <flux:button size="sm" wire:click="edit({{ $membre->id }})">
@@ -80,17 +80,16 @@
                 </flux:heading>
             </div>
 
-            <flux:input :label="__('Nom')" wire:model="nom" />
-            <flux:input :label="__('Titre')" wire:model="titre" />
+            <flux:input :label="__('Nom')" wire:model="name" />
+            <flux:input :label="__('Titre')" wire:model="membre_titre" />
 
-            <flux:select :label="__('Rôle')" wire:model="role">
+            <flux:select :label="__('Rôle')" wire:model="membre_role">
                 <flux:select.option value="parent">{{ __("Parent d'élève") }}</flux:select.option>
                 <flux:select.option value="professeur">{{ __('Professeur') }}</flux:select.option>
-                <flux:select.option value="salarie">{{ __('Salarié') }}</flux:select.option>
             </flux:select>
 
             <flux:input :label="__('Photo')" wire:model="photo" :description="__('Nom du fichier dans storage/membres, exemple : nom-prenom.jpg')" />
-            <flux:input :label="__('Courriel')" type="email" wire:model="courriel" />
+            <flux:input :label="__('Courriel')" type="email" wire:model="email" :description="$editing ? null : __('Un mot de passe aléatoire est généré ; le membre devra utiliser « mot de passe oublié » pour se connecter.')" />
 
             <div class="flex">
                 <flux:spacer />
