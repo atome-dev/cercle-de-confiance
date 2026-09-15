@@ -2,10 +2,12 @@
 
 namespace App\Livewire\Settings;
 
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Title('Appearance settings')]
+#[Layout('layouts::public')]
+#[Title('Apparence')]
 class Appearance extends Component
 {
     public function render()

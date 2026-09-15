@@ -7,10 +7,12 @@ use Flux\Flux;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Title('Security settings')]
+#[Layout('layouts::public')]
+#[Title('Paramètres de sécurité')]
 class Security extends Component
 {
     use PasswordValidationRules;

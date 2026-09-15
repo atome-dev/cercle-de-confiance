@@ -98,6 +98,15 @@
                                     </div>
                                 </div>
                                 <flux:menu.separator />
+                                <flux:menu.item
+                                    :href="route('security.edit')"
+                                    icon="key"
+                                    wire:navigate
+                                    data-test="nav-password"
+                                >
+                                    Mot de passe
+                                </flux:menu.item>
+                                <flux:menu.separator />
                                 <form method="POST" action="{{ route('logout') }}" class="w-full">
                                     @csrf
                                     <flux:menu.item
@@ -184,13 +193,20 @@
                                 circle
                             />
                             <span class="flex-1 truncate font-medium text-text">{{ auth()->user()->name }}</span>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="font-medium text-text transition hover:text-primary-500" data-test="mobile-logout-button">
-                                    Déconnexion
-                                </button>
-                            </form>
                         </div>
+                        <a
+                            href="{{ route('security.edit') }}"
+                            class="rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('security.edit') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"
+                            wire:navigate
+                        >
+                            Mot de passe
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}" class="px-4">
+                            @csrf
+                            <button type="submit" class="font-medium text-text transition hover:text-primary-500" data-test="mobile-logout-button">
+                                Déconnexion
+                            </button>
+                        </form>
                     @endauth
                 </nav>
             </div>

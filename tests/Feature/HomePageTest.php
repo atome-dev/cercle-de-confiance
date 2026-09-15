@@ -72,3 +72,24 @@ test('an authenticated member does not see the anonymous dossier access link', f
     $response->assertOk();
     $response->assertDontSee(route('anonymous-access'));
 });
+
+test('an authenticated member sees a link to change their password', function () {
+    $user = User::factory()->parent()->create();
+
+    $response = $this->actingAs($user)
+        ->withCookie('access_granted', EnsureAccessCodeIsValid::expectedCookieValue())
+        ->get(route('home'));
+
+    $response->assertOk();
+    $response->assertSee(route('security.edit'));
+});
+
+test('a guest does not see a link to change a password', function () {
+    $this->seed(RoleSeeder::class);
+
+    $response = $this->withCookie('access_granted', EnsureAccessCodeIsValid::expectedCookieValue())
+        ->get(route('home'));
+
+    $response->assertOk();
+    $response->assertDontSee(route('security.edit'));
+});

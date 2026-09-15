@@ -9,5 +9,18 @@
     "Forgot password": "Mot de passe oublié",
     "Enter your email to receive a password reset link": "Saisissez votre addresse courriel pour recevoir un lien de réinitialisation.",
     "Email password reset link": "Recevoir le lien par courriel",
-    "Or, return to": "ou retourner à la page de"
+    "Or, return to": "ou retourner à la page de",
+    "Settings": "Paramètres",
+    "Manage your profile and account settings": "Gérez votre profil et les paramètres de votre compte",
+    "Profile": "Profil",
+    "Security": "Sécurité",
+    "Appearance": "Apparence",
+    "Security settings": "Paramètres de sécurité",
+    "Update password": "Modifier le mot de passe",
+    "Ensure your account is using a long, random password to stay secure": "Utilisez un mot de passe long et aléatoire pour sécuriser votre compte",
+    "Current password": "Mot de passe actuel",
+    "New password": "Nouveau mot de passe",
+    "Confirm password": "Confirmer le mot de passe",
+    "Save": "Enregistrer",
+    "Password updated.": "Mot de passe mis à jour."
 }

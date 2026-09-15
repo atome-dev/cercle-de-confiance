@@ -16,6 +16,17 @@ test('security settings page can be rendered', function () {
     $response->assertOk();
 });
 
+test('security settings page uses the app\'s branded layout, not the starter-kit sidebar', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->get(route('security.edit'));
+
+    $response->assertOk();
+    $response->assertSeeText('Cercle de Confiance');
+    $response->assertSee(route('logout'));
+});
+
 test('security settings page renders without two factor when feature is disabled', function () {
     config(['fortify.features' => []]);
 
@@ -24,7 +35,7 @@ test('security settings page renders without two factor when feature is disabled
     $this->actingAs($user)
         ->get(route('security.edit'))
         ->assertOk()
-        ->assertSee('Update password')
+        ->assertSee('Modifier le mot de passe')
         ->assertDontSee('Manage your passkeys for passwordless sign-in')
         ->assertDontSee('Add a passkey to sign in without a password')
         ->assertDontSee('Two-factor authentication');
