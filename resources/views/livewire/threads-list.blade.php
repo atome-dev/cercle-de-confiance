@@ -14,6 +14,8 @@
         <flux:table.columns>
             <flux:table.column>Code</flux:table.column>
             <flux:table.column>Destinataire</flux:table.column>
+            <flux:table.column>Section</flux:table.column>
+            <flux:table.column>Classe</flux:table.column>
             <flux:table.column>Statut</flux:table.column>
             <flux:table.column>Dernier message</flux:table.column>
         </flux:table.columns>
@@ -30,6 +32,12 @@
                         {{ $thread->isForGroup() ? 'Commission' : $thread->recipientUser?->name }}
                     </flux:table.cell>
                     <flux:table.cell>
+                        {{ $thread->section?->label() ?? '—' }}
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        {{ $thread->school_class?->label() ?? '—' }}
+                    </flux:table.cell>
+                    <flux:table.cell>
                         <flux:badge :color="match ($thread->status) {
                             'nouveau' => 'blue',
                             'en_cours' => 'amber',
@@ -44,7 +52,7 @@
                 </flux:table.row>
             @empty
                 <flux:table.row>
-                    <flux:table.cell colspan="4" class="text-center text-gray-500">
+                    <flux:table.cell colspan="6" class="text-center text-gray-500">
                         Aucun dossier pour le moment.
                     </flux:table.cell>
                 </flux:table.row>

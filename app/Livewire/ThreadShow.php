@@ -5,8 +5,11 @@ namespace App\Livewire;
 use App\Actions\ReplyToThread;
 use App\Actions\ShareThread;
 use App\Enums\Role;
+use App\Enums\SchoolClass;
+use App\Enums\Section;
 use App\Models\Thread;
 use App\Models\User;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -24,9 +27,15 @@ class ThreadShow extends Component
 
     public array $shareUserIds = [];
 
+    public ?string $classificationSection = null;
+
+    public ?string $classificationSchoolClass = null;
+
     public function mount(Thread $thread): void
     {
         $this->thread = $thread;
+        $this->classificationSection = $thread->section?->value;
+        $this->classificationSchoolClass = $thread->school_class?->value;
 
         if (! $this->resolveThreadKey()) {
             $this->accessDeniedReason = 'Vous n\'avez pas accès à ce dossier.';
@@ -112,6 +121,20 @@ class ThreadShow extends Component
         unset($this->decryptedMessages);
     }
 
+    public function updatedClassificationSchoolClass(string $value): void
+    {
+        if ($value === '') {
+            return;
+        }
+
+        $this->classificationSection = SchoolClass::from($value)->section()->value;
+    }
+
+    public function updatedClassificationSection(): void
+    {
+        $this->classificationSchoolClass = '';
+    }
+
     public function updateStatus(string $status): void
     {
         if (! auth()->check() || ! $this->thread->isAccessibleBy(auth()->user())) {
@@ -119,6 +142,23 @@ class ThreadShow extends Component
         }
 
         $this->thread->update(['status' => $status]);
+    }
+
+    public function updateClassification(): void
+    {
+        if (! auth()->check() || ! $this->thread->isAccessibleBy(auth()->user())) {
+            return;
+        }
+
+        $this->validate([
+            'classificationSection' => ['nullable', Rule::enum(Section::class)],
+            'classificationSchoolClass' => ['nullable', Rule::enum(SchoolClass::class)],
+        ]);
+
+        $this->thread->update([
+            'section' => $this->classificationSection ?: null,
+            'school_class' => $this->classificationSchoolClass ?: null,
+        ]);
     }
 
     public function share(ShareThread $action): void

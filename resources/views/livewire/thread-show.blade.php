@@ -27,6 +27,32 @@
                 </div>
 
                 <flux:card class="mb-6 space-y-4">
+                    <flux:heading size="sm">Classification</flux:heading>
+
+                    <form wire:submit="updateClassification" class="flex flex-col gap-3 sm:flex-row sm:items-end">
+                        <flux:select wire:model.live="classificationSection" label="Section" class="flex-1">
+                            <flux:select.option value="">Aucune section</flux:select.option>
+                            @foreach (\App\Enums\Section::cases() as $sectionOption)
+                                <flux:select.option value="{{ $sectionOption->value }}">{{ $sectionOption->label() }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+
+                        <flux:select wire:model.live="classificationSchoolClass" label="Classe" class="flex-1">
+                            <flux:select.option value="">Aucune classe</flux:select.option>
+                            @foreach (\App\Enums\Section::cases() as $sectionOption)
+                                <flux:select.group label="{{ $sectionOption->label() }}">
+                                    @foreach (\App\Enums\SchoolClass::forSection($sectionOption) as $classeOption)
+                                        <flux:select.option value="{{ $classeOption->value }}">{{ $classeOption->label() }}</flux:select.option>
+                                    @endforeach
+                                </flux:select.group>
+                            @endforeach
+                        </flux:select>
+
+                        <flux:button type="submit" size="sm">Enregistrer</flux:button>
+                    </form>
+                </flux:card>
+
+                <flux:card class="mb-6 space-y-4">
                     <flux:heading size="sm">Partagé avec</flux:heading>
 
                     <ul class="space-y-1 text-sm text-gray-600">

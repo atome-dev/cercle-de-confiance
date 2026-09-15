@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\SchoolClass;
+use App\Enums\Section;
 use App\Services\ThreadEncryptionService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +18,7 @@ class Thread extends Model
 
     protected $fillable = [
         'code', 'recipient_type', 'recipient_user_id', 'status',
+        'section', 'school_class',
         'sender_name', 'sender_email', 'sender_user_id', 'is_anonymous',
         'anon_key_envelope',
         'last_message_at',
@@ -24,6 +27,8 @@ class Thread extends Model
     protected function casts(): array
     {
         return [
+            'section' => Section::class,
+            'school_class' => SchoolClass::class,
             'is_anonymous' => 'boolean',
             'last_message_at' => 'datetime',
         ];

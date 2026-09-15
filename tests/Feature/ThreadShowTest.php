@@ -1,6 +1,8 @@
 <?php
 
 use App\Actions\CreateThreadWithMessage;
+use App\Enums\SchoolClass;
+use App\Enums\Section;
 use App\Livewire\ThreadShow;
 use App\Models\User;
 use App\Services\ThreadCodeGenerator;
@@ -89,6 +91,76 @@ test('updateStatus succeeds for a grantee and no-ops for a non-grantee', functio
         ->call('updateStatus', 'archive');
 
     expect($thread->fresh()->status)->toBe('archive');
+});
+
+test('updateClassification succeeds for a grantee and no-ops for a non-grantee', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+    $outsider = User::factory()->parent()->create();
+
+    Livewire::actingAs($outsider)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->set('classificationSection', Section::College->value)
+        ->set('classificationSchoolClass', SchoolClass::Classe7->value)
+        ->call('updateClassification');
+
+    expect($thread->fresh()->section)->toBeNull()
+        ->and($thread->fresh()->school_class)->toBeNull();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->set('classificationSection', Section::College->value)
+        ->set('classificationSchoolClass', SchoolClass::Classe7->value)
+        ->call('updateClassification');
+
+    expect($thread->fresh()->section)->toBe(Section::College)
+        ->and($thread->fresh()->school_class)->toBe(SchoolClass::Classe7);
+});
+
+test('selecting a class moves the section select to that class\'s section', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->assertSet('classificationSection', null)
+        ->set('classificationSchoolClass', SchoolClass::Classe7->value)
+        ->assertSet('classificationSection', Section::College->value);
+});
+
+test('selecting a section clears the previously selected class', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->set('classificationSchoolClass', SchoolClass::Classe7->value)
+        ->assertSet('classificationSchoolClass', SchoolClass::Classe7->value)
+        ->set('classificationSection', Section::Lycee->value)
+        ->assertSet('classificationSchoolClass', '');
+});
+
+test('updateClassification can clear a previously assigned section and class', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+    $thread->update(['section' => Section::Lycee, 'school_class' => SchoolClass::Classe11]);
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->set('classificationSection', '')
+        ->set('classificationSchoolClass', '')
+        ->call('updateClassification');
+
+    expect($thread->fresh()->section)->toBeNull()
+        ->and($thread->fresh()->school_class)->toBeNull();
+});
+
+test('updateClassification rejects a value that is not a valid section or class', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->set('classificationSection', 'not-a-real-section')
+        ->call('updateClassification')
+        ->assertHasErrors(['classificationSection']);
+
+    expect($thread->fresh()->section)->toBeNull();
 });
 
 test('share() creates new grants and updates the grantees list', function () {

@@ -2,6 +2,8 @@
 
 use App\Actions\CreateThreadWithMessage;
 use App\Actions\ShareThread;
+use App\Enums\SchoolClass;
+use App\Enums\Section;
 use App\Livewire\ThreadsList;
 use App\Models\Thread;
 use App\Models\User;
@@ -101,6 +103,20 @@ test('a user with none of administrateur, parent or professeur gets a 403 on the
     $this->actingAs($user)
         ->get(route('threads.index'))
         ->assertForbidden();
+});
+
+test('the list shows the assigned section and class, or a dash when unclassified', function () {
+    $parent = User::factory()->parent()->create();
+
+    $classified = createGroupThreadForTest();
+    $classified->update(['section' => Section::College, 'school_class' => SchoolClass::Classe7]);
+
+    $unclassified = createGroupThreadForTest();
+
+    $component = Livewire::actingAs($parent)->test(ThreadsList::class);
+
+    $component->assertSeeInOrder([$classified->code, 'Collège', '7ème classe']);
+    $component->assertSeeInOrder([$unclassified->code, '—']);
 });
 
 test('the status filter still works combined with the grant-based query', function () {
