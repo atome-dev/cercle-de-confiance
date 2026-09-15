@@ -1,12 +1,14 @@
 <?php
 
 use App\Actions\CreateThreadWithMessage;
+use App\Actions\ReplyToThread;
 use App\Actions\ShareThread;
 use App\Enums\SchoolClass;
 use App\Enums\Section;
 use App\Livewire\ThreadShow;
 use App\Models\User;
 use App\Services\ThreadCodeGenerator;
+use App\Services\ThreadEncryptionService;
 use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
 
@@ -102,6 +104,88 @@ test('a granted member sees "Expéditeur" on the sender\'s messages', function (
         ->test(ThreadShow::class, ['thread' => $thread])
         ->assertSee('Expéditeur')
         ->assertDontSee('Vous');
+});
+
+test('a granted member can reply internally, and the reply is tagged accordingly', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->set('newMessage', 'Note interne : attention, dossier sensible.')
+        ->set('replyVisibility', 'internal')
+        ->call('reply')
+        ->assertSee('Note interne : attention, dossier sensible.')
+        ->assertSee('Interne')
+        ->assertSet('replyVisibility', 'sender');
+
+    $reply = $thread->messages()->latest('id')->first();
+    expect($reply->author_type)->toBe('member')
+        ->and($reply->is_internal)->toBeTrue();
+});
+
+test('the anonymous sender never sees an internal reply', function () {
+    ['thread' => $thread, 'fullCode' => $fullCode, 'parent' => $parent] = createGroupThreadWithParentForTest();
+
+    $threadKey = app(ThreadEncryptionService::class)->openAppEnvelope(
+        $thread->grants()->where('user_id', $parent->id)->sole()->key_envelope
+    );
+
+    app(ReplyToThread::class)->execute(
+        thread: $thread,
+        threadKey: $threadKey,
+        message: 'Note interne : ne pas partager.',
+        authorType: 'member',
+        authorUser: $parent,
+        isInternal: true,
+    );
+
+    [, $privateKey] = app(ThreadCodeGenerator::class)->parseFullCode($fullCode);
+
+    $this->withSession(["anon_access_{$thread->id}" => $privateKey])
+        ->get(route('threads.show', $thread))
+        ->assertDontSeeText('Note interne : ne pas partager.')
+        ->assertDontSeeText('Interne');
+});
+
+test('the anonymous sender does not see the internal/sender reply choice', function () {
+    $result = app(CreateThreadWithMessage::class)->execute(
+        senderName: 'Jean Dupont',
+        senderEmail: 'jean.dupont@example.com',
+        message: 'Ceci est un message de test suffisamment long.',
+        recipientType: 'group',
+        recipientUserId: null,
+    );
+
+    $thread = $result['thread'];
+    [, $privateKey] = app(ThreadCodeGenerator::class)->parseFullCode($result['fullCode']);
+
+    $this->withSession(["anon_access_{$thread->id}" => $privateKey])
+        ->get(route('threads.show', $thread))
+        ->assertDontSee('Interne');
+});
+
+test('an anonymous reply is never stored as internal even if the property is tampered with', function () {
+    $result = app(CreateThreadWithMessage::class)->execute(
+        senderName: 'Jean Dupont',
+        senderEmail: 'jean.dupont@example.com',
+        message: 'Ceci est un message de test suffisamment long.',
+        recipientType: 'group',
+        recipientUserId: null,
+    );
+
+    $thread = $result['thread'];
+    [, $privateKey] = app(ThreadCodeGenerator::class)->parseFullCode($result['fullCode']);
+
+    $this->withSession(["anon_access_{$thread->id}" => $privateKey]);
+
+    Livewire::test(ThreadShow::class, ['thread' => $thread])
+        ->set('newMessage', 'Réponse anonyme.')
+        ->set('replyVisibility', 'internal')
+        ->call('reply');
+
+    $reply = $thread->messages()->latest('id')->first();
+    expect($reply->author_type)->toBe('sender')
+        ->and($reply->is_internal)->toBeFalse();
 });
 
 test('updateStatus succeeds for a grantee and no-ops for a non-grantee', function () {

@@ -14,6 +14,7 @@ class ReplyToThread
         string $message,
         string $authorType,
         ?User $authorUser = null,
+        bool $isInternal = false,
     ): ThreadMessage {
         $created = ThreadMessage::createEncrypted(
             $thread,
@@ -21,6 +22,7 @@ class ReplyToThread
             $threadKey,
             $authorType,
             $authorUser?->id,
+            $isInternal,
         );
 
         if ($thread->status === 'nouveau') {

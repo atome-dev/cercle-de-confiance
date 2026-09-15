@@ -12,9 +12,16 @@ class ThreadMessage extends Model
     use HasFactory;
 
     protected $fillable = [
-        'thread_id', 'author_type', 'author_user_id',
+        'thread_id', 'author_type', 'author_user_id', 'is_internal',
         'ciphertext', 'iv', 'tag',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_internal' => 'boolean',
+        ];
+    }
 
     public function thread(): BelongsTo
     {
@@ -38,6 +45,7 @@ class ThreadMessage extends Model
         string $threadKey,
         string $authorType,
         ?int $authorUserId = null,
+        bool $isInternal = false,
     ): self {
         $encrypted = app(ThreadEncryptionService::class)->encryptMessage($plaintext, $threadKey);
 
@@ -45,6 +53,7 @@ class ThreadMessage extends Model
             'thread_id' => $thread->id,
             'author_type' => $authorType,
             'author_user_id' => $authorUserId,
+            'is_internal' => $isInternal,
             'ciphertext' => $encrypted['ciphertext'],
             'iv' => $encrypted['iv'],
             'tag' => $encrypted['tag'],

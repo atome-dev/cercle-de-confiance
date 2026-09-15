@@ -34,6 +34,8 @@ class ThreadShow extends Component
 
     public string $comment = '';
 
+    public string $replyVisibility = 'sender';
+
     public function mount(Thread $thread): void
     {
         $this->thread = $thread;
@@ -86,15 +88,18 @@ class ThreadShow extends Component
         $threadKey = base64_decode($resolvedThreadKey);
         $viewingAsSender = ! (auth()->check() && $this->thread->isAccessibleBy(auth()->user()));
 
-        return $this->thread->messages->map(function ($message) use ($threadKey, $viewingAsSender) {
-            return [
-                'id' => $message->id,
-                'author_type' => $message->author_type,
-                'author_label' => $this->authorLabel($message, $viewingAsSender),
-                'plaintext' => $message->decrypt($threadKey),
-                'created_at' => $message->created_at,
-            ];
-        });
+        return $this->thread->messages
+            ->reject(fn ($message) => $viewingAsSender && $message->is_internal)
+            ->map(function ($message) use ($threadKey, $viewingAsSender) {
+                return [
+                    'id' => $message->id,
+                    'author_type' => $message->author_type,
+                    'author_label' => $this->authorLabel($message, $viewingAsSender),
+                    'is_internal' => $message->is_internal,
+                    'plaintext' => $message->decrypt($threadKey),
+                    'created_at' => $message->created_at,
+                ];
+            });
     }
 
     /**
@@ -134,11 +139,23 @@ class ThreadShow extends Component
             message: $this->newMessage,
             authorType: $hasGrant ? 'member' : 'sender',
             authorUser: $hasGrant ? auth()->user() : null,
+            isInternal: $hasGrant && $this->replyVisibility === 'internal',
         );
 
         $this->newMessage = '';
+        $this->replyVisibility = 'sender';
         $this->thread->refresh();
         unset($this->decryptedMessages);
+    }
+
+    /**
+     * La réponse "Interne" n'est proposée qu'aux membres grantés — l'expéditeur
+     * anonyme ne répond jamais qu'à lui-même, la distinction n'a pas de sens
+     * pour lui.
+     */
+    public function canReplyInternally(): bool
+    {
+        return auth()->check() && $this->thread->isAccessibleBy(auth()->user());
     }
 
     public function updatedClassificationSchoolClass(string $value): void

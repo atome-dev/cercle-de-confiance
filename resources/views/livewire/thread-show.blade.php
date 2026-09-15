@@ -102,9 +102,12 @@
         <div class="space-y-4 mb-8">
             @foreach ($this->decryptedMessages as $msg)
                 <div class="flex flex-col {{ $msg['author_type'] === 'member' ? 'items-end' : 'items-start' }}">
-                    <div class="max-w-lg rounded-lg px-4 py-3 {{ $msg['author_type'] === 'member' ? 'bg-blue-50' : 'bg-gray-100' }}">
+                    <div class="max-w-lg rounded-lg px-4 py-3 {{ $msg['is_internal'] ? 'bg-amber-50' : ($msg['author_type'] === 'member' ? 'bg-blue-50' : 'bg-gray-100') }}">
                         <flux:text class="text-xs text-gray-500 mb-1">
                             {{ $msg['author_label'] }}
+                            @if ($msg['is_internal'])
+                                · <span class="font-medium text-amber-600">Interne</span>
+                            @endif
                             · {{ $msg['created_at']->format('d/m/Y H:i') }}
                         </flux:text>
                         <p class="whitespace-pre-line">{{ $msg['plaintext'] }}</p>
@@ -114,7 +117,21 @@
         </div>
 
         <form wire:submit="reply" class="space-y-4">
-            <flux:textarea wire:model="newMessage" label="Votre réponse" rows="4" />
+            <div>
+                <div class="flex items-center justify-between mb-1">
+                    <flux:label>Votre réponse</flux:label>
+
+                    @if ($this->canReplyInternally())
+                        <flux:radio.group wire:model="replyVisibility" variant="segmented" size="sm">
+                            <flux:radio value="sender" label="Expéditeur" />
+                            <flux:radio value="internal" label="Interne" />
+                        </flux:radio.group>
+                    @endif
+                </div>
+
+                <flux:textarea wire:model="newMessage" rows="4" />
+            </div>
+
             <flux:button type="submit" variant="primary" icon="paper-airplane">Répondre</flux:button>
         </form>
     @endif
