@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Http\Middleware\EnsureAccessCodeIsValid;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -23,6 +24,8 @@ class AccessGate extends Component
         $this->validate([
             'code' => ['required', 'string'],
         ]);
+
+        $this->code = Str::upper($this->code);
 
         if (RateLimiter::tooManyAttempts($this->throttleKey(), 6)) {
             $this->addError('code', __('Trop de tentatives. Réessayez dans :seconds secondes.', [
