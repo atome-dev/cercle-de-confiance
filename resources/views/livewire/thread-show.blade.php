@@ -117,22 +117,51 @@
         </div>
 
         <form wire:submit="reply" class="space-y-4">
-            <div>
-                <div class="flex items-center justify-between mb-1">
-                    <flux:label>Votre réponse</flux:label>
+            <flux:card class="space-y-4 {{ $replyVisibility === 'internal' ? 'bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900' : '' }}">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <flux:icon
+                            :name="$replyVisibility === 'internal' ? 'lock-closed' : 'chat-bubble-left-right'"
+                            variant="micro"
+                            class="{{ $replyVisibility === 'internal' ? 'text-amber-600 dark:text-amber-500' : 'text-zinc-400' }}"
+                        />
+                        <flux:label class="!mb-0">
+                            {{ $replyVisibility === 'internal' ? 'Note interne' : 'Votre réponse' }}
+                        </flux:label>
+                    </div>
 
                     @if ($this->canReplyInternally())
-                        <flux:radio.group wire:model="replyVisibility" variant="segmented" size="sm">
-                            <flux:radio value="sender" label="Expéditeur" />
-                            <flux:radio value="internal" label="Interne" />
+                        <flux:radio.group wire:model.live="replyVisibility" variant="segmented" size="sm">
+                            <flux:radio value="sender" label="Expéditeur" icon="user-circle" />
+                            &nbsp;&nbsp;
+                            <flux:radio value="internal" label="Interne" icon="lock-closed" />
                         </flux:radio.group>
                     @endif
                 </div>
 
-                <flux:textarea wire:model="newMessage" rows="4" />
-            </div>
+                <flux:textarea
+                    wire:model="newMessage"
+                    rows="4"
+                    :placeholder="$replyVisibility === 'internal' ? 'Ajouter une note visible uniquement par l\'équipe...' : 'Écrivez votre réponse...'"
+                />
 
-            <flux:button type="submit" variant="primary" icon="paper-airplane">Répondre</flux:button>
+                @if ($replyVisibility === 'internal')
+                    <flux:text size="sm" class="text-amber-700 dark:text-amber-500 flex items-center gap-1">
+                        <flux:icon name="information-circle" variant="micro" />
+                        Cette note ne sera visible que par l'équipe interne.
+                    </flux:text>
+                @endif
+
+                <div class="flex justify-end">
+                    <flux:button
+                        type="submit"
+                        :variant="$replyVisibility === 'internal' ? 'filled' : 'primary'"
+                        icon="paper-airplane"
+                    >
+                        {{ $replyVisibility === 'internal' ? 'Ajouter la note' : 'Répondre' }}
+                    </flux:button>
+                </div>
+            </flux:card>
         </form>
     @endif
 </div>
