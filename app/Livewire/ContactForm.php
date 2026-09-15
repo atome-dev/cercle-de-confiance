@@ -14,6 +14,8 @@ use Livewire\Component;
 #[Title('Nous contacter')]
 class ContactForm extends Component
 {
+    public $members;
+
     #[Validate('string|max:255')]
     public string $senderName = '';
 
@@ -32,10 +34,18 @@ class ContactForm extends Component
 
     public ?string $generatedFullCode = null;
 
+
+    public function mount(): void
+    {
+        $this->loadMembers();
+    }
+
     public function updatedRecipientType(): void
     {
         if ($this->recipientType === 'group') {
             $this->recipientUserId = null;
+        } else {
+            $this->recipientUserId = $this->members[0]->id;
         }
     }
 
@@ -68,9 +78,9 @@ class ContactForm extends Component
         }
     }
 
-    public function members()
+    public function loadMembers()
     {
-        return User::role([Role::Parent, Role::Professeur])
+        $this->members = User::role([Role::Parent, Role::Professeur])
             ->orderBy('name')
             ->get(['id', 'name', 'membre_role', 'membre_titre']);
     }
@@ -78,7 +88,7 @@ class ContactForm extends Component
     public function render()
     {
         return view('livewire.contact-form', [
-            'members' => $this->members(),
+            'members' => $this->members,
         ]);
     }
 }
