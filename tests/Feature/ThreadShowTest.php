@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\CreateThreadWithMessage;
+use App\Actions\ShareThread;
 use App\Enums\SchoolClass;
 use App\Enums\Section;
 use App\Livewire\ThreadShow;
@@ -188,6 +189,44 @@ test('updateClassification rejects a value that is not a valid section or class'
         ->assertHasErrors(['classificationSection']);
 
     expect($thread->fresh()->section)->toBeNull();
+});
+
+test('a granted parent or professeur can see and save a comment', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->assertSee('Commentaire')
+        ->set('comment', 'À surveiller de près.')
+        ->call('updateComment');
+
+    expect($thread->fresh()->comment)->toBe('À surveiller de près.');
+});
+
+test('a non-granted parent cannot save a comment', function () {
+    ['thread' => $thread] = createGroupThreadWithParentForTest();
+    $outsider = User::factory()->parent()->create();
+
+    Livewire::actingAs($outsider)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->set('comment', 'Intrusion.')
+        ->call('updateComment');
+
+    expect($thread->fresh()->comment)->toBeNull();
+});
+
+test('a granted administrateur does not see the comment field and cannot save one', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+    $admin = User::factory()->admin()->create();
+    app(ShareThread::class)->execute($thread, $parent, [$admin->id]);
+
+    Livewire::actingAs($admin)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->assertDontSee('Commentaire')
+        ->set('comment', 'Tentative admin.')
+        ->call('updateComment');
+
+    expect($thread->fresh()->comment)->toBeNull();
 });
 
 test('share() creates new grants and updates the grantees list', function () {

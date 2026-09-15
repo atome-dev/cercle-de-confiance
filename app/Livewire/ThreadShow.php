@@ -32,11 +32,14 @@ class ThreadShow extends Component
 
     public ?string $classificationSchoolClass = null;
 
+    public string $comment = '';
+
     public function mount(Thread $thread): void
     {
         $this->thread = $thread;
         $this->classificationSection = $thread->section?->value;
         $this->classificationSchoolClass = $thread->school_class?->value;
+        $this->comment = (string) $thread->comment;
 
         if (! $this->resolveThreadKey()) {
             $this->accessDeniedReason = 'Vous n\'avez pas accès à ce dossier.';
@@ -176,6 +179,31 @@ class ThreadShow extends Component
             'section' => $this->classificationSection ?: null,
             'school_class' => $this->classificationSchoolClass ?: null,
         ]);
+    }
+
+    /**
+     * Réservé aux parents et professeurs détenteurs d'un grant — contrairement
+     * à la classification et au statut, un administrateur granté ne peut pas
+     * écrire de commentaire ici.
+     */
+    public function canComment(): bool
+    {
+        return auth()->check()
+            && $this->thread->isAccessibleBy(auth()->user())
+            && auth()->user()->hasAnyRole([Role::Parent, Role::Professeur]);
+    }
+
+    public function updateComment(): void
+    {
+        if (! $this->canComment()) {
+            return;
+        }
+
+        $this->validate([
+            'comment' => ['nullable', 'string', 'max:5000'],
+        ]);
+
+        $this->thread->update(['comment' => $this->comment ?: null]);
     }
 
     public function share(ShareThread $action): void

@@ -52,6 +52,21 @@
                     </form>
                 </flux:card>
 
+                @if ($this->canComment())
+                    <flux:card class="mb-6 space-y-4">
+                        <flux:heading size="sm">Commentaire</flux:heading>
+
+                        <form wire:submit="updateComment" class="space-y-3">
+                            <flux:textarea
+                                wire:model="comment"
+                                placeholder="Note interne visible par les parents et professeurs ayant accès à ce dossier…"
+                                rows="4"
+                            />
+                            <flux:button type="submit" size="sm">Enregistrer</flux:button>
+                        </form>
+                    </flux:card>
+                @endif
+
                 <flux:card class="mb-6 space-y-4">
                     <flux:heading size="sm">Partagé avec</flux:heading>
 

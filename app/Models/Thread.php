@@ -18,7 +18,7 @@ class Thread extends Model
 
     protected $fillable = [
         'code', 'recipient_type', 'recipient_user_id', 'status',
-        'section', 'school_class',
+        'section', 'school_class', 'comment',
         'sender_name', 'sender_email', 'sender_user_id', 'is_anonymous',
         'anon_key_envelope',
         'last_message_at',
