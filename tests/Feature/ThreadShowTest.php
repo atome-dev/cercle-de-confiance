@@ -76,6 +76,33 @@ test('anonymous access via the tracking code still works', function () {
         ->assertSeeText('Ceci est un message de test suffisamment long.');
 });
 
+test('the anonymous sender sees "Vous" instead of "Expéditeur" on their own messages', function () {
+    $result = app(CreateThreadWithMessage::class)->execute(
+        senderName: 'Jean Dupont',
+        senderEmail: 'jean.dupont@example.com',
+        message: 'Ceci est un message de test suffisamment long.',
+        recipientType: 'group',
+        recipientUserId: null,
+    );
+
+    $thread = $result['thread'];
+    [, $privateKey] = app(ThreadCodeGenerator::class)->parseFullCode($result['fullCode']);
+
+    $this->withSession(["anon_access_{$thread->id}" => $privateKey])
+        ->get(route('threads.show', $thread))
+        ->assertSeeText('Vous')
+        ->assertDontSeeText('Expéditeur');
+});
+
+test('a granted member sees "Expéditeur" on the sender\'s messages', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->assertSee('Expéditeur')
+        ->assertDontSee('Vous');
+});
+
 test('updateStatus succeeds for a grantee and no-ops for a non-grantee', function () {
     ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
     $outsider = User::factory()->parent()->create();

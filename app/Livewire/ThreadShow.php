@@ -8,6 +8,7 @@ use App\Enums\Role;
 use App\Enums\SchoolClass;
 use App\Enums\Section;
 use App\Models\Thread;
+use App\Models\ThreadMessage;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
@@ -80,16 +81,32 @@ class ThreadShow extends Component
         }
 
         $threadKey = base64_decode($resolvedThreadKey);
+        $viewingAsSender = ! (auth()->check() && $this->thread->isAccessibleBy(auth()->user()));
 
-        return $this->thread->messages->map(function ($message) use ($threadKey) {
+        return $this->thread->messages->map(function ($message) use ($threadKey, $viewingAsSender) {
             return [
                 'id' => $message->id,
                 'author_type' => $message->author_type,
-                'author_name' => $message->author?->name,
+                'author_label' => $this->authorLabel($message, $viewingAsSender),
                 'plaintext' => $message->decrypt($threadKey),
                 'created_at' => $message->created_at,
             ];
         });
+    }
+
+    /**
+     * "Vous" pour l'expéditeur qui consulte son propre dossier via le code de
+     * suivi ; "Expéditeur" pour un membre qui lit les messages de ce même
+     * expéditeur — la même ligne ne porte donc pas le même libellé selon qui
+     * la regarde.
+     */
+    private function authorLabel(ThreadMessage $message, bool $viewingAsSender): string
+    {
+        if ($message->author_type === 'member') {
+            return $message->author?->name ?? 'Membre';
+        }
+
+        return $viewingAsSender ? 'Vous' : 'Expéditeur';
     }
 
     public function reply(ReplyToThread $action): void

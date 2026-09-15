@@ -89,7 +89,7 @@
                 <div class="flex flex-col {{ $msg['author_type'] === 'member' ? 'items-end' : 'items-start' }}">
                     <div class="max-w-lg rounded-lg px-4 py-3 {{ $msg['author_type'] === 'member' ? 'bg-blue-50' : 'bg-gray-100' }}">
                         <flux:text class="text-xs text-gray-500 mb-1">
-                            {{ $msg['author_type'] === 'member' ? ($msg['author_name'] ?? 'Membre') : 'Expéditeur' }}
+                            {{ $msg['author_label'] }}
                             · {{ $msg['created_at']->format('d/m/Y H:i') }}
                         </flux:text>
                         <p class="whitespace-pre-line">{{ $msg['plaintext'] }}</p>
