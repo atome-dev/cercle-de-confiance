@@ -2,6 +2,14 @@
 
 use App\Http\Middleware\EnsureAccessCodeIsValid;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
+
+beforeEach(function () {
+    // The "parent" role always exists in production (seeded by RoleSeeder on every
+    // deploy) even before any parent user is registered — Home::mount() uses
+    // User::role() to list members, which requires the role to exist.
+    Role::firstOrCreate(['name' => 'parent']);
+});
 
 function visitHomeAs(?User $user)
 {

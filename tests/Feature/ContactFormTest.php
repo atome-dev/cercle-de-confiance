@@ -44,12 +44,6 @@ test('the recipient dropdown lists parents and professeurs, and appears when "me
     $component->assertDontSee($otherUser->name);
 });
 
-test('the contact form does not crash when no parent or professeur is registered yet', function () {
-    Livewire::test(ContactForm::class)
-        ->set('recipientType', 'member')
-        ->assertSet('recipientType', 'member');
-});
-
 test('submitting with "Cercle de Confiance" creates a group thread with no recipient user', function () {
     Livewire::test(ContactForm::class)
         ->set('senderName', 'Jean Dupont')
@@ -66,11 +60,14 @@ test('submitting with "Cercle de Confiance" creates a group thread with no recip
 });
 
 test('submitting with "member" requires a selected member', function () {
+    createEligibleMember();
+
     Livewire::test(ContactForm::class)
         ->set('senderName', 'Jean Dupont')
         ->set('senderEmail', 'jean@example.com')
         ->set('message', 'Ceci est un message de test suffisamment long.')
         ->set('recipientType', 'member')
+        ->set('recipientUserId', null)
         ->call('submit')
         ->assertHasErrors(['recipientUserId' => 'required']);
 

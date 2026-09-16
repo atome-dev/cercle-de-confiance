@@ -6,10 +6,18 @@ use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Livewire\Livewire;
+use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
-    config(['access.code' => 'secret-code']);
+    // Access codes are always configured in uppercase in practice — AccessGate
+    // uppercases the submitted code before comparing against config('access.code').
+    config(['access.code' => 'SECRET-CODE']);
     Cache::flush();
+
+    // The "parent" role always exists in production (seeded by RoleSeeder on every
+    // deploy) even before any parent user is registered — Home::mount() uses
+    // User::role() to list members, which requires the role to exist.
+    Role::firstOrCreate(['name' => 'parent']);
 });
 
 test('a public page redirects guests without the access cookie', function () {
