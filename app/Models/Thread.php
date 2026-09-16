@@ -5,12 +5,12 @@ namespace App\Models;
 use App\Enums\SchoolClass;
 use App\Enums\Section;
 use App\Services\ThreadEncryptionService;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
 
 class Thread extends Model
 {
@@ -136,13 +136,18 @@ class Thread extends Model
             ->decryptMessage($this->comment_ciphertext, $this->comment_iv, $this->comment_tag, $threadKey);
     }
 
-    public function lastReadAtFor(?User $user): ?Carbon
+    /**
+     * Utilise la relation "reads" déjà chargée quand elle est disponible (ex.
+     * ThreadsList l'eager-charge, filtrée sur l'utilisateur courant, pour
+     * éviter une requête par dossier affiché).
+     */
+    public function lastReadAtFor(?User $user): ?CarbonInterface
     {
-        $read = $this->reads()
-            ->where('reader_user_id', $user?->id)
-            ->first();
+        if ($this->relationLoaded('reads')) {
+            return $this->reads->firstWhere('reader_user_id', $user?->id)?->last_read_at;
+        }
 
-        return $read?->last_read_at;
+        return $this->reads()->where('reader_user_id', $user?->id)->first()?->last_read_at;
     }
 
     public function markReadFor(?User $user): void
@@ -153,11 +158,31 @@ class Thread extends Model
         );
     }
 
+    /**
+     * Utilise la relation "messages" déjà chargée quand elle est disponible,
+     * pour la même raison que lastReadAtFor() — voir ThreadsList::threads().
+     */
     public function hasUnreadFor(?User $user): bool
     {
         $lastRead = $this->lastReadAtFor($user);
+        $latestOtherMessageAt = $this->latestMessageFromOtherPartyAt($user);
 
-        $latestOtherMessage = $this->messages()
+        if (! $latestOtherMessageAt) {
+            return false;
+        }
+
+        return $lastRead === null || $latestOtherMessageAt->gt($lastRead);
+    }
+
+    private function latestMessageFromOtherPartyAt(?User $user): ?CarbonInterface
+    {
+        if ($this->relationLoaded('messages')) {
+            return $this->messages
+                ->filter(fn (ThreadMessage $message) => $this->isFromOtherParty($message, $user))
+                ->max('created_at');
+        }
+
+        return $this->messages()
             ->when($user, function ($q) use ($user) {
                 $q->where(function ($q2) use ($user) {
                     $q2->where('author_type', 'sender')
@@ -167,12 +192,14 @@ class Thread extends Model
                 $q->where('author_type', 'member');
             })
             ->latest('created_at')
-            ->first();
+            ->first()
+            ?->created_at;
+    }
 
-        if (! $latestOtherMessage) {
-            return false;
-        }
-
-        return $lastRead === null || $latestOtherMessage->created_at->gt($lastRead);
+    private function isFromOtherParty(ThreadMessage $message, ?User $user): bool
+    {
+        return $user
+            ? ($message->author_type === 'sender' || $message->author_user_id !== $user->id)
+            : $message->author_type === 'member';
     }
 }

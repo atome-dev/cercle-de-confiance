@@ -23,11 +23,17 @@
 
         <flux:table.rows>
             @forelse ($this->threads as $thread)
+                @php $hasUnread = $thread->hasUnreadFor(auth()->user()); @endphp
                 <flux:table.row wire:key="thread-{{ $thread->id }}">
                     <flux:table.cell>
-                        <flux:link href="{{ route('threads.show', $thread) }}" wire:navigate>
-                            {{ $thread->code }}
-                        </flux:link>
+                        <div class="flex items-center gap-2">
+                            @if ($hasUnread)
+                                <span class="h-2 w-2 shrink-0 rounded-full bg-blue-500" title="Messages non lus"></span>
+                            @endif
+                            <flux:link href="{{ route('threads.show', $thread) }}" wire:navigate class="{{ $hasUnread ? 'font-bold' : '' }}">
+                                {{ $thread->code }}
+                            </flux:link>
+                        </div>
                     </flux:table.cell>
                     <flux:table.cell>
                         {{ $thread->decryptedSenderName() ?: 'Anonyme' }}

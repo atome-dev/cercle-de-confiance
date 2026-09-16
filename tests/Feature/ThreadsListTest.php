@@ -7,6 +7,7 @@ use App\Enums\Section;
 use App\Livewire\ThreadsList;
 use App\Models\Thread;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
 
 function createGroupThreadForTest(): Thread
@@ -126,6 +127,53 @@ test('the list shows the sender\'s name when one was given', function () {
     Livewire::actingAs($parent)
         ->test(ThreadsList::class)
         ->assertSeeInOrder([$thread->code, 'Jean Dupont']);
+});
+
+test('a thread with an unread message from the sender shows the unread indicator', function () {
+    $parent = User::factory()->parent()->create();
+    $thread = createGroupThreadForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadsList::class)
+        ->assertSeeHtml('Messages non lus');
+});
+
+test('a thread the parent has already read shows no unread indicator', function () {
+    $parent = User::factory()->parent()->create();
+    $thread = createGroupThreadForTest();
+    $thread->markReadFor($parent);
+
+    Livewire::actingAs($parent)
+        ->test(ThreadsList::class)
+        ->assertDontSeeHtml('Messages non lus');
+});
+
+test('the list does not run extra queries per thread to compute unread state', function () {
+    $parent = User::factory()->parent()->create();
+    createGroupThreadForTest();
+    createGroupThreadForTest();
+    createGroupThreadForTest();
+    createGroupThreadForTest();
+
+    DB::enableQueryLog();
+    Livewire::actingAs($parent)->test(ThreadsList::class);
+    $queryCountForFour = count(DB::getQueryLog());
+    DB::flushQueryLog();
+
+    DB::disableQueryLog();
+    createGroupThreadForTest();
+    createGroupThreadForTest();
+    createGroupThreadForTest();
+    createGroupThreadForTest();
+    DB::enableQueryLog();
+
+    Livewire::actingAs($parent)->test(ThreadsList::class);
+    $queryCountForEight = count(DB::getQueryLog());
+    DB::disableQueryLog();
+
+    // Allow for incidental variance (e.g. permission cache warmup) but rule out
+    // a per-thread query: doubling the threads must not add queries.
+    expect($queryCountForEight)->toBeLessThanOrEqual($queryCountForFour);
 });
 
 test('the status filter still works combined with the grant-based query', function () {
