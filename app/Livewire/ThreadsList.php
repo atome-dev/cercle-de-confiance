@@ -15,14 +15,14 @@ class ThreadsList extends Component
 {
     use WithPagination;
 
-    public string $statusFilter = 'all';
+    public bool $showArchived = false;
 
     public function mount(): void
     {
         abort_unless(auth()->user()?->hasAnyRole(['administrateur', 'parent', 'professeur']), 403);
     }
 
-    public function updatedStatusFilter(): void
+    public function updatedShowArchived(): void
     {
         $this->resetPage();
     }
@@ -42,7 +42,7 @@ class ThreadsList extends Component
                 'reads' => fn ($q) => $q->where('reader_user_id', $user->id),
                 'messages' => fn ($q) => $q->select(['id', 'thread_id', 'author_type', 'author_user_id', 'created_at']),
             ])
-            ->when($this->statusFilter !== 'all', fn ($q) => $q->where('status', $this->statusFilter))
+            ->when(! $this->showArchived, fn ($q) => $q->where('status', '!=', 'archive'))
             ->latest('last_message_at')
             ->paginate(15);
     }

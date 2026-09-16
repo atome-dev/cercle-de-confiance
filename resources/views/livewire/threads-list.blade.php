@@ -1,13 +1,12 @@
 <div class="max-w-5xl mx-auto p-6">
     <div class="flex items-center justify-between mb-6">
         <flux:heading size="xl">Dossiers</flux:heading>
-
-        <flux:select wire:model.live="statusFilter" class="w-48">
-            <flux:select.option value="all">Tous les statuts</flux:select.option>
-            <flux:select.option value="nouveau">Nouveau</flux:select.option>
-            <flux:select.option value="en_cours">En cours</flux:select.option>
-            <flux:select.option value="archive">Archivé</flux:select.option>
-        </flux:select>
+        <flux:switch
+            wire:model.live="showArchived"
+            label="Afficher les dossiers archivés"
+            align="left"
+            class="data-[checked]:bg-amber-500"
+        />
     </div>
 
     <flux:table>

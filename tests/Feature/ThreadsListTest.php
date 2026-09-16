@@ -176,18 +176,19 @@ test('the list does not run extra queries per thread to compute unread state', f
     expect($queryCountForEight)->toBeLessThanOrEqual($queryCountForFour);
 });
 
-test('the status filter still works combined with the grant-based query', function () {
+test('archived dossiers are hidden by default and shown once the switch is toggled', function () {
     $parent = User::factory()->parent()->create();
-    $thread = createGroupThreadForTest();
-    $thread->update(['status' => 'archive']);
+    $archivedThread = createGroupThreadForTest();
+    $archivedThread->update(['status' => 'archive']);
 
-    $otherThread = createGroupThreadForTest();
+    $activeThread = createGroupThreadForTest();
 
     $component = Livewire::actingAs($parent)->test(ThreadsList::class);
 
-    $component->assertSee($thread->code)->assertSee($otherThread->code);
+    $component->assertDontSee($archivedThread->code)
+        ->assertSee($activeThread->code);
 
-    $component->set('statusFilter', 'archive')
-        ->assertSee($thread->code)
-        ->assertDontSee($otherThread->code);
+    $component->set('showArchived', true)
+        ->assertSee($archivedThread->code)
+        ->assertSee($activeThread->code);
 });

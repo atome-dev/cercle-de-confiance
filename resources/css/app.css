@@ -15,8 +15,8 @@
 /* ============================================================
  * SECTION 1: CONFIGURATION TAILWIND 4
  * ============================================================ */
-@source "../../vendor/livewire/flux-ui/stubs/**/*.blade.php";
-@source "../../vendor/livewire/flux-ui/flux-tailwind-ui/**/*.blade.php";
+@source "../../vendor/livewire/flux/stubs/**/*.blade.php";
+@source "../../vendor/livewire/flux-pro/stubs/**/*.blade.php";
 @source "../../vendor/livewire/livewire/src/**/*.blade.php";
 @source "../../app/**/*.blade.php";
 @source "../../resources/**/*.blade.php";
@@ -315,7 +315,6 @@
         background-color: var(--color-surface);
         color: var(--color-text);
         border: none;
-        padding: 0.5rem 0.75rem;
         border-radius: var(--radius-md);
         width: 100%;
     }
