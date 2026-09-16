@@ -17,7 +17,7 @@ class Thread extends Model
     use HasFactory;
 
     protected $fillable = [
-        'code', 'recipient_type', 'recipient_user_id', 'status',
+        'code', 'recipient_type', 'recipient_user_id', 'status', 'archived_at',
         'section', 'school_class', 'comment_ciphertext', 'comment_iv', 'comment_tag',
         'sender_name', 'sender_email', 'sender_user_id', 'is_anonymous',
         'anon_key_envelope',
@@ -30,6 +30,7 @@ class Thread extends Model
             'section' => Section::class,
             'school_class' => SchoolClass::class,
             'is_anonymous' => 'boolean',
+            'archived_at' => 'datetime',
             'last_message_at' => 'datetime',
         ];
     }

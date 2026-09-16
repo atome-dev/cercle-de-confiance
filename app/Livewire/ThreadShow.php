@@ -183,7 +183,12 @@ class ThreadShow extends Component
             return;
         }
 
-        $this->thread->update(['status' => $status]);
+        $this->thread->update([
+            'status' => $status,
+            // Point de départ de la purge automatique à 6 mois (voir
+            // PurgeArchivedThreads) — remis à zéro si le dossier est rouvert.
+            'archived_at' => $status === 'archive' ? now() : null,
+        ]);
     }
 
     public function updateClassification(): void

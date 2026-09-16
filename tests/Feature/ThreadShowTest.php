@@ -239,6 +239,22 @@ test('updateStatus succeeds for a grantee and no-ops for a non-grantee', functio
     expect($thread->fresh()->status)->toBe('archive');
 });
 
+test('archiving sets archived_at, and reopening clears it', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->call('updateStatus', 'archive');
+
+    expect($thread->fresh()->archived_at)->not->toBeNull();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->call('updateStatus', 'en_cours');
+
+    expect($thread->fresh()->archived_at)->toBeNull();
+});
+
 test('updateClassification succeeds for a grantee and no-ops for a non-grantee', function () {
     ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
     $outsider = User::factory()->parent()->create();
