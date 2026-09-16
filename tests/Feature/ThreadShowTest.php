@@ -5,6 +5,7 @@ use App\Actions\ReplyToThread;
 use App\Actions\ShareThread;
 use App\Enums\SchoolClass;
 use App\Enums\Section;
+use App\Http\Middleware\EnsureAccessCodeIsValid;
 use App\Livewire\ThreadShow;
 use App\Models\User;
 use App\Services\ThreadCodeGenerator;
@@ -20,6 +21,12 @@ beforeEach(function () {
     // administrateurs when there is no parent).
     Role::firstOrCreate(['name' => 'parent']);
     Role::firstOrCreate(['name' => 'administrateur']);
+
+    // /dossiers/{thread} now sits behind the school's shared access.code gate even
+    // for anonymous tracking-code visitors — only matters for the plain HTTP
+    // ->get(route('threads.show', ...)) calls below; Livewire::test() bypasses
+    // route middleware entirely, so it's a no-op for the granted-member tests.
+    $this->withCookie('access_granted', EnsureAccessCodeIsValid::expectedCookieValue());
 });
 
 function createGroupThreadWithParentForTest(): array

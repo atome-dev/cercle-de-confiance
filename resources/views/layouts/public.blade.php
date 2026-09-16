@@ -227,6 +227,7 @@
                     <nav class="flex flex-wrap gap-x-8 gap-y-4 text-sm">
                         <a href="{{ route('contact.show') }}" class="transition hover:text-secondary-400" wire:navigate>Nous Contacter</a>
                         <a href="{{ route('charte.show') }}" class="transition hover:text-secondary-400" wire:navigate>Notre Charte</a>
+                        <a href="{{ route('rgpd.show') }}" class="transition hover:text-secondary-400" wire:navigate data-test="nav-rgpd">Protection des données</a>
                         @if(auth()->check())
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
