@@ -13,6 +13,7 @@
     <flux:table>
         <flux:table.columns>
             <flux:table.column>Code</flux:table.column>
+            <flux:table.column>Expéditeur</flux:table.column>
             <flux:table.column>Destinataire</flux:table.column>
             <flux:table.column>Section</flux:table.column>
             <flux:table.column>Classe</flux:table.column>
@@ -27,6 +28,9 @@
                         <flux:link href="{{ route('threads.show', $thread) }}" wire:navigate>
                             {{ $thread->code }}
                         </flux:link>
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        {{ $thread->decryptedSenderName() ?: 'Anonyme' }}
                     </flux:table.cell>
                     <flux:table.cell>
                         {{ $thread->isForGroup() ? 'Commission' : $thread->recipientUser?->name }}
@@ -52,7 +56,7 @@
                 </flux:table.row>
             @empty
                 <flux:table.row>
-                    <flux:table.cell colspan="6" class="text-center text-gray-500">
+                    <flux:table.cell colspan="7" class="text-center text-gray-500">
                         Aucun dossier pour le moment.
                     </flux:table.cell>
                 </flux:table.row>

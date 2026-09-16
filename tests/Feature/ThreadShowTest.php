@@ -106,6 +106,33 @@ test('a granted member sees "Expéditeur" on the sender\'s messages', function (
         ->assertDontSee('Vous');
 });
 
+test('a granted member sees the sender\'s name and email below the dossier code', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->assertSee('Jean Dupont')
+        ->assertSee('jean.dupont@example.com');
+});
+
+test('the anonymous sender does not see their own name and email redisplayed', function () {
+    $result = app(CreateThreadWithMessage::class)->execute(
+        senderName: 'Jean Dupont',
+        senderEmail: 'jean.dupont@example.com',
+        message: 'Ceci est un message de test suffisamment long.',
+        recipientType: 'group',
+        recipientUserId: null,
+    );
+
+    $thread = $result['thread'];
+    [, $privateKey] = app(ThreadCodeGenerator::class)->parseFullCode($result['fullCode']);
+
+    $this->withSession(["anon_access_{$thread->id}" => $privateKey])
+        ->get(route('threads.show', $thread))
+        ->assertDontSee('Jean Dupont')
+        ->assertDontSee('jean.dupont@example.com');
+});
+
 test('a granted member can reply internally, and the reply is tagged accordingly', function () {
     ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
 
@@ -284,7 +311,9 @@ test('a granted parent or professeur can see and save a comment', function () {
         ->set('comment', 'À surveiller de près.')
         ->call('updateComment');
 
-    expect($thread->fresh()->comment)->toBe('À surveiller de près.');
+    $thread->refresh();
+    expect($thread->comment_ciphertext)->not->toBeNull()
+        ->and($thread->decryptComment($thread->decryptKeyFor($parent)))->toBe('À surveiller de près.');
 });
 
 test('a non-granted parent cannot save a comment', function () {
@@ -296,7 +325,7 @@ test('a non-granted parent cannot save a comment', function () {
         ->set('comment', 'Intrusion.')
         ->call('updateComment');
 
-    expect($thread->fresh()->comment)->toBeNull();
+    expect($thread->fresh()->comment_ciphertext)->toBeNull();
 });
 
 test('a granted administrateur does not see the comment field and cannot save one', function () {
@@ -310,7 +339,19 @@ test('a granted administrateur does not see the comment field and cannot save on
         ->set('comment', 'Tentative admin.')
         ->call('updateComment');
 
-    expect($thread->fresh()->comment)->toBeNull();
+    expect($thread->fresh()->comment_ciphertext)->toBeNull();
+});
+
+test('a comment is encrypted at rest with the thread key, like the exchanged messages', function () {
+    ['thread' => $thread, 'parent' => $parent] = createGroupThreadWithParentForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadShow::class, ['thread' => $thread])
+        ->set('comment', 'Contact établi avec la famille.')
+        ->call('updateComment');
+
+    $thread->refresh();
+    expect($thread->comment_ciphertext)->not->toContain('Contact établi avec la famille.');
 });
 
 test('share() creates new grants and updates the grantees list', function () {

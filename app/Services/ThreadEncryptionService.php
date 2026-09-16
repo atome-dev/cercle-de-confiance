@@ -28,6 +28,20 @@ class ThreadEncryptionService
         return base64_decode(Crypt::decryptString($envelope));
     }
 
+    /**
+     * Chiffre un champ texte (ex. nom de l'expéditeur) dans l'enveloppe app :
+     * lisible par l'application/les membres, sans avoir besoin du code de suivi.
+     */
+    public function sealTextForApp(string $text): string
+    {
+        return Crypt::encryptString($text);
+    }
+
+    public function openTextFromAppEnvelope(string $envelope): string
+    {
+        return Crypt::decryptString($envelope);
+    }
+
     public function sealForAnon(string $threadKey, string $threadCode, string $privateKey): string
     {
         return $this->anonEncrypter($threadCode, $privateKey)
@@ -39,20 +53,6 @@ class ThreadEncryptionService
         return base64_decode(
             $this->anonEncrypter($threadCode, $privateKey)->decryptString($envelope)
         );
-    }
-
-    /**
-     * Chiffre un champ d'identité réelle (nom, email) dans l'enveloppe anon :
-     * uniquement récupérable par qui détient le code complet ABCD-EFGH.
-     */
-    public function sealIdentityForAnon(string $plainText, string $threadCode, string $privateKey): string
-    {
-        return $this->anonEncrypter($threadCode, $privateKey)->encryptString($plainText);
-    }
-
-    public function openIdentityFromAnonEnvelope(string $envelope, string $threadCode, string $privateKey): string
-    {
-        return $this->anonEncrypter($threadCode, $privateKey)->decryptString($envelope);
     }
 
     protected function anonEncrypter(string $threadCode, string $privateKey): Encrypter

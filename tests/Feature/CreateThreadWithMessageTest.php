@@ -1,10 +1,10 @@
 <?php
 
 use App\Actions\CreateThreadWithMessage;
+use App\Livewire\ThreadsList;
 use App\Models\Thread;
 use App\Models\User;
-use App\Services\ThreadCodeGenerator;
-use Illuminate\Contracts\Encryption\DecryptException;
+use Livewire\Livewire;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -32,7 +32,7 @@ test('creating a thread encrypts the sender name and email at rest', function ()
         ->and($thread->sender_email)->not->toContain('jean.dupont');
 });
 
-test('the sender name and email can be recovered with the full tracking code', function () {
+test('the sender name and email are readable by the app without any tracking code', function () {
     $result = app(CreateThreadWithMessage::class)->execute(
         senderName: 'Jean Dupont',
         senderEmail: 'jean.dupont@example.com',
@@ -41,26 +41,26 @@ test('the sender name and email can be recovered with the full tracking code', f
         recipientUserId: null,
     );
 
-    [, $privateKey] = app(ThreadCodeGenerator::class)->parseFullCode($result['fullCode']);
-
-    $thread = $result['thread'];
-
-    expect($thread->decryptSenderName($privateKey))->toBe('Jean Dupont')
-        ->and($thread->decryptSenderEmail($privateKey))->toBe('jean.dupont@example.com');
+    expect($result['thread']->decryptedSenderName())->toBe('Jean Dupont')
+        ->and($result['thread']->decryptedSenderEmail())->toBe('jean.dupont@example.com');
 });
 
-test('the sender name and email cannot be recovered with the wrong private key', function () {
+test('an empty sender name is shown as "Anonyme" in the dossier list', function () {
+    $parent = User::factory()->parent()->create();
+
     $result = app(CreateThreadWithMessage::class)->execute(
-        senderName: 'Jean Dupont',
+        senderName: '',
         senderEmail: 'jean.dupont@example.com',
         message: 'Ceci est un message de test suffisamment long.',
         recipientType: 'group',
         recipientUserId: null,
     );
 
-    $thread = $result['thread'];
+    expect($result['thread']->decryptedSenderName())->toBe('');
 
-    expect(fn () => $thread->decryptSenderName('XXXX'))->toThrow(DecryptException::class);
+    Livewire::actingAs($parent)
+        ->test(ThreadsList::class)
+        ->assertSee('Anonyme');
 });
 
 test('a "group" thread grants every current parent user', function () {

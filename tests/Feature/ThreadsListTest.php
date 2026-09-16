@@ -119,6 +119,15 @@ test('the list shows the assigned section and class, or a dash when unclassified
     $component->assertSeeInOrder([$unclassified->code, '—']);
 });
 
+test('the list shows the sender\'s name when one was given', function () {
+    $parent = User::factory()->parent()->create();
+    $thread = createGroupThreadForTest();
+
+    Livewire::actingAs($parent)
+        ->test(ThreadsList::class)
+        ->assertSeeInOrder([$thread->code, 'Jean Dupont']);
+});
+
 test('the status filter still works combined with the grant-based query', function () {
     $parent = User::factory()->parent()->create();
     $thread = createGroupThreadForTest();

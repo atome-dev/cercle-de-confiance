@@ -5,6 +5,16 @@
         <div class="flex items-center justify-between mb-6">
             <div>
                 <flux:heading size="xl">Dossier {{ $thread->code }}</flux:heading>
+                @auth
+                    @if ($thread->isAccessibleBy(auth()->user()))
+                        <flux:text class="text-gray-500">
+                            Expéditeur : {{ $thread->decryptedSenderName() ?: 'Anonyme' }}
+                            @if ($thread->decryptedSenderEmail())
+                                ({{ $thread->decryptedSenderEmail() }})
+                            @endif
+                        </flux:text>
+                    @endif
+                @endauth
                 <flux:text class="text-gray-500">
                     {{ $thread->isForGroup() ? 'Adressé à la commission' : 'Adressé à ' . $thread->recipientUser?->name }}
                 </flux:text>

@@ -41,12 +41,17 @@ class ThreadShow extends Component
         $this->thread = $thread;
         $this->classificationSection = $thread->section?->value;
         $this->classificationSchoolClass = $thread->school_class?->value;
-        $this->comment = (string) $thread->comment;
 
-        if (! $this->resolveThreadKey()) {
+        $resolvedThreadKey = $this->resolveThreadKey();
+
+        if (! $resolvedThreadKey) {
             $this->accessDeniedReason = 'Vous n\'avez pas accès à ce dossier.';
 
             return;
+        }
+
+        if ($this->canComment()) {
+            $this->comment = $thread->decryptComment(base64_decode($resolvedThreadKey));
         }
 
         $this->thread->markReadFor(auth()->user());
@@ -220,7 +225,7 @@ class ThreadShow extends Component
             'comment' => ['nullable', 'string', 'max:5000'],
         ]);
 
-        $this->thread->update(['comment' => $this->comment ?: null]);
+        $this->thread->encryptComment($this->comment, base64_decode($this->resolveThreadKey()));
     }
 
     public function share(ShareThread $action): void

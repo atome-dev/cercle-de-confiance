@@ -18,7 +18,7 @@ class Thread extends Model
 
     protected $fillable = [
         'code', 'recipient_type', 'recipient_user_id', 'status',
-        'section', 'school_class', 'comment',
+        'section', 'school_class', 'comment_ciphertext', 'comment_iv', 'comment_tag',
         'sender_name', 'sender_email', 'sender_user_id', 'is_anonymous',
         'anon_key_envelope',
         'last_message_at',
@@ -95,16 +95,45 @@ class Thread extends Model
             ->openAnonEnvelope($this->anon_key_envelope, $this->code, $privateKey);
     }
 
-    public function decryptSenderName(string $privateKey): string
+    public function decryptedSenderName(): string
     {
-        return app(ThreadEncryptionService::class)
-            ->openIdentityFromAnonEnvelope($this->sender_name, $this->code, $privateKey);
+        return app(ThreadEncryptionService::class)->openTextFromAppEnvelope($this->sender_name);
     }
 
-    public function decryptSenderEmail(string $privateKey): string
+    public function decryptedSenderEmail(): string
     {
+        return app(ThreadEncryptionService::class)->openTextFromAppEnvelope($this->sender_email);
+    }
+
+    /**
+     * Chiffré comme les messages du dossier (AES-256-GCM, clé du dossier) —
+     * lisible par tout titulaire d'un grant, jamais par l'application seule.
+     */
+    public function encryptComment(string $plaintext, string $threadKey): void
+    {
+        if ($plaintext === '') {
+            $this->update(['comment_ciphertext' => null, 'comment_iv' => null, 'comment_tag' => null]);
+
+            return;
+        }
+
+        $encrypted = app(ThreadEncryptionService::class)->encryptMessage($plaintext, $threadKey);
+
+        $this->update([
+            'comment_ciphertext' => $encrypted['ciphertext'],
+            'comment_iv' => $encrypted['iv'],
+            'comment_tag' => $encrypted['tag'],
+        ]);
+    }
+
+    public function decryptComment(string $threadKey): string
+    {
+        if (! $this->comment_ciphertext) {
+            return '';
+        }
+
         return app(ThreadEncryptionService::class)
-            ->openIdentityFromAnonEnvelope($this->sender_email, $this->code, $privateKey);
+            ->decryptMessage($this->comment_ciphertext, $this->comment_iv, $this->comment_tag, $threadKey);
     }
 
     public function lastReadAtFor(?User $user): ?Carbon

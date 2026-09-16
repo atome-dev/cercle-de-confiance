@@ -39,8 +39,8 @@ class CreateThreadWithMessage
                 'recipient_type' => $recipientType,
                 'recipient_user_id' => $recipientType === 'member' ? $recipientUserId : null,
                 'status' => 'nouveau',
-                'sender_name' => $this->encryption->sealIdentityForAnon($senderName, $threadCode, $privateKey),
-                'sender_email' => $this->encryption->sealIdentityForAnon($senderEmail, $threadCode, $privateKey),
+                'sender_name' => $this->encryption->sealTextForApp($senderName),
+                'sender_email' => $this->encryption->sealTextForApp($senderEmail),
                 'anon_key_envelope' => $this->encryption->sealForAnon($threadKey, $threadCode, $privateKey),
                 'last_message_at' => now(),
             ]);
