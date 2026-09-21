@@ -1,14 +1,18 @@
 <?php
 
 use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\VolunteerAttestationController;
 use App\Livewire\AccessGate;
 use App\Livewire\AnonymousAccess;
 use App\Livewire\Cartouches;
 use App\Livewire\ContactForm;
 use App\Livewire\Home;
 use App\Livewire\Membres;
+use App\Livewire\PdfEditor;
 use App\Livewire\ThreadShow;
 use App\Livewire\ThreadsList;
+use App\Livewire\VolunteerAttestation;
+use App\Livewire\VolunteerAttestationsList;
 use Illuminate\Support\Facades\Route;
 
 Route::livewire('/acces', AccessGate::class)
@@ -42,6 +46,18 @@ Route::middleware('access.code')->group(function () {
                 ->name('cartouches.show');
 
             Route::livewire('/dossiers', ThreadsList::class)->name('threads.index');
+
+            Route::livewire('/editeur-pdf', PdfEditor::class)->middleware('access.code')
+                ->name('pdf-editor.show');
+
+            Route::livewire('/attestation-benevolat', VolunteerAttestation::class)->middleware('access.code')
+                ->name('attestation-benevolat.show');
+            Route::get('/attestation-benevolat/modele', [VolunteerAttestationController::class, 'template'])
+                ->name('attestation-benevolat.template');
+            Route::post('/attestation-benevolat', [VolunteerAttestationController::class, 'store'])
+                ->name('attestation-benevolat.store');
+            Route::get('/attestation-benevolat/telecharger', [VolunteerAttestationController::class, 'downloadMine'])
+                ->name('attestation-benevolat.download');
         });
 
         Route::middleware(['auth', 'role:administrateur', 'ensure2fa'])->group(function () {
@@ -50,6 +66,11 @@ Route::middleware('access.code')->group(function () {
                 ->name('membres.show');
             Route::put('/users/{user}/roles', [UserRoleController::class, 'update'])
                 ->name('users.roles.update');
+
+            Route::livewire('/attestations-benevolat', VolunteerAttestationsList::class)->middleware('access.code')
+                ->name('attestations-benevolat.index');
+            Route::get('/attestations-benevolat/{attestation}/telecharger', [VolunteerAttestationController::class, 'download'])
+                ->name('attestations-benevolat.download');
         });
 
     });

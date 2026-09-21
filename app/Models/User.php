@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -65,6 +66,27 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->hasRole('admin');
+    }
+
+    public function volunteerAttestation(): HasOne
+    {
+        return $this->hasOne(VolunteerAttestation::class);
+    }
+
+    /**
+     * Same eager-loading pattern as ThreadsList::threads() (2 queries regardless of
+     * thread count) so this can run on every page load for the nav badge without
+     * an N+1 across the user's accessible threads.
+     */
+    public function hasUnreadThreads(): bool
+    {
+        return Thread::whereHas('grants', fn ($query) => $query->where('user_id', $this->id))
+            ->with([
+                'reads' => fn ($query) => $query->where('reader_user_id', $this->id),
+                'messages' => fn ($query) => $query->select(['id', 'thread_id', 'author_type', 'author_user_id', 'created_at']),
+            ])
+            ->get()
+            ->contains(fn (Thread $thread) => $thread->hasUnreadFor($this));
     }
 
     protected function photoUrl(): Attribute

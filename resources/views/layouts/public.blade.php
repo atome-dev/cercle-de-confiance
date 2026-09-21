@@ -43,11 +43,40 @@
                         @hasanyrole('administrateur|parent|professeur')
                         <a
                             href="{{ route('threads.index') }}"
-                            class="relative py-2 font-medium transition {{ request()->routeIs('threads.index', 'threads.show') ? 'text-primary-500' : 'text-text hover:text-primary-500' }}"
+                            class="relative inline-flex items-center gap-1.5 py-2 font-medium transition {{ request()->routeIs('threads.index', 'threads.show') ? 'text-primary-500' : 'text-text hover:text-primary-500' }}"
                             wire:navigate
                             data-test="nav-dossiers"
                         >
+                            @if (auth()->user()->hasUnreadThreads())
+                                <span class="h-2 w-2 shrink-0 rounded-full bg-blue-500" title="{{ __('Dossiers non lus') }}"></span>
+                            @endif
                             Dossiers
+                        </a>
+                        {{--
+                        <a
+                            href="{{ route('pdf-editor.show') }}"
+                            class="relative py-2 font-medium transition {{ request()->routeIs('pdf-editor.show') ? 'text-primary-500' : 'text-text hover:text-primary-500' }}"
+                            data-test="nav-pdf-editor"
+                        >
+                            Éditeur PDF
+                        </a>
+                        --}}
+                        {{-- Pas de wire:navigate : la page charge un bundle JS/CSS dédié
+                             (resources/js/pdf-editor.js) qui s'exécute une seule fois par
+                             chargement de module. En navigation SPA, le script inline qui
+                             définit window.PDF_EDITOR_CONFIG est simplement patché par le
+                             morph de Livewire (pas ré-exécuté par le navigateur), donc le
+                             modèle ne se charge plus automatiquement après la première
+                             visite — seul un vrai rechargement de page le garantit. --}}
+                        <a
+                            href="{{ route('attestation-benevolat.show') }}"
+                            class="relative inline-flex items-center gap-1.5 py-2 font-medium transition {{ request()->routeIs('attestation-benevolat.show') ? 'text-primary-500' : 'text-text hover:text-primary-500' }}"
+                            data-test="nav-attestation-benevolat"
+                        >
+                            @unless (auth()->user()->volunteerAttestation)
+                                <span class="h-2 w-2 shrink-0 rounded-full bg-blue-500" title="{{ __('Attestation non enregistrée') }}"></span>
+                            @endunless
+                            Attestation de bénévolat
                         </a>
                         @endhasanyrole
 
@@ -69,6 +98,10 @@
 
                         <a href="{{ route('cartouches.show') }}" class="relative py-2 font-medium text-text transition hover:text-primary-500">
                             Cartouches
+                        </a>
+
+                        <a href="{{ route('attestations-benevolat.index') }}" class="relative py-2 font-medium text-text transition hover:text-primary-500">
+                            Attestations
                         </a>
 
                         @endrole
@@ -167,10 +200,33 @@
                     @hasanyrole('administrateur|parent|professeur')
                     <a
                         href="{{ route('threads.index') }}"
-                        class="rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('threads.index', 'threads.show') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"
+                        class="flex items-center gap-1.5 rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('threads.index', 'threads.show') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"
                         wire:navigate
                     >
+                        @if (auth()->user()->hasUnreadThreads())
+                            <span class="h-2 w-2 shrink-0 rounded-full bg-blue-500" title="{{ __('Dossiers non lus') }}"></span>
+                        @endif
                         Dossiers
+                    </a>
+
+                    {{--
+                    <a
+                        href="{{ route('pdf-editor.show') }}"
+                        class="rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('pdf-editor.show') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"
+                        data-test="nav-pdf-editor"
+                    >
+                        Éditeur PDF
+                    </a>
+                    --}}
+                    <a
+                        href="{{ route('attestation-benevolat.show') }}"
+                        class="flex items-center gap-1.5 rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('attestation-benevolat.show') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"
+                        data-test="nav-attestation-benevolat"
+                    >
+                        @unless (auth()->user()->volunteerAttestation)
+                            <span class="h-2 w-2 shrink-0 rounded-full bg-blue-500" title="{{ __('Attestation non enregistrée') }}"></span>
+                        @endunless
+                        Attestation de bénévolat
                     </a>
                     @endhasanyrole
 

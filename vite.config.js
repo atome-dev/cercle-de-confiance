@@ -11,6 +11,8 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
+                'resources/css/pdf-editor.css',
+                'resources/js/pdf-editor.js',
             ],
             refresh: true,
             fonts: [

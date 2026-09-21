@@ -148,6 +148,27 @@ test('a thread the parent has already read shows no unread indicator', function 
         ->assertDontSeeHtml('Messages non lus');
 });
 
+test('the nav shows a dot next to Dossiers when the user has an unread thread', function () {
+    $parent = User::factory()->parent()->create();
+    createGroupThreadForTest();
+
+    $this->actingAs($parent)
+        ->withCookies(withAccessCookie())
+        ->get(route('home'))
+        ->assertSee('Dossiers non lus');
+});
+
+test('the nav shows no dot next to Dossiers once all threads are read', function () {
+    $parent = User::factory()->parent()->create();
+    $thread = createGroupThreadForTest();
+    $thread->markReadFor($parent);
+
+    $this->actingAs($parent)
+        ->withCookies(withAccessCookie())
+        ->get(route('home'))
+        ->assertDontSee('Dossiers non lus');
+});
+
 test('the list does not run extra queries per thread to compute unread state', function () {
     $parent = User::factory()->parent()->create();
     createGroupThreadForTest();
