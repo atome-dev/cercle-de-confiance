@@ -28,6 +28,7 @@ it('automatically loads the blank template when reaching the page via a nav link
     // page (au lieu de naviguer directement) pour vérifier qu'un vrai chargement de page a
     // bien lieu et que le modèle se charge malgré tout automatiquement.
     $page->navigate(route('home'))
+        ->click('@user-menu-trigger')
         ->click('@nav-attestation-benevolat');
 
     // Preuve que le modèle vierge a été chargé automatiquement (pas de clic
