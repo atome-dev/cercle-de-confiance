@@ -8,10 +8,10 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Signature('app:purge-archived-threads')]
-#[Description('Delete dossiers archived for more than 6 months, per the RGPD retention policy')]
+#[Description('Delete dossiers archived for more than 18 months, per the RGPD retention policy')]
 class PurgeArchivedThreads extends Command
 {
-    public const RETENTION_MONTHS = 6;
+    public const RETENTION_MONTHS = 18;
 
     /**
      * Execute the console command.

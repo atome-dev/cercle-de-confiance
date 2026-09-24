@@ -169,9 +169,9 @@
                     </div>
                     <p class="mb-4 leading-[1.8] text-text-muted">
                         Un dossier clos (statut « archivé ») est <strong class="text-text">supprimé
-                        automatiquement et définitivement 6 mois après sa clôture</strong> — dossier,
+                        automatiquement et définitivement 18 mois après sa clôture</strong> — dossier,
                         messages, notes internes et clés de chiffrement associées sont effacés dans
-                        leur intégralité. Si le dossier est rouvert avant ce délai, le compteur de 6
+                        leur intégralité. Si le dossier est rouvert avant ce délai, le compteur de 18
                         mois est annulé.
                     </p>
                     <p class="leading-[1.8] text-text-muted">
