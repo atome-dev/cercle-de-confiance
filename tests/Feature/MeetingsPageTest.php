@@ -25,7 +25,7 @@ test('members see the meetings of the current month with their attendees', funct
     $member = User::factory()->parent()->create(['name' => 'Alice Martin']);
     $meeting = Meeting::factory()->create(['held_on' => '2026-09-10', 'title' => 'Réunion de rentrée']);
     $meeting->attendees()->attach($member);
-    Meeting::factory()->create(['held_on' => '2026-10-10', 'title' => 'Réunion d’octobre']);
+    Meeting::factory()->create(['held_on' => '2026-08-27', 'title' => 'Réunion d’août']);
 
     $this->actingAs($member)
         ->withCookies(withAccessCookie())
@@ -34,7 +34,28 @@ test('members see the meetings of the current month with their attendees', funct
         ->assertSeeText('septembre 2026')
         ->assertSeeText('Réunion de rentrée')
         ->assertSeeText('Alice Martin')
-        ->assertDontSeeText('Réunion d’octobre');
+        ->assertDontSeeText('Réunion d’août');
+});
+
+test('the next meeting is detailed above the calendar whatever the displayed month', function () {
+    $this->travelTo(Carbon::parse('2026-09-24'));
+    $member = User::factory()->parent()->create(['name' => 'Alice Martin']);
+    $this->actingAs($member);
+
+    Meeting::factory()->create(['held_on' => '2026-09-20', 'title' => 'Réunion passée']);
+    Meeting::factory()->create(['held_on' => '2026-11-05', 'title' => 'Réunion plus lointaine']);
+    $next = Meeting::factory()->create([
+        'held_on' => '2026-10-08',
+        'title' => 'Réunion d’octobre',
+        'notes' => 'Préparer le bilan du trimestre.',
+    ]);
+    $next->attendees()->attach($member);
+
+    Livewire::test(Meetings::class)
+        ->call('previousMonth')
+        ->call('previousMonth')
+        ->assertSeeHtmlInOrder(['Prochaine réunion', 'Réunion d’octobre', 'Préparer le bilan du trimestre.', 'Alice Martin', 'juillet 2026'])
+        ->assertDontSee('Réunion plus lointaine');
 });
 
 test('the calendar navigates between months', function () {
@@ -62,7 +83,7 @@ test('an administrator can record a meeting with its attendees', function () {
         ->call('create', '2026-09-24')
         ->set('title', 'Point mensuel')
         ->set('startsAt', '18:30')
-        ->set('attendeeIds', [$admin->id, $member->id])
+        ->set('attendeeIds', [$member->id])
         ->call('save')
         ->assertHasNoErrors()
         ->assertSet('showModal', false);
@@ -70,7 +91,19 @@ test('an administrator can record a meeting with its attendees', function () {
     $meeting = Meeting::sole();
     expect($meeting->title)->toBe('Point mensuel')
         ->and($meeting->held_on->format('Y-m-d'))->toBe('2026-09-24')
-        ->and($meeting->attendees->pluck('id')->sort()->values()->all())->toBe([$admin->id, $member->id]);
+        ->and($meeting->attendees->pluck('id')->all())->toBe([$member->id]);
+});
+
+test('administrators cannot be recorded as attendees', function () {
+    $admin = User::factory()->admin()->create();
+    $this->actingAs($admin);
+
+    Livewire::test(Meetings::class)
+        ->call('create', '2026-09-24')
+        ->set('title', 'Point mensuel')
+        ->set('attendeeIds', [$admin->id])
+        ->call('save')
+        ->assertHasErrors(['attendeeIds.0']);
 });
 
 test('an administrator can update and delete a meeting', function () {
@@ -98,7 +131,6 @@ test('an administrator can update and delete a meeting', function () {
 
 test('a meeting requires a title and a valid date', function () {
     $this->actingAs(User::factory()->admin()->create());
-    User::factory()->parent()->create();
 
     Livewire::test(Meetings::class)
         ->call('create')
@@ -109,7 +141,6 @@ test('a meeting requires a title and a valid date', function () {
 
 test('attendees must be members', function () {
     $this->actingAs(User::factory()->admin()->create());
-    User::factory()->parent()->create();
     $outsider = User::factory()->create();
 
     Livewire::test(Meetings::class)
@@ -120,14 +151,36 @@ test('attendees must be members', function () {
         ->assertHasErrors(['attendeeIds.0']);
 });
 
-test('non-administrator members cannot manage meetings', function () {
-    $this->actingAs(User::factory()->parent()->create());
-    $meeting = Meeting::factory()->create();
+test('parents and professeurs can manage meetings too', function (string $role) {
+    $member = User::factory()->{$role}()->create();
+    $this->actingAs($member);
 
     Livewire::test(Meetings::class)
-        ->assertDontSee('Ajouter une réunion')
-        ->call('create')
-        ->assertForbidden();
+        ->assertSee('Ajouter une réunion')
+        ->call('create', '2026-09-24')
+        ->set('title', 'Réunion des membres')
+        ->set('attendeeIds', [$member->id])
+        ->call('save')
+        ->assertHasNoErrors();
+
+    $meeting = Meeting::sole();
+
+    Livewire::test(Meetings::class)
+        ->call('edit', $meeting->id)
+        ->set('title', 'Réunion modifiée')
+        ->call('save')
+        ->assertHasNoErrors();
+
+    expect($meeting->fresh()->title)->toBe('Réunion modifiée');
+
+    Livewire::test(Meetings::class)->call('delete', $meeting->id);
+
+    expect(Meeting::find($meeting->id))->toBeNull();
+})->with(['parent', 'professeur']);
+
+test('users without a member role cannot manage meetings', function () {
+    $this->actingAs(User::factory()->create());
+    $meeting = Meeting::factory()->create();
 
     Livewire::test(Meetings::class)
         ->call('delete', $meeting->id)

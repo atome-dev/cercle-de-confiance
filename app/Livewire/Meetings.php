@@ -53,7 +53,7 @@ class Meetings extends Component
     #[Computed]
     public function canManage(): bool
     {
-        return Auth::user()->hasRole(Role::Administrateur);
+        return Auth::user()->hasAnyRole([Role::Administrateur, Role::Parent, Role::Professeur]);
     }
 
     public function previousMonth(): void
@@ -93,6 +93,19 @@ class Meetings extends Component
     }
 
     /**
+     * First meeting from today onwards, independent of the displayed month.
+     */
+    #[Computed]
+    public function nextMeeting(): ?Meeting
+    {
+        return Meeting::with(['attendees' => fn ($query) => $query->orderBy('name')])
+            ->whereDate('held_on', '>=', today())
+            ->orderBy('held_on')
+            ->orderBy('starts_at')
+            ->first();
+    }
+
+    /**
      * @return Collection<int, Meeting>
      */
     #[Computed]
@@ -108,12 +121,17 @@ class Meetings extends Component
     }
 
     /**
+     * Filters on role names rather than `User::role()`, which throws when one of the roles
+     * does not exist yet in the database.
+     *
      * @return Collection<int, User>
      */
     #[Computed]
     public function members(): Collection
     {
-        return User::role([Role::Parent, Role::Professeur, Role::Administrateur])
+        $memberRoles = array_map(fn (Role $role): string => $role->value, [Role::Parent, Role::Professeur]);
+
+        return User::whereHas('roles', fn ($query) => $query->whereIn('name', $memberRoles))
             ->orderBy('name')
             ->get();
     }

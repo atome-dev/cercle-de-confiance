@@ -5,7 +5,7 @@
     @endphp
 
     {{-- Page title --}}
-    <section class="bg-gradient-to-b from-surface-muted to-surface py-16 text-center">
+    <section class="bg-gradient-to-b from-surface-muted to-surface py-2 text-center">
         <div class="mx-auto max-w-[1200px] px-6 lg:px-12">
             <div class="mx-auto max-w-3xl">
                 <h1 class="mb-6 font-display text-4xl text-text sm:text-5xl">{{ __('Réunions') }}</h1>
@@ -16,8 +16,54 @@
         </div>
     </section>
 
-    <section class="py-16">
-        <div class="mx-auto max-w-[1200px] px-6 lg:px-12">
+    <section class="py-2">
+        <div class="mx-auto max-w-[1200px] px-2">
+            {{-- Next meeting, whatever month is displayed --}}
+            @if ($nextMeeting = $this->nextMeeting)
+                <div class="mb-10 rounded-lg border border-primary-200 bg-primary-50 p-6" data-test="next-meeting">
+                    <div class="flex flex-wrap items-start justify-between gap-4">
+                        <div>
+                            <div class="text-sm font-medium uppercase tracking-wide text-primary-500">
+                                {{ $nextMeeting->held_on->isToday() ? __("Réunion aujourd'hui") : __('Prochaine réunion') }}
+                            </div>
+                            <h2 class="mt-1 font-display text-2xl text-primary-700">{{ $nextMeeting->title }}</h2>
+                            <div class="mt-1 capitalize text-primary-700">
+                                {{ $nextMeeting->held_on->locale('fr')->translatedFormat('l j F Y') }}
+                                @if ($nextMeeting->starts_at)
+                                    · {{ substr($nextMeeting->starts_at, 0, 5) }}
+                                @endif
+                            </div>
+                        </div>
+
+                        @if ($this->canManage)
+                            <flux:button size="sm" wire:click="edit({{ $nextMeeting->id }})">{{ __('Editer') }}</flux:button>
+                        @endif
+                    </div>
+
+                    @if ($nextMeeting->notes)
+                        <p class="mt-4 whitespace-pre-line text-text">{{ $nextMeeting->notes }}</p>
+                    @endif
+
+                    <div class="mt-4">
+                        <div class="text-sm font-medium text-primary-700">
+                            {{ __('Membres présents') }} ({{ $nextMeeting->attendees->count() }})
+                        </div>
+                        @if ($nextMeeting->attendees->isEmpty())
+                            <p class="mt-2 text-sm italic text-text-muted">{{ __('Aucun membre indiqué.') }}</p>
+                        @else
+                            <ul class="mt-2 flex flex-wrap gap-2">
+                                @foreach ($nextMeeting->attendees as $attendee)
+                                    <li class="flex items-center gap-2 rounded-full bg-surface py-1 pe-3 ps-1">
+                                        <flux:avatar :name="$attendee->name" :src="$attendee->photo_url" size="xs" circle />
+                                        <span class="text-sm text-text">{{ $attendee->name }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             {{-- Month navigation --}}
             <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-2">
@@ -126,7 +172,7 @@
 
                             @if ($this->canManage)
                                 <div class="flex gap-2">
-                                    <flux:button size="sm" wire:click="edit({{ $meeting->id }})">{{ __('Modifier') }}</flux:button>
+                                    <flux:button size="sm" wire:click="edit({{ $meeting->id }})">{{ __('Editer') }}</flux:button>
                                     <flux:button
                                         size="sm"
                                         variant="danger"
@@ -192,7 +238,7 @@
                 <div class="flex gap-2">
                     <flux:spacer />
                     @if ($this->canManage)
-                        <flux:button size="sm" wire:click="edit({{ $viewing->id }})">{{ __('Modifier') }}</flux:button>
+                        <flux:button size="sm" wire:click="edit({{ $viewing->id }})">{{ __('Editer') }}</flux:button>
                     @endif
                     <flux:modal.close>
                         <flux:button size="sm" variant="ghost">{{ __('Fermer') }}</flux:button>
@@ -207,7 +253,7 @@
         <flux:modal wire:model.self="showModal" class="md:w-[32rem]">
             <form wire:submit="save" class="space-y-6">
                 <flux:heading size="lg">
-                    {{ $editing ? __('Modifier la réunion') : __('Ajouter une réunion') }}
+                    {{ $editing ? __('Editer la réunion') : __('Ajouter une réunion') }}
                 </flux:heading>
 
                 <flux:input :label="__('Titre')" wire:model="title" />
