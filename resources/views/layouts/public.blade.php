@@ -52,6 +52,14 @@
                             @endif
                             Dossiers
                         </a>
+                        <a
+                            href="{{ route('meetings.index') }}"
+                            class="relative py-2 font-medium transition {{ request()->routeIs('meetings.index') ? 'text-primary-500' : 'text-text hover:text-primary-500' }}"
+                            wire:navigate
+                            data-test="nav-meetings"
+                        >
+                            Réunions
+                        </a>
                         {{--
                         <a
                             href="{{ route('pdf-editor.show') }}"
@@ -207,6 +215,13 @@
                             <span class="h-2 w-2 shrink-0 rounded-full bg-blue-500" title="{{ __('Dossiers non lus') }}"></span>
                         @endif
                         Dossiers
+                    </a>
+                    <a
+                        href="{{ route('meetings.index') }}"
+                        class="rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('meetings.index') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"
+                        wire:navigate
+                    >
+                        Réunions
                     </a>
 
                     {{--

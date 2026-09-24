@@ -7,6 +7,7 @@ use App\Livewire\AnonymousAccess;
 use App\Livewire\Cartouches;
 use App\Livewire\ContactForm;
 use App\Livewire\Home;
+use App\Livewire\Meetings;
 use App\Livewire\Membres;
 use App\Livewire\PdfEditor;
 use App\Livewire\ThreadShow;
@@ -46,6 +47,8 @@ Route::middleware('access.code')->group(function () {
                 ->name('cartouches.show');
 
             Route::livewire('/dossiers', ThreadsList::class)->name('threads.index');
+
+            Route::livewire('/reunions', Meetings::class)->name('meetings.index');
 
             Route::livewire('/editeur-pdf', PdfEditor::class)->middleware('access.code')
                 ->name('pdf-editor.show');
