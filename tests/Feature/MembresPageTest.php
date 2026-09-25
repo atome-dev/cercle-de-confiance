@@ -111,3 +111,62 @@ test('a member can be deleted', function () {
 
     expect(User::find($membre->id))->toBeNull();
 });
+
+test('an administrator can grant the administrateur role to a member', function () {
+    $admin = User::factory()->admin()->create();
+    $membre = User::factory()->parent()->create();
+
+    Livewire::actingAs($admin)->test(Membres::class)
+        ->call('toggleAdmin', $membre->id);
+
+    expect($membre->fresh()->hasRole('administrateur'))->toBeTrue()
+        ->and($membre->fresh()->hasRole('parent'))->toBeTrue();
+});
+
+test('an administrator can revoke the administrateur role from another member', function () {
+    $admin = User::factory()->admin()->create();
+    $membre = User::factory()->parent()->admin()->create();
+
+    Livewire::actingAs($admin)->test(Membres::class)
+        ->call('toggleAdmin', $membre->id);
+
+    expect($membre->fresh()->hasRole('administrateur'))->toBeFalse()
+        ->and($membre->fresh()->hasRole('parent'))->toBeTrue();
+});
+
+test('an administrator cannot revoke their own administrateur role', function () {
+    $admin = User::factory()->parent()->admin()->create();
+
+    Livewire::actingAs($admin)->test(Membres::class)
+        ->call('toggleAdmin', $admin->id)
+        ->assertForbidden();
+
+    expect($admin->fresh()->hasRole('administrateur'))->toBeTrue();
+});
+
+test('a non-administrator cannot grant the administrateur role', function () {
+    $parent = User::factory()->parent()->create();
+    $membre = User::factory()->parent()->create();
+
+    Livewire::actingAs($parent)->test(Membres::class)
+        ->call('toggleAdmin', $membre->id)
+        ->assertForbidden();
+
+    expect($membre->fresh()->hasRole('administrateur'))->toBeFalse();
+});
+
+test('updating a member keeps their administrateur role', function () {
+    $admin = User::factory()->admin()->create();
+    $membre = User::factory()->parent()->admin()->create();
+    $membre->forceFill(['membre_titre' => "Parent d'élève", 'membre_role' => 'parent'])->save();
+
+    Livewire::actingAs($admin)->test(Membres::class)
+        ->call('edit', $membre->id)
+        ->set('membre_role', 'professeur')
+        ->call('save');
+
+    $membre->refresh();
+    expect($membre->hasRole('professeur'))->toBeTrue()
+        ->and($membre->hasRole('administrateur'))->toBeTrue()
+        ->and($membre->hasRole('parent'))->toBeFalse();
+});

@@ -38,6 +38,7 @@ class Membres extends Component
     public function membres(): Collection
     {
         return User::role([Role::Parent, Role::Professeur])
+            ->with('roles')
             ->orderBy('name')
             ->get();
     }
@@ -86,9 +87,30 @@ class Membres extends Component
         }
 
         $user->save();
-        $user->syncRoles([$validated['membre_role']]);
+        $user->syncRoles($user->hasRole(Role::Administrateur)
+            ? [$validated['membre_role'], Role::Administrateur]
+            : [$validated['membre_role']]);
 
         $this->showModal = false;
+        unset($this->membres);
+    }
+
+    /**
+     * An administrator cannot revoke their own role, so the association
+     * always keeps at least one administrator able to manage accounts.
+     */
+    public function toggleAdmin(User $membre): void
+    {
+        $this->authorize('assignRole', $membre);
+
+        if ($membre->hasRole(Role::Administrateur)) {
+            abort_if($membre->is(auth()->user()), 403);
+
+            $membre->removeRole(Role::Administrateur);
+        } else {
+            $membre->assignRole(Role::Administrateur);
+        }
+
         unset($this->membres);
     }
 

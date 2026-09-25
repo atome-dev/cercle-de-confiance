@@ -43,25 +43,66 @@
                                 {{ $membre->name }}
                             </flux:table.cell>
                             <flux:table.cell>{{ $membre->membre_titre }}</flux:table.cell>
+                            @php($isAdmin = $membre->hasRole(\App\Enums\Role::Administrateur))
                             <flux:table.cell>
-                                <span class="inline-block rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase {{ $this->badgeClasses($membre->membre_role) }}">
-                                    {{ $membre->membre_role }}
-                                </span>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="inline-block rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase {{ $this->badgeClasses($membre->membre_role) }}">
+                                        {{ $membre->membre_role }}
+                                    </span>
+                                    @if ($isAdmin)
+                                        <flux:badge color="amber" size="sm" icon="shield-check" rounded>
+                                            {{ __('Admin') }}
+                                        </flux:badge>
+                                    @endif
+                                </div>
                             </flux:table.cell>
                             <flux:table.cell>{{ $membre->email }}</flux:table.cell>
                             <flux:table.cell>
-                                <div class="flex gap-2">
-                                    <flux:button size="sm" wire:click="edit({{ $membre->id }})">
-                                        {{ __('Modifier') }}
-                                    </flux:button>
-                                    <flux:button
-                                        size="sm"
-                                        variant="danger"
-                                        wire:click="delete({{ $membre->id }})"
-                                        wire:confirm="{{ __('Supprimer ce membre ?') }}"
-                                    >
-                                        {{ __('Supprimer') }}
-                                    </flux:button>
+                                <div class="flex items-center gap-1">
+                                    <flux:tooltip :content="__('Modifier')">
+                                        <flux:button size="sm" variant="ghost" icon="pencil-square" wire:click="edit({{ $membre->id }})" />
+                                    </flux:tooltip>
+
+                                    @if (! $isAdmin)
+                                        <flux:tooltip :content="__('Nommer administrateur')">
+                                            <flux:button
+                                                size="sm"
+                                                variant="ghost"
+                                                icon="shield-check"
+                                                wire:click="toggleAdmin({{ $membre->id }})"
+                                                wire:confirm="{{ __('Nommer :name administrateur ?', ['name' => $membre->name]) }}"
+                                            />
+                                        </flux:tooltip>
+                                    @elseif ($membre->is(auth()->user()))
+                                        <flux:tooltip :content="__('Vous ne pouvez pas retirer votre propre rôle administrateur')">
+                                            <div>
+                                                <flux:button size="sm" variant="ghost" icon="shield-check" icon:variant="solid" class="!text-amber-500" disabled />
+                                            </div>
+                                        </flux:tooltip>
+                                    @else
+                                        <flux:tooltip :content="__('Retirer le rôle administrateur')">
+                                            <flux:button
+                                                size="sm"
+                                                variant="ghost"
+                                                icon="shield-check"
+                                                icon:variant="solid"
+                                                class="!text-amber-500"
+                                                wire:click="toggleAdmin({{ $membre->id }})"
+                                                wire:confirm="{{ __('Retirer le rôle administrateur à :name ?', ['name' => $membre->name]) }}"
+                                            />
+                                        </flux:tooltip>
+                                    @endif
+
+                                    <flux:tooltip :content="__('Supprimer')">
+                                        <flux:button
+                                            size="sm"
+                                            variant="ghost"
+                                            icon="trash"
+                                            class="!text-red-500"
+                                            wire:click="delete({{ $membre->id }})"
+                                            wire:confirm="{{ __('Supprimer ce membre ?') }}"
+                                        />
+                                    </flux:tooltip>
                                 </div>
                             </flux:table.cell>
                         </flux:table.row>
