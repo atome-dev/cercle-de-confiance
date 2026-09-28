@@ -138,3 +138,14 @@ test('the emails never contain the exchanged message', function () {
         ->not->toContain('Ceci est un message de test suffisamment long.');
     expect($thread->routeNotificationForMail())->toBe('jean.dupont@example.com');
 });
+
+test('a member who turned off email notifications is not emailed', function () {
+    $optedOutParent = User::factory()->parent()->create(['receives_email_notifications' => false]);
+    $parent = User::factory()->parent()->create();
+    Notification::fake();
+
+    createGroupThreadForNotificationTest();
+
+    Notification::assertNotSentTo($optedOutParent, NewThreadMessageForMember::class);
+    Notification::assertSentTo($parent, NewThreadMessageForMember::class);
+});

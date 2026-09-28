@@ -20,6 +20,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property int $id
  * @property string $name
  * @property string $email
+ * @property bool $receives_email_notifications
  * @property Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $two_factor_secret
@@ -38,6 +39,10 @@ class User extends Authenticatable
 
     protected $appends = ['photo_url'];
 
+    protected $attributes = [
+        'receives_email_notifications' => true,
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -48,6 +53,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'receives_email_notifications' => 'boolean',
         ];
     }
 

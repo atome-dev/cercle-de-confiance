@@ -138,6 +138,14 @@
                                 </div>
                                 <flux:menu.separator />
                                 <flux:menu.item
+                                    :href="route('profile.edit')"
+                                    icon="user-circle"
+                                    wire:navigate
+                                    data-test="nav-profile"
+                                >
+                                    Profil
+                                </flux:menu.item>
+                                <flux:menu.item
                                     :href="route('security.edit')"
                                     icon="key"
                                     wire:navigate
@@ -301,6 +309,13 @@
                             />
                             <span class="flex-1 truncate font-medium text-text">{{ auth()->user()->name }}</span>
                         </div>
+                        <a
+                            href="{{ route('profile.edit') }}"
+                            class="rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('profile.edit') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"
+                            wire:navigate
+                        >
+                            Profil
+                        </a>
                         <a
                             href="{{ route('security.edit') }}"
                             class="rounded-md px-4 py-3 font-medium transition {{ request()->routeIs('security.edit') ? 'bg-surface-muted text-primary-500' : 'text-text hover:bg-surface-muted hover:text-primary-500' }}"

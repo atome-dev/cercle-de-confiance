@@ -24,7 +24,7 @@ test('members only see their tools in the main menu', function () {
         ->assertOk()
         ->assertSee('data-test="nav-dossiers"', false)
         ->assertSee('data-test="nav-meetings"', false)
-        ->assertSeeInOrder(['data-test="nav-password"', 'data-test="nav-attestation-benevolat"', 'data-test="logout-button"'], false)
+        ->assertSeeInOrder(['data-test="nav-profile"', 'data-test="nav-password"', 'data-test="nav-attestation-benevolat"', 'data-test="logout-button"'], false)
         ->assertSee('data-test="user-menu-attestation-alert"', false)
         ->assertDontSee('data-test="nav-home"', false)
         ->assertDontSee('data-test="nav-contact"', false)

@@ -301,6 +301,12 @@ dossier.
   l'expéditeur qui a laissé une adresse reçoit en plus une
   confirmation de réception (`ThreadReceivedForSender`, envoyée par
   `CreateThreadWithMessage`).
+    - Un membre peut refuser ces courriels depuis son profil
+      (« Recevoir les notifications », `users.receives_email_notifications`,
+      activé par défaut). Le choix est vérifié **au moment de l'envoi**
+      (`NewThreadMessageForMember::shouldSend()`), donc aussi pour les
+      courriels déjà en file. L'indicateur « non lu » de l'application
+      reste inchangé.
     - Les courriels ne contiennent **jamais** le contenu des messages
       ni le code de suivi — seulement un lien (dossier pour les
       membres, `/mon-dossier` pour l'expéditeur).

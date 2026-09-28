@@ -29,6 +29,16 @@ class NewThreadMessageForMember extends Notification implements ShouldQueueAfter
         return ['mail'];
     }
 
+    /**
+     * Évalué au moment de l'envoi (dans le worker) : un membre qui désactive
+     * les notifications dans son profil ne reçoit plus les courriels déjà en
+     * file d'attente.
+     */
+    public function shouldSend(object $notifiable, string $channel): bool
+    {
+        return $notifiable->receives_email_notifications;
+    }
+
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
