@@ -54,7 +54,7 @@ test('a granted user can view decrypted messages and reply', function () {
         ->call('reply')
         ->assertSee('Merci pour votre message, nous revenons vers vous.');
 
-    $reply = $thread->messages()->latest('id')->first();
+    $reply = $thread->messages()->reorder()->latest('id')->first();
     expect($reply->author_type)->toBe('member')
         ->and($reply->author_user_id)->toBe($parent->id);
 });
@@ -152,7 +152,7 @@ test('a granted member can reply internally, and the reply is tagged accordingly
         ->assertSee('Interne')
         ->assertSet('replyVisibility', 'sender');
 
-    $reply = $thread->messages()->latest('id')->first();
+    $reply = $thread->messages()->reorder()->latest('id')->first();
     expect($reply->author_type)->toBe('member')
         ->and($reply->is_internal)->toBeTrue();
 });
@@ -217,7 +217,7 @@ test('an anonymous reply is never stored as internal even if the property is tam
         ->set('replyVisibility', 'internal')
         ->call('reply');
 
-    $reply = $thread->messages()->latest('id')->first();
+    $reply = $thread->messages()->reorder()->latest('id')->first();
     expect($reply->author_type)->toBe('sender')
         ->and($reply->is_internal)->toBeFalse();
 });

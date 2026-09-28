@@ -11,10 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\RoutesNotifications;
 
 class Thread extends Model
 {
-    use HasFactory;
+    use HasFactory, RoutesNotifications;
 
     protected $fillable = [
         'code', 'recipient_type', 'recipient_user_id', 'status', 'archived_at',
@@ -104,6 +105,16 @@ class Thread extends Model
     public function decryptedSenderEmail(): string
     {
         return app(ThreadEncryptionService::class)->openTextFromAppEnvelope($this->sender_email);
+    }
+
+    /**
+     * Destinataire des courriels adressés à l'expéditeur : l'adresse n'est
+     * déchiffrée qu'au moment de l'envoi, pour ne jamais figurer en clair
+     * dans la file d'attente.
+     */
+    public function routeNotificationForMail(): ?string
+    {
+        return $this->decryptedSenderEmail() ?: null;
     }
 
     /**

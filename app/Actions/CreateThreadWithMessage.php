@@ -7,6 +7,7 @@ use App\Models\Thread;
 use App\Models\ThreadKeyGrant;
 use App\Models\ThreadMessage;
 use App\Models\User;
+use App\Notifications\ThreadReceivedForSender;
 use App\Services\ThreadCodeGenerator;
 use App\Services\ThreadEncryptionService;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,7 @@ class CreateThreadWithMessage
     public function __construct(
         protected ThreadCodeGenerator $codes,
         protected ThreadEncryptionService $encryption,
+        protected NotifyThreadParticipants $notifyParticipants,
     ) {}
 
     public function execute(
@@ -70,12 +72,18 @@ class CreateThreadWithMessage
                 ]);
             }
 
-            ThreadMessage::createEncrypted(
+            $firstMessage = ThreadMessage::createEncrypted(
                 thread: $thread,
                 plaintext: $message,
                 threadKey: $threadKey,
                 authorType: 'sender'
             );
+
+            $this->notifyParticipants->execute($firstMessage);
+
+            if ($senderEmail !== '') {
+                $thread->notify(new ThreadReceivedForSender);
+            }
 
             return [
                 'thread' => $thread,

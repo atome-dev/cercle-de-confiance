@@ -8,6 +8,10 @@ use App\Models\User;
 
 class ReplyToThread
 {
+    public function __construct(
+        protected NotifyThreadParticipants $notifyParticipants,
+    ) {}
+
     public function execute(
         Thread $thread,
         string $threadKey,
@@ -30,6 +34,8 @@ class ReplyToThread
         }
 
         $thread->markReadFor($authorUser);
+
+        $this->notifyParticipants->execute($created);
 
         return $created;
     }
