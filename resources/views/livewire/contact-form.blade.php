@@ -91,11 +91,13 @@
                         <flux:input wire:model="senderEmail" label="Votre email" type="email" icon="envelope" />
                     </div>
 
-                    <flux:checkbox
-                        wire:model="sendAnonymously"
-                        label="Je préfère pour le moment rester anonyme"
-                        class="items-center"
-                    />
+                    @if ($this->isAnonymousContactEnabled())
+                        <flux:checkbox
+                            wire:model="sendAnonymously"
+                            label="Je préfère pour le moment rester anonyme"
+                            class="items-center"
+                        />
+                    @endif
 
                 </div>
 

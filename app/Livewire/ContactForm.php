@@ -16,10 +16,8 @@ class ContactForm extends Component
 {
     public $members;
 
-    #[Validate('string|max:255')]
     public string $senderName = '';
 
-    #[Validate('email|max:255')]
     public string $senderEmail = '';
 
     #[Validate('required|string|min:10|max:5000')]
@@ -33,7 +31,6 @@ class ContactForm extends Component
     public bool $sendAnonymously = false;
 
     public ?string $generatedFullCode = null;
-
 
     public function mount(): void
     {
@@ -49,13 +46,25 @@ class ContactForm extends Component
         }
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function rules(): array
     {
+        $identityRule = $this->isAnonymousContactEnabled() ? 'nullable' : 'required';
+
         return [
+            'senderName' => "{$identityRule}|string|max:255",
+            'senderEmail' => "{$identityRule}|email|max:255",
             'recipientUserId' => $this->recipientType === 'member'
                 ? 'required|exists:users,id'
                 : 'nullable',
         ];
+    }
+
+    public function isAnonymousContactEnabled(): bool
+    {
+        return config('access.anonymous_contact_enabled');
     }
 
     public function submit(CreateThreadWithMessage $action): void

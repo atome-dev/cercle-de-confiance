@@ -70,6 +70,15 @@ sont **optionnels**, jamais requis (`ContactForm`, pas de règle
 n'a qu'un rôle de réassurance dans l'UI, elle ne change **aucun**
 comportement de stockage (`sendAnonymously` n'est lu nulle part).
 
+**Interrupteur `ANONYMOUS_CONTACT_ENABLED` (depuis 2026-09-28)** —
+`config('access.anonymous_contact_enabled')`, `true` par défaut. À
+`false` (choix actuel de l'établissement), le nom et l'email
+deviennent **obligatoires** (`ContactForm::rules()`) et la case
+« rester anonyme » est masquée. Rien d'autre ne change : code de
+suivi, chiffrement et accès `/mon-dossier` restent identiques, de
+sorte que les messages anonymes puissent être réactivés sans
+migration.
+
 - **`sender_name`** et **`sender_email`** sont chiffrés dans
   l'**enveloppe app** (`ThreadEncryptionService::sealTextForApp()` /
   `Crypt`), donc **lisibles par l'application et les membres grantés

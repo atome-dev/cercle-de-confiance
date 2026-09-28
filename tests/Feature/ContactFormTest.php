@@ -111,3 +111,27 @@ test('switching back to "Cercle de Confiance" clears the previously selected mem
         ->set('recipientType', 'group')
         ->assertSet('recipientUserId', null);
 });
+
+test('when anonymous contact is disabled, the name and email are required and the anonymity checkbox is hidden', function () {
+    config(['access.anonymous_contact_enabled' => false]);
+
+    Livewire::test(ContactForm::class)
+        ->assertDontSee('Je préfère pour le moment rester anonyme')
+        ->set('message', 'Ceci est un message de test suffisamment long.')
+        ->call('submit')
+        ->assertHasErrors(['senderName' => 'required', 'senderEmail' => 'required']);
+
+    expect(Thread::count())->toBe(0);
+});
+
+test('when anonymous contact is enabled, a message can be sent without a name or email', function () {
+    config(['access.anonymous_contact_enabled' => true]);
+
+    Livewire::test(ContactForm::class)
+        ->assertSee('Je préfère pour le moment rester anonyme')
+        ->set('message', 'Ceci est un message de test suffisamment long.')
+        ->call('submit')
+        ->assertHasNoErrors();
+
+    expect(Thread::count())->toBe(1);
+});
