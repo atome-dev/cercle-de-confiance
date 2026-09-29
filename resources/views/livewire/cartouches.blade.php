@@ -24,6 +24,7 @@
 
             <flux:table>
                 <flux:table.columns>
+                    <flux:table.column>{{ __('Position') }}</flux:table.column>
                     <flux:table.column>{{ __('Icône') }}</flux:table.column>
                     <flux:table.column>{{ __('Titre') }}</flux:table.column>
                     <flux:table.column>{{ __('Description') }}</flux:table.column>
@@ -33,7 +34,10 @@
                 <flux:table.rows>
                     @foreach ($this->cartouches as $cartouche)
                         <flux:table.row wire:key="cartouche-{{ $cartouche->id }}">
-                            <flux:table.cell class="text-2xl">{{ $cartouche->icone }}</flux:table.cell>
+                            <flux:table.cell>{{ $cartouche->position }}</flux:table.cell>
+                            <flux:table.cell>
+                                <flux:icon :name="$cartouche->icone->value" class="size-6 text-primary-500" />
+                            </flux:table.cell>
                             <flux:table.cell>{{ $cartouche->titre }}</flux:table.cell>
                             <flux:table.cell class="description-cell w-auto">
                                 {{ $cartouche->description }}
@@ -69,9 +73,20 @@
                 </flux:heading>
             </div>
 
-            <flux:input :label="__('Icône')" wire:model="icone" :description="__('Un émoji, ex: 🤝')" />
+            <flux:select :label="__('Icône')" wire:model="icone" :placeholder="__('Choisir une icône...')">
+                @foreach (\App\Enums\CartoucheIcone::cases() as $iconeOption)
+                    <flux:select.option value="{{ $iconeOption->value }}">{{ $iconeOption->label() }}</flux:select.option>
+                @endforeach
+            </flux:select>
             <flux:input :label="__('Titre')" wire:model="titre" />
             <flux:textarea :label="__('Description')" wire:model="description" rows="7" />
+            <flux:input
+                type="number"
+                min="1"
+                :label="__('Position')"
+                wire:model="position"
+                :description="__('Ordre d\'affichage sur l\'accueil : 1 apparaît en premier.')"
+            />
 
             <div class="flex">
                 <flux:spacer />

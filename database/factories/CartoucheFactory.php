@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\CartoucheIcone;
 use App\Models\Cartouche;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,9 +19,10 @@ class CartoucheFactory extends Factory
     public function definition(): array
     {
         return [
-            'icone' => $this->faker->randomElement(['🤝', '⚖️', '💬', '🌱', '📌']),
+            'icone' => $this->faker->randomElement(CartoucheIcone::cases()),
             'titre' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
+            'position' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

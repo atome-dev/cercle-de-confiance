@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\CartoucheIcone;
 use App\Models\Cartouche;
 use Illuminate\Database\Seeder;
 
@@ -13,19 +14,22 @@ class CartoucheSeeder extends Seeder
     public function run(): void
     {
         Cartouche::create([
-            'icone' => '🤝',
+            'icone' => CartoucheIcone::Ecoute,
+            'position' => 1,
             'titre' => 'Écoute confidentielle',
             'description' => 'Nous vous offrons une écoute professionnelle et bienveillante pour vous aider à traverser les moments difficiles. Notre équipe, composée de personnes engagées et expérimentées, est entièrement dédiée à vous apporter le meilleur soutien possible.',
         ]);
 
         Cartouche::create([
-            'icone' => '⚖️',
+            'icone' => CartoucheIcone::Neutralite,
+            'position' => 2,
             'titre' => 'Neutralité & impartialité',
             'description' => 'En toute indépendance, nous vous apportons un regard objectif sur votre situation, sans jugement ni a priori.',
         ]);
 
         Cartouche::create([
-            'icone' => '💬',
+            'icone' => CartoucheIcone::Bienveillance,
+            'position' => 3,
             'titre' => 'Médiation bienveillante',
             'description' => 'Nous facilitons le dialogue entre les différentes parties prenantes pour trouver des solutions consensuelles et durables.',
         ]);

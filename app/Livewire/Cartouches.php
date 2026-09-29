@@ -2,8 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Enums\CartoucheIcone;
 use App\Models\Cartouche;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -23,36 +25,41 @@ class Cartouches extends Component
 
     public string $description = '';
 
+    public ?int $position = null;
+
     /**
      * @return Collection<int, Cartouche>
      */
     #[Computed]
     public function cartouches(): Collection
     {
-        return Cartouche::orderBy('titre')->get();
+        return Cartouche::orderBy('position')->orderBy('id')->get();
     }
 
     public function create(): void
     {
         $this->reset(['editing', 'icone', 'titre', 'description']);
+        $this->position = (int) Cartouche::max('position') + 1;
         $this->showModal = true;
     }
 
     public function edit(Cartouche $cartouche): void
     {
         $this->editing = $cartouche;
-        $this->icone = $cartouche->icone;
+        $this->icone = $cartouche->icone->value;
         $this->titre = $cartouche->titre;
         $this->description = $cartouche->description;
+        $this->position = $cartouche->position;
         $this->showModal = true;
     }
 
     public function save(): void
     {
         $validated = $this->validate([
-            'icone' => ['required', 'string', 'max:255'],
+            'icone' => ['required', Rule::enum(CartoucheIcone::class)],
             'titre' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
+            'position' => ['required', 'integer', 'min:1'],
         ]);
 
         if ($this->editing) {

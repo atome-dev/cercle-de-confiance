@@ -79,7 +79,9 @@
             <div class="grid grid-cols-1 gap-8 sm:grid-cols-3">
                 @foreach ($features as $feature)
                     <flux:card class="!rounded-lg !border-border !bg-surface p-12 text-center shadow-[var(--shadow-color-sm)] hover:!shadow-[var(--shadow-color-lg)]">
-                        <span class="mb-6 block text-5xl">{{ $feature['icone'] }}</span>
+                        <div class="mx-auto mb-6 flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary-500/10 to-primary-500/10">
+                            <flux:icon :name="$feature['icone']" class="size-8 text-primary-500" />
+                        </div>
                         <h3 class="mb-4 font-display text-2xl text-primary-500">{{ $feature['titre'] }}</h3>
                         <p class="text-text-muted">{{ $feature['description'] }}</p>
                     </flux:card>

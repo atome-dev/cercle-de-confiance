@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CartoucheIcone;
 use App\Http\Middleware\EnsureAccessCodeIsValid;
 use App\Models\Cartouche;
 use App\Models\User;
@@ -13,7 +14,7 @@ test('the homepage renders the hero, the members and the cartouches', function (
     ])->save();
 
     $cartouche = Cartouche::factory()->create([
-        'icone' => '🤝',
+        'icone' => CartoucheIcone::Ecoute,
         'titre' => 'Écoute confidentielle',
     ]);
 
@@ -28,6 +29,15 @@ test('the homepage renders the hero, the members and the cartouches', function (
 
     $response->assertSeeText('Que faisons-nous ?');
     $response->assertSeeText($cartouche->titre);
+});
+
+test('the homepage shows the cartouches in their position order', function () {
+    Cartouche::factory()->create(['titre' => 'Affichée en second', 'position' => 2]);
+    Cartouche::factory()->create(['titre' => 'Affichée en premier', 'position' => 1]);
+
+    $this->withCookie('access_granted', EnsureAccessCodeIsValid::expectedCookieValue())
+        ->get(route('home'))
+        ->assertSeeTextInOrder(['Affichée en premier', 'Affichée en second']);
 });
 
 test('an authenticated member sees their own avatar and a logout action in the header', function () {

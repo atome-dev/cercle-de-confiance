@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CartoucheIcone;
 use App\Livewire\Cartouches;
 use App\Models\Cartouche;
 use App\Models\User;
@@ -12,7 +13,7 @@ test('the cartouches page redirects guests without the access cookie', function 
 
 test('the cartouches page is accessible and lists cartouches with a valid access cookie', function () {
     $cartouche = Cartouche::factory()->create([
-        'icone' => '🤝',
+        'icone' => CartoucheIcone::Ecoute,
         'titre' => 'Écoute confidentielle',
     ]);
 
@@ -32,13 +33,45 @@ test('a cartouche can be created', function () {
 
     Livewire::test(Cartouches::class)
         ->call('create')
-        ->set('icone', '🌱')
+        ->set('icone', CartoucheIcone::Bienveillance->value)
         ->set('titre', 'Bienveillance')
         ->set('description', 'Une description de test.')
         ->call('save')
         ->assertSet('showModal', false);
 
-    expect(Cartouche::where('titre', 'Bienveillance')->exists())->toBeTrue();
+    expect(Cartouche::where('titre', 'Bienveillance')->first()->icone)->toBe(CartoucheIcone::Bienveillance);
+});
+
+test('a new cartouche is proposed after the last one', function () {
+    $this->withCookies(withAccessCookie());
+
+    Cartouche::factory()->create(['position' => 4]);
+
+    Livewire::test(Cartouches::class)
+        ->call('create')
+        ->assertSet('position', 5);
+});
+
+test('a cartouche position must be a positive integer', function () {
+    $this->withCookies(withAccessCookie());
+
+    Livewire::test(Cartouches::class)
+        ->call('create')
+        ->set('position', 0)
+        ->call('save')
+        ->assertHasErrors(['position' => 'min']);
+});
+
+test('a cartouche cannot use an icon outside the proposed list', function () {
+    $this->withCookies(withAccessCookie());
+
+    Livewire::test(Cartouches::class)
+        ->call('create')
+        ->set('icone', '🌱')
+        ->set('titre', 'Bienveillance')
+        ->set('description', 'Une description de test.')
+        ->call('save')
+        ->assertHasErrors(['icone']);
 });
 
 test('a cartouche cannot be created without required fields', function () {
@@ -59,10 +92,13 @@ test('a cartouche can be updated', function () {
     Livewire::test(Cartouches::class)
         ->call('edit', $cartouche->id)
         ->set('titre', 'Nouveau titre')
+        ->set('position', 7)
         ->call('save')
         ->assertSet('showModal', false);
 
-    expect($cartouche->fresh()->titre)->toBe('Nouveau titre');
+    expect($cartouche->fresh())
+        ->titre->toBe('Nouveau titre')
+        ->position->toBe(7);
 });
 
 test('a cartouche can be deleted', function () {

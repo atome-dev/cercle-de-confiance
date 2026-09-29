@@ -33,7 +33,8 @@ class Home extends Component
 
         ray($this->members);
 
-        $this->features = Cartouche::orderBy('id')
+        $this->features = Cartouche::orderBy('position')
+            ->orderBy('id')
             ->get()
             ->toArray();
     }
