@@ -18,7 +18,7 @@
         <div class="mx-auto max-w-[1200px] px-6 lg:px-12">
             <div class="mb-8 flex justify-end">
                 <flux:button variant="primary" wire:click="create">
-                    {{ __('Ajouter une cartouche') }}
+                    {{ __('Ajouter un cartouche') }}
                 </flux:button>
             </div>
 
@@ -51,7 +51,7 @@
                                         size="sm"
                                         variant="danger"
                                         wire:click="delete({{ $cartouche->id }})"
-                                        wire:confirm="{{ __('Supprimer cette cartouche ?') }}"
+                                        wire:confirm="{{ __('Supprimer ce cartouche ?') }}"
                                     >
                                         {{ __('Supprimer') }}
                                     </flux:button>
@@ -69,7 +69,7 @@
         <form wire:submit="save" class="space-y-6">
             <div>
                 <flux:heading size="lg">
-                    {{ $editing ? __('Modifier la cartouche') : __('Ajouter une cartouche') }}
+                    {{ $editing ? __('Modifier le cartouche') : __('Ajouter un cartouche') }}
                 </flux:heading>
             </div>
 
