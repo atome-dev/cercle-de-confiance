@@ -13,9 +13,10 @@ test('the charte page is accessible and renders its content with a valid access 
 
     $response->assertOk();
     $response->assertSeeText('Notre Charte');
-    $response->assertSeeText('Nos valeurs fondamentales');
-    $response->assertSeeText('Confidentialité');
-    $response->assertSeeText('Neutralité');
-    $response->assertSeeText('Nos engagements envers vous');
-    $response->assertSeeText('Composition du Cercle');
+    $response->assertSeeText('Raison d’être');
+    $response->assertSeeText('Résultats attendus du cercle');
+    $response->assertSeeText('Rôle et périmètre');
+    $response->assertSeeText('Missions principales');
+    $response->assertSeeText('Missions complémentaires');
+    $response->assertSeeText('Les limites du Cercle de Confiance');
 });

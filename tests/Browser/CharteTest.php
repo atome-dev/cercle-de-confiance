@@ -11,7 +11,7 @@ it('lets a visitor navigate from the homepage to the charte page and back', func
         ->click('@nav-charte')
         ->assertPathIs('/charte')
         ->assertSee('Notre Charte')
-        ->assertSee('Nos valeurs fondamentales');
+        ->assertSee('Raison d’être');
 
     $page->script('window.scrollTo(0, document.body.scrollHeight)');
 

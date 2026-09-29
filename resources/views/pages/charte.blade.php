@@ -1,6 +1,6 @@
 <x-layouts::public :title="__('Notre Charte')">
     {{-- Page title --}}
-    <section class="relative overflow-hidden bg-gradient-to-b from-surface-muted to-surface py-20 text-center">
+    <section class="relative overflow-hidden bg-gradient-to-b from-surface-muted to-surface text-center">
         {{-- Decorative background elements --}}
         <div class="pointer-events-none absolute inset-0 overflow-hidden">
             <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary-500/5 blur-3xl"></div>
@@ -14,165 +14,180 @@
                 </div>
                 <h1 class="mb-6 font-display text-4xl text-text sm:text-5xl">{{ __('Notre Charte') }}</h1>
                 <p class="mx-auto max-w-xl text-xl text-text-muted">
-                    {{ __('Découvrez les valeurs et les engagements qui guident notre action au quotidien.') }}
+                    {{ __('Découvrez la raison d’être, le rôle et les limites du Cercle de Confiance.') }}
                 </p>
             </div>
         </div>
     </section>
 
     {{-- Charter content --}}
-    <section class="py-24">
+    <section class="py-10">
         <div class="mx-auto max-w-[1200px] px-6 lg:px-12">
             <div class="mx-auto max-w-[800px]">
 
-                {{-- Nos valeurs fondamentales --}}
+                {{-- Raison d'être --}}
                 <div class="mb-16 rounded-2xl border border-border bg-surface p-8 shadow-sm transition-shadow hover:shadow-md">
                     <div class="mb-6 flex items-center gap-4">
                         <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary-500/10 to-primary-500/10">
                             <flux:icon name="heart" class="size-6 text-primary-500" />
                         </div>
                         <h3 class="font-display text-2xl text-text">
-                            {{ __('Nos valeurs fondamentales') }}
+                            {{ __('Raison d’être') }}
                         </h3>
                     </div>
-                    <p class="mb-4 leading-[1.8] text-text-muted">
-                        Le Cercle de Confiance repose sur trois piliers essentiels qui constituent le socle de notre action : l'écoute attentive, la bienveillance sincère et le respect mutuel. Ces valeurs ne sont pas de simples mots affichés sur un mur ; elles guident chacune de nos interactions et chacune des décisions que nous prenons au sein de la communauté scolaire.
-                    </p>
                     <p class="leading-[1.8] text-text-muted">
-                        Nous croyons fermement que chaque membre de la communauté scolaire mérite d'être entendu et respecté, quelle que soit sa situation. Notre rôle est de créer un espace sûr où chacun peut exprimer ses préoccupations en toute confiance.
+                        Le Cercle de Confiance est une instance de médiation et de recours, qui veille à ce que chacune et chacun puisse trouver, au sein de l’école, un espace d’écoute et de dialogue lorsqu’une difficulté ne peut être résolue directement. Il contribue à préserver ou restaurer la confiance entre les personnes et à rechercher, ensemble, une voie permettant de faire évoluer la situation.
                     </p>
                 </div>
 
-                {{-- Confidentialité --}}
+                {{-- Résultats attendus du cercle --}}
                 <div class="mb-16 rounded-2xl border border-border bg-surface p-8 shadow-sm transition-shadow hover:shadow-md">
                     <div class="mb-6 flex items-center gap-4">
                         <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary-500/10 to-primary-500/10">
-                            <flux:icon name="lock-closed" class="size-6 text-primary-500" />
+                            <flux:icon name="flag" class="size-6 text-primary-500" />
                         </div>
                         <h3 class="font-display text-2xl text-text">
-                            {{ __('Confidentialité') }}
+                            {{ __('Résultats attendus du cercle') }}
                         </h3>
                     </div>
                     <p class="mb-4 leading-[1.8] text-text-muted">
-                        La confidentialité est le fondement de notre crédibilité et de notre capacité à aider. Toutes les informations partagées avec le Cercle de Confiance sont traitées avec le plus grand respect et ne sont jamais communiquées à des tiers, sauf demande explicite de la personne concernée.
+                        Le Cercle de Confiance cherche à permettre à chaque personne qui le sollicite d’être entendue et de recevoir une réponse. Selon les situations, il vise à contribuer à la résolution ou à l’apaisement de la difficulté, au rétablissement du dialogue et de la confiance entre les personnes, ou à l’orientation vers l’instance la plus à même d’agir.
                     </p>
                     <p class="leading-[1.8] text-text-muted">
-                        Les échanges avec les membres du Cercle restent strictement confidentiels. Aucune information n'est divulguée sans votre consentement explicite, et ce, quelle que soit la nature de votre demande.
+                        Il contribue également, à partir de situations rencontrées, à faire évoluer les pratiques et le fonctionnement de l’école lorsque cela apparaît nécessaire.
                     </p>
                 </div>
 
-                {{-- Neutralité --}}
-                <div class="mb-16 rounded-2xl border border-border bg-surface p-8 shadow-sm transition-shadow hover:shadow-md">
-                    <div class="mb-6 flex items-center gap-4">
-                        <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary-500/10 to-primary-500/10">
-                            <flux:icon name="scale" class="size-6 text-primary-500" />
-                        </div>
-                        <h3 class="font-display text-2xl text-text">
-                            {{ __('Neutralité') }}
-                        </h3>
-                    </div>
-                    <p class="mb-4 leading-[1.8] text-text-muted">
-                        Le Cercle de Confiance agit en toute indépendance vis-à-vis de la direction de l'établissement, des enseignants et de tout autre organisme extérieur. Notre unique objectif est de vous aider à trouver la meilleure solution possible, sans considération d'intérêt personnel ou organisationnel.
-                    </p>
-                    <p class="leading-[1.8] text-text-muted">
-                        Nous nous engageons à analyser chaque situation avec objectivité, à considérer toutes les parties prenantes avec équité, et à proposer des solutions justes et équilibrées, sans prendre parti.
-                    </p>
-                </div>
-
-                {{-- Nos engagements envers vous --}}
-                <div class="mb-16 rounded-2xl border border-border bg-surface p-8 shadow-sm transition-shadow hover:shadow-md">
-                    <div class="mb-6 flex items-center gap-4">
-                        <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary-500/10 to-primary-500/10">
-                            <flux:icon name="hand-raised" class="size-6 text-primary-500" />
-                        </div>
-                        <h3 class="font-display text-2xl text-text">
-                            {{ __('Nos engagements envers vous') }}
-                        </h3>
-                    </div>
-                    <p class="mb-6 leading-[1.8] text-text-muted">
-                        En faisant appel au Cercle de Confiance, vous bénéficiez de notre engagement total à vous accompagner dans le respect de vos droits et de votre dignité :
-                    </p>
-
-                    <div class="grid gap-4 sm:grid-cols-2">
-                        <div class="flex gap-3 rounded-xl bg-surface-muted p-4">
-                            <flux:icon name="check-circle" class="size-5 shrink-0 text-secondary-500" />
-                            <div>
-                                <strong class="text-text">{{ __('Accessibilité') }}</strong>
-                                <p class="mt-1 text-sm leading-relaxed text-text-muted">
-                                    {{ __('Nous sommes à votre disposition pour répondre à vos demandes dans les meilleurs délais. Vous pouvez nous contacter anonymement si vous le souhaitez.') }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-3 rounded-xl bg-surface-muted p-4">
-                            <flux:icon name="check-circle" class="size-5 shrink-0 text-secondary-500" />
-                            <div>
-                                <strong class="text-text">{{ __('Écoute active') }}</strong>
-                                <p class="mt-1 text-sm leading-relaxed text-text-muted">
-                                    {{ __('Chaque demande reçoit toute notre attention. Nous prenons le temps nécessaire pour bien comprendre votre situation.') }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-3 rounded-xl bg-surface-muted p-4">
-                            <flux:icon name="check-circle" class="size-5 shrink-0 text-secondary-500" />
-                            <div>
-                                <strong class="text-text">{{ __('Suivi rigoureux') }}</strong>
-                                <p class="mt-1 text-sm leading-relaxed text-text-muted">
-                                    {{ __('Votre dossier est traité avec sérieux et nous vous tenons informé de l\'avancement de votre demande.') }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-3 rounded-xl bg-surface-muted p-4">
-                            <flux:icon name="check-circle" class="size-5 shrink-0 text-secondary-500" />
-                            <div>
-                                <strong class="text-text">{{ __('Accompagnement adapté') }}</strong>
-                                <p class="mt-1 text-sm leading-relaxed text-text-muted">
-                                    {{ __('Nous vous guidons vers les ressources et les personnes compétentes pour résoudre vos difficultés.') }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Composition du Cercle --}}
+                {{-- Rôle et périmètre --}}
                 <div class="mb-16 rounded-2xl border border-border bg-surface p-8 shadow-sm transition-shadow hover:shadow-md">
                     <div class="mb-6 flex items-center gap-4">
                         <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary-500/10 to-primary-500/10">
                             <flux:icon name="user-group" class="size-6 text-primary-500" />
                         </div>
                         <h3 class="font-display text-2xl text-text">
-                            {{ __('Composition du Cercle') }}
+                            {{ __('Rôle et périmètre') }}
                         </h3>
                     </div>
-                    <p class="mb-6 leading-[1.8] text-text-muted">
-                        Le Cercle de Confiance est composé de six membres représentatifs de la diversité de notre communauté scolaire, garantissant une pluralité de regards et une compréhension approfondie des différentes réalités vécues au sein de l'établissement.
+                    <p class="mb-4 leading-[1.8] text-text-muted">
+                        Le Cercle de Confiance s’adresse à tous les adultes de l’école et à toutes les instances (CA, CDP, GC, collèges de cycle, admin, cantine, salarié.e.s).
                     </p>
-
-                    <div class="grid grid-cols-2 gap-4 text-center">
-                        <div class="rounded-xl bg-surface-muted p-4">
-                            <p class="font-display text-3xl text-primary-500">3</p>
-                            <p class="mt-1 text-sm text-text-muted">{{ __('Parents d\'élèves') }}</p>
-                        </div>
-                        <div class="rounded-xl bg-surface-muted p-4">
-                            <p class="font-display text-3xl text-primary-500">3</p>
-                            <p class="mt-1 text-sm text-text-muted">{{ __('Professeurs') }}</p>
-                        </div>
-                    </div>
-
-                    <p class="mt-6 leading-[1.8] text-text-muted">
-                        Chaque membre s'engage à respecter la présente charte et à maintenir les plus hauts standards d'éthique et de professionnalisme dans l'exercice de ses fonctions au sein du Cercle.
+                    <p class="leading-[1.8] text-text-muted">
+                        Il peut être sollicité pour toute difficulté d’ordre relationnel, personnel, ou touchant à la communication entre des personnes ou avec l’école. Il n’a pas vocation à traiter des questions purement matérielles, administratives, financières ou pédagogiques, qui relèvent des instances compétentes : il peut en revanche être sollicité lorsqu’une difficulté relationnelle se noue autour de l’une de ces questions.
                     </p>
                 </div>
 
-                {{-- Quote --}}
-                <blockquote class="relative my-12 overflow-hidden rounded-2xl border-l-4 border-secondary-500 bg-gradient-to-br from-surface-muted to-surface p-8 shadow-sm">
-                    <flux:icon name="chat-bubble-left-right" class="absolute -top-4 -right-4 size-24 text-primary-500/5" />
-                    <p class="relative text-lg leading-relaxed text-text italic">
-                        « Le Cercle de Confiance est un espace de parole et de médiation où chacun peut trouver une écoute bienveillante et neutre, sans jugement. Notre unique objectif est de vous accompagner vers des solutions constructives et durables. »
+                {{-- Missions principales --}}
+                <div class="mb-16 rounded-2xl border border-border bg-surface p-8 shadow-sm transition-shadow hover:shadow-md">
+                    <div class="mb-6 flex items-center gap-4">
+                        <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary-500/10 to-primary-500/10">
+                            <flux:icon name="hand-raised" class="size-6 text-primary-500" />
+                        </div>
+                        <h3 class="font-display text-2xl text-text">
+                            {{ __('Missions principales') }}
+                        </h3>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="rounded-xl bg-surface-muted p-6">
+                            <strong class="text-text">{{ __('Accompagner une situation individuelle') }}</strong>
+                            <ul class="mt-4 space-y-3">
+                                @foreach ([
+                                    'Écouter une personne confrontée à une difficulté et accueillir sa parole sans jugement,',
+                                    'Aider à clarifier une situation et les différents points de vue,',
+                                    'Mettre en relation les personnes et faciliter la communication lorsqu’un dialogue direct est difficile,',
+                                    'Orienter vers l’instance appropriée lorsque la situation ne relève pas de ses compétences,',
+                                    'Accompagner une démarche de médiation lorsque celle-ci paraît adaptée,',
+                                    'Proposer des pistes ou solutions, sans se substituer à la décision des personnes ou des instances compétentes,',
+                                    'Accompagner la personne dans cette orientation, lorsque cela est nécessaire ou souhaité,',
+                                    'Assurer un suivi de la situation jusqu’à sa résolution, son apaisement ou son orientation effective.',
+                                ] as $mission)
+                                    <li class="flex gap-3">
+                                        <flux:icon name="check-circle" class="mt-1 size-5 shrink-0 text-secondary-500" />
+                                        <span class="leading-relaxed text-text-muted">{{ $mission }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        <div class="rounded-xl bg-surface-muted p-6">
+                            <strong class="text-text">{{ __('Agir au niveau collectif') }}</strong>
+                            <ul class="mt-4 space-y-3">
+                                @foreach ([
+                                    'Soutenir les parents référents dans leur rôle : disponibilité et conseil en cas de besoin, animer le groupe de parents référents, recueillir leurs retours et faire remonter les difficultés collectives des classes.',
+                                    'Faire remonter des difficultés récurrentes ou des dysfonctionnements aux instances compétentes,',
+                                    'Proposer des pistes d’amélioration du fonctionnement collectif, lorsqu’elles émergent des situations rencontrées,',
+                                    'Contribuer à prévenir l’apparition ou l’aggravation de certaines difficultés en favorisant le dialogue.',
+                                ] as $mission)
+                                    <li class="flex gap-3">
+                                        <flux:icon name="check-circle" class="mt-1 size-5 shrink-0 text-secondary-500" />
+                                        <span class="leading-relaxed text-text-muted">{{ $mission }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Missions complémentaires --}}
+                <div class="mb-16 rounded-2xl border border-border bg-surface p-8 shadow-sm transition-shadow hover:shadow-md">
+                    <div class="mb-6 flex items-center gap-4">
+                        <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary-500/10 to-primary-500/10">
+                            <flux:icon name="chat-bubble-left-right" class="size-6 text-primary-500" />
+                        </div>
+                        <h3 class="font-display text-2xl text-text">
+                            {{ __('Missions complémentaires') }}
+                        </h3>
+                    </div>
+                    <p class="mb-6 leading-[1.8] text-text-muted">
+                        Le Cercle peut également être sollicité pour faciliter ponctuellement un échange collectif ou une réunion de classe, ou pour contribuer à une réflexion sur un dysfonctionnement collectif. Ces interventions restent secondaires par rapport à sa mission principale et sont mises en œuvre lorsque le Cercle dispose des capacités suffisantes.
                     </p>
-                </blockquote>
+                    <ul class="space-y-3">
+                        @foreach ([
+                            'Faciliter une discussion ou un dialogue collectif lorsque cela peut contribuer à résoudre une difficulté ;',
+                            'Intervenir ponctuellement dans une réunion de classe lorsqu’une difficulté de communication ou un conflit le justifie.',
+                        ] as $mission)
+                            <li class="flex gap-3">
+                                <flux:icon name="check-circle" class="mt-1 size-5 shrink-0 text-secondary-500" />
+                                <span class="leading-relaxed text-text-muted">{{ $mission }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                {{-- Les limites du Cercle de confiance --}}
+                <div class="mb-16 rounded-2xl border border-border bg-surface p-8 shadow-sm transition-shadow hover:shadow-md">
+                    <div class="mb-6 flex items-center gap-4">
+                        <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary-500/10 to-primary-500/10">
+                            <flux:icon name="scale" class="size-6 text-primary-500" />
+                        </div>
+                        <h3 class="font-display text-2xl text-text">
+                            {{ __('Les limites du Cercle de Confiance') }}
+                        </h3>
+                    </div>
+                    <p class="mb-4 leading-[1.8] text-text-muted">
+                        Le Cercle ne se substitue pas :
+                    </p>
+                    <ul class="mb-6 space-y-3">
+                        @foreach ([
+                            'aux personnes concernées, qui restent autant que possible actrices de la résolution de leur difficulté,',
+                            'aux enseignant.e.s / jardinier.ère.s / interlocuteur.rice.s habituel.le.s, qui doivent être sollicité.e.s en premier lorsque cela est possible,',
+                            'aux instances de l’école (CA, CDP, GC et collèges de cycle) pour les questions relevant de leur responsabilité,',
+                            'à la cellule Care, notamment pour les situations relevant du harcèlement ou de problématiques spécifiques concernant les enfants,',
+                            'aux autorités compétentes, notamment la police ou les services d’urgence, lorsqu’une situation présente un danger ou relève d’une obligation légale.',
+                        ] as $limit)
+                            <li class="flex gap-3">
+                                <flux:icon name="minus-circle" class="mt-1 size-5 shrink-0 text-secondary-500" />
+                                <span class="leading-relaxed text-text-muted">{{ $limit }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <p class="mb-4 leading-[1.8] text-text-muted">
+                        Le Cercle de Confiance ne signale ni ne transmet une situation à un tiers (personne ou instance interne à l’école, autorité extérieure) qu’avec l’accord de la personne concernée, sauf lorsque la loi l’exige.
+                    </p>
+                    <p class="leading-[1.8] text-text-muted">
+                        Le Cercle de Confiance peut accompagner une personne dans les démarches nécessaires auprès de l’instance ou de l’autorité compétente, notamment lorsque la situation est difficile à porter seul. Il ne se substitue toutefois pas à cette instance ou à cette autorité.
+                    </p>
+                </div>
 
                 {{-- CTA --}}
                 <div class="mt-16 rounded-2xl border border-border bg-gradient-to-br from-surface-muted to-surface p-10 text-center">
