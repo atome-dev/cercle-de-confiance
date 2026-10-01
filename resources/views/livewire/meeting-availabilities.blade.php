@@ -30,7 +30,7 @@
                 wire:click="copyPreviousWeek"
                 wire:confirm="{{ __('Remplacer les disponibilités à venir de cette semaine par celles de la semaine précédente ?') }}"
             >
-                {{ __('Reprendre la semaine précédente') }}
+                {{ __('Cloner la semaine précédente') }}
             </flux:button>
         @endif
     </div>
