@@ -133,6 +133,6 @@ redirige vers la page de connexion.
 
 - `business-rules.md` — règles métier détaillées (rôles, chiffrement,
   statuts, i18n).
-- `modules.md` — inventaire des 11 pages/fonctionnalités.
+- `modules.md` — inventaire des 12 pages/fonctionnalités.
 - `.ai/rules/index.md` — point d'entrée du système de règles du
   projet (voir `cahier-des-charges-rules.md`).

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -23,6 +24,12 @@ class Meetings extends Component
      */
     #[Url]
     public string $month = '';
+
+    /**
+     * Active tab: `calendrier`, `disponibilites` (personal availability grid) or `creneaux` (slot finder).
+     */
+    #[Url(as: 'onglet', except: 'calendrier')]
+    public string $tab = 'calendrier';
 
     public bool $showModal = false;
 
@@ -121,19 +128,12 @@ class Meetings extends Component
     }
 
     /**
-     * Filters on role names rather than `User::role()`, which throws when one of the roles
-     * does not exist yet in the database.
-     *
      * @return Collection<int, User>
      */
     #[Computed]
     public function members(): Collection
     {
-        $memberRoles = array_map(fn (Role $role): string => $role->value, [Role::Parent, Role::Professeur]);
-
-        return User::whereHas('roles', fn ($query) => $query->whereIn('name', $memberRoles))
-            ->orderBy('name')
-            ->get();
+        return User::meetingMembers()->orderBy('name')->get();
     }
 
     public function show(Meeting $meeting): void
@@ -149,6 +149,21 @@ class Meetings extends Component
         $this->reset(['editing', 'viewing', 'showDetails', 'startsAt', 'title', 'notes', 'attendeeIds']);
         $this->heldOn = $date ?? now()->format('Y-m-d');
         $this->showModal = true;
+    }
+
+    /**
+     * Opens the creation form prefilled from a slot picked in the slot finder.
+     *
+     * @param  list<int>  $attendeeIds
+     */
+    #[On('plan-meeting')]
+    public function planMeeting(string $date, string $time, array $attendeeIds): void
+    {
+        $this->create($date);
+        $this->startsAt = $time;
+        $this->attendeeIds = array_values(array_intersect($attendeeIds, $this->members->pluck('id')->all()));
+        $this->month = substr($date, 0, 7);
+        $this->tab = 'calendrier';
     }
 
     public function edit(Meeting $meeting): void

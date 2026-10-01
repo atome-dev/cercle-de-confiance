@@ -1,6 +1,6 @@
 # Modules et pages — Cercle de confiance
 
-Ce fichier inventorie les **11 pages / fonctionnalités** de
+Ce fichier inventorie les **12 pages / fonctionnalités** de
 l'application. Pour chaque page on précise : rôle requis, route,
 but fonctionnel, et règles métier notables. Les règles transverses
 (chiffrement, rôles, i18n) restent dans `business-rules.md`.
@@ -233,6 +233,50 @@ but fonctionnel, et règles métier notables. Les règles transverses
     - Voir `business-rules.md` section *Internationalisation* pour la
       justification détaillée de l'approche et la liste exhaustive des
       attributs translatables.
+
+## 12. Réunions (agenda et disponibilités)
+
+- **Route :** `/reunions` (`App\Livewire\Meetings`), avec trois onglets
+  sélectionnés par le paramètre `?onglet=` : `calendrier` (défaut),
+  `disponibilites`, `creneaux`. Le paramètre `?semaine=` (lundi de la
+  semaine, `Y-m-d`) est partagé par les deux derniers onglets.
+- **Rôle requis :** `parent`, `professeur` ou `administrateur`.
+- **But :** planifier les réunions du Cercle et trouver le moment qui
+  réunit le plus de membres.
+- **Onglet « Calendrier » :** calendrier mensuel des réunions
+  (`Meeting`), prochaine réunion mise en avant, création / édition /
+  suppression par tout utilisateur ayant l'un des trois rôles.
+- **Onglet « Mes disponibilités »** (`App\Livewire\MeetingAvailabilities`) :
+  grille hebdomadaire personnelle que le membre « peint » (clic, ou
+  glisser à la souris) avec le mode choisi : présentiel, distanciel ou
+  indisponible.
+- **Onglet « Trouver un créneau »** (`App\Livewire\MeetingSlotFinder`) :
+  croise les disponibilités de la semaine selon trois filtres (durée,
+  nombre minimum de personnes, nombre minimum en présentiel) ; affiche
+  les meilleurs créneaux et une carte de chaleur, et le bouton
+  « Planifier » ouvre le formulaire de réunion prérempli (événement
+  `plan-meeting` écouté par `Meetings::planMeeting()`).
+- **Règles métier notables :**
+    - Seuls les `parent` et `professeur` peuvent être participants
+      d'une réunion (`User::meetingMembers()`) ; ce sont donc les seuls
+      à déclarer des disponibilités et à être comptés par la recherche
+      de créneau. Un `administrateur` sans l'un de ces rôles consulte
+      la recherche mais ne saisit rien.
+    - Créneaux de **30 minutes, de 8 h à 22 h**
+      (`MeetingAvailability::slotTimes()`). Une ligne
+      `meeting_availabilities` par membre et par créneau, avec un mode
+      `presentiel` ou `distanciel` (`App\Enums\AvailabilityMode`) ;
+      **l'absence de ligne signifie « indisponible »**.
+    - Les créneaux passés ne sont plus modifiables ni proposés ; les
+      créneaux hors grille ou mal formés envoyés au serveur sont ignorés
+      silencieusement.
+    - Un membre ne compte pour un créneau que s'il est disponible sur
+      **toute** la durée de la réunion ; il ne compte « en présentiel »
+      que s'il l'est sur **chaque** demi-heure, sinon il compte à
+      distance.
+    - Les meilleurs créneaux (5 au plus) sont classés par nombre de
+      personnes, puis nombre en présentiel, puis date, sans
+      chevauchement entre eux.
 
 ---
 

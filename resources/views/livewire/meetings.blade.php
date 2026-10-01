@@ -16,6 +16,27 @@
         </div>
     </section>
 
+    <div class="mx-auto mb-6 flex max-w-[1200px] justify-center px-2">
+        <flux:tabs wire:model.live="tab" variant="segmented" data-test="meeting-tabs">
+            <flux:tab name="calendrier" icon="calendar-days">{{ __('Calendrier') }}</flux:tab>
+            <flux:tab name="disponibilites" icon="clock">{{ __('Mes disponibilités') }}</flux:tab>
+            <flux:tab name="creneaux" icon="magnifying-glass">{{ __('Trouver un créneau') }}</flux:tab>
+        </flux:tabs>
+    </div>
+
+    @if ($tab === 'disponibilites')
+        <section class="py-2">
+            <div class="mx-auto max-w-[1200px] px-2">
+                <livewire:meeting-availabilities wire:key="tab-availabilities" />
+            </div>
+        </section>
+    @elseif ($tab === 'creneaux')
+        <section class="py-2">
+            <div class="mx-auto max-w-[1200px] px-2">
+                <livewire:meeting-slot-finder wire:key="tab-slot-finder" />
+            </div>
+        </section>
+    @else
     <section class="py-2">
         <div class="mx-auto max-w-[1200px] px-2">
             {{-- Next meeting, whatever month is displayed --}}
@@ -200,6 +221,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- Details modal --}}
     <flux:modal wire:model.self="showDetails" class="md:w-[28rem]">
