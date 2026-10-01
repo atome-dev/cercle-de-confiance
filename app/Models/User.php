@@ -95,6 +95,11 @@ class User extends Authenticatable
         $query->whereHas('roles', fn (Builder $query) => $query->whereIn('name', $memberRoles));
     }
 
+    public function logins(): HasMany
+    {
+        return $this->hasMany(UserLogin::class);
+    }
+
     public function meetingAvailabilities(): HasMany
     {
         return $this->hasMany(MeetingAvailability::class);

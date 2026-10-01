@@ -26,6 +26,9 @@
                     <flux:table.column>{{ __('Titre') }}</flux:table.column>
                     <flux:table.column>{{ __('Rôle') }}</flux:table.column>
                     <flux:table.column>{{ __('Courriel') }}</flux:table.column>
+                    <flux:table.column>{{ __('Connexions') }}</flux:table.column>
+                    <flux:table.column>{{ __('Première connexion') }}</flux:table.column>
+                    <flux:table.column>{{ __('Dernière connexion') }}</flux:table.column>
                     <flux:table.column>{{ __('Actions') }}</flux:table.column>
                 </flux:table.columns>
 
@@ -57,6 +60,16 @@
                                 </div>
                             </flux:table.cell>
                             <flux:table.cell>{{ $membre->email }}</flux:table.cell>
+                            <flux:table.cell data-test="logins-count">{{ $membre->logins_count }}</flux:table.cell>
+                            @foreach ([$membre->logins_min_logged_in_at, $membre->logins_max_logged_in_at] as $loggedInAt)
+                                <flux:table.cell class="whitespace-nowrap">
+                                    @if ($loggedInAt)
+                                        {{ \Illuminate\Support\Carbon::parse($loggedInAt)->format('d/m/Y H:i') }}
+                                    @else
+                                        <span class="text-text-muted">{{ __('Jamais') }}</span>
+                                    @endif
+                                </flux:table.cell>
+                            @endforeach
                             <flux:table.cell>
                                 <div class="flex items-center gap-1">
                                     <flux:tooltip :content="__('Modifier')">

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Console\Events\ScheduledTaskFailed;
 use Illuminate\Console\Events\ScheduledTaskFinished;
 use Illuminate\Console\Events\ScheduledTaskStarting;
@@ -36,6 +38,19 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
         $this->configureJobLogging();
+        $this->configureLoginTracking();
+    }
+
+    /**
+     * Record every successful login, including "remember me" ones, for the administrators' members page.
+     */
+    protected function configureLoginTracking(): void
+    {
+        Event::listen(function (Login $event): void {
+            if ($event->user instanceof User) {
+                $event->user->logins()->create(['logged_in_at' => now()]);
+            }
+        });
     }
 
     /**

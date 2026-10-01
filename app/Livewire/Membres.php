@@ -39,6 +39,9 @@ class Membres extends Component
     {
         return User::role([Role::Parent, Role::Professeur])
             ->with('roles')
+            ->withCount('logins')
+            ->withMin('logins', 'logged_in_at')
+            ->withMax('logins', 'logged_in_at')
             ->orderBy('name')
             ->get();
     }

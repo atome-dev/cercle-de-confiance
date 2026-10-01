@@ -211,6 +211,17 @@ but fonctionnel, et règles métier notables. Les règles transverses
       dossier).
     - La clé dérivée n'est jamais loguée ni exposée à l'UI — elle
       vit en mémoire uniquement le temps de l'opération.
+    - **Suivi des connexions** (page `/membres`, `App\Livewire\Membres`) :
+      chaque connexion réussie est enregistrée dans `user_logins`
+      (écouteur de l'événement `Login` dans `AppServiceProvider`), y
+      compris via « Se souvenir de moi » ; une connexion en attente du
+      code de double authentification n'est comptée qu'une fois le code
+      validé. La table des membres affiche le nombre de connexions, la
+      première et la dernière (« Jamais » à défaut).
+    - Seule la **date-heure** est conservée — ni adresse IP, ni
+      navigateur — et l'historique est supprimé avec le compte (clé
+      étrangère en cascade). Cette collecte est mentionnée sur `/rgpd` ;
+      tout ajout de donnée (IP, user-agent…) doit y être reporté.
     - Voir `business-rules.md` sections *Rôles* et *Chiffrement*.
 
 ## 11. Internationalisation (FR/EN)

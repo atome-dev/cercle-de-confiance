@@ -70,7 +70,8 @@
                         <strong class="text-text">Comptes des membres de l'équipe</strong> (parents,
                         professeurs, administrateurs habilités) : nom, adresse email, mot de passe
                         (jamais stocké en clair), photo facultative, rôle et titre au sein du Cercle,
-                        et — si activée — la configuration de la double authentification.
+                        date et heure de chaque connexion (sans adresse IP ni navigateur), et — si
+                        activée — la configuration de la double authentification.
                     </p>
                     <p class="mb-4 leading-[1.8] text-text-muted">
                         <strong class="text-text">Contenu des dossiers.</strong> Les messages échangés
