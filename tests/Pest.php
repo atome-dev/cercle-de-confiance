@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureAccessCodeIsValid;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -47,4 +48,14 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+/**
+ * Cookies granting access to the pages protected by the access code.
+ *
+ * @return array{access_granted: string}
+ */
+function withAccessCookie(): array
+{
+    return ['access_granted' => EnsureAccessCodeIsValid::expectedCookieValue()];
 }
