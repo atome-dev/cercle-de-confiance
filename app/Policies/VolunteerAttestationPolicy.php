@@ -44,7 +44,7 @@ class VolunteerAttestationPolicy
      */
     public function delete(User $user, VolunteerAttestation $volunteerAttestation): bool
     {
-        return false;
+        return $user->hasRole('administrateur');
     }
 
     /**

@@ -4,7 +4,10 @@ namespace App\Livewire;
 
 use App\Enums\Role;
 use App\Models\User;
+use App\Models\VolunteerAttestation;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -24,6 +27,19 @@ class VolunteerAttestationsList extends Component
             ->with('volunteerAttestation')
             ->orderBy('name')
             ->get();
+    }
+
+    /**
+     * Remove the attestation and its PDF so the member can submit a new one.
+     */
+    public function delete(VolunteerAttestation $attestation): void
+    {
+        Gate::authorize('delete', $attestation);
+
+        Storage::disk('local')->delete($attestation->disk_path);
+        $attestation->delete();
+
+        unset($this->members);
     }
 
     public function render()

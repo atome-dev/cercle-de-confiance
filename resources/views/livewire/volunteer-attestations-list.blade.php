@@ -40,13 +40,26 @@
                             </flux:table.cell>
                             <flux:table.cell>
                                 @if ($member->volunteerAttestation)
-                                    <flux:button
-                                        size="sm"
-                                        icon="arrow-down-tray"
-                                        href="{{ route('attestations-benevolat.download', $member->volunteerAttestation) }}"
-                                    >
-                                        {{ __('Télécharger') }}
-                                    </flux:button>
+                                    <div class="flex items-center gap-2">
+                                        <flux:button
+                                            size="sm"
+                                            icon="arrow-down-tray"
+                                            href="{{ route('attestations-benevolat.download', $member->volunteerAttestation) }}"
+                                        >
+                                            {{ __('Télécharger') }}
+                                        </flux:button>
+
+                                        <flux:tooltip :content="__('Supprimer')">
+                                            <flux:button
+                                                size="sm"
+                                                variant="ghost"
+                                                icon="trash"
+                                                class="!text-red-500"
+                                                wire:click="delete({{ $member->volunteerAttestation->id }})"
+                                                wire:confirm="{{ __('Supprimer l\'attestation de :name ? Le membre pourra en remplir une nouvelle.', ['name' => $member->name]) }}"
+                                            />
+                                        </flux:tooltip>
+                                    </div>
                                 @endif
                             </flux:table.cell>
                         </flux:table.row>

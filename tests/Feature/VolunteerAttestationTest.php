@@ -1,9 +1,11 @@
 <?php
 
+use App\Livewire\VolunteerAttestationsList;
 use App\Models\User;
 use App\Models\VolunteerAttestation;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Livewire;
 
 function fakePdfUpload(string $name = 'document.pdf'): UploadedFile
 {
@@ -136,4 +138,44 @@ test('an administrateur sees the list of members and can download a submitted at
         ->withCookies(withAccessCookie())
         ->get(route('attestations-benevolat.download', $attestation))
         ->assertOk();
+});
+
+test('an administrateur can delete an attestation so the member can submit a new one', function () {
+    Storage::fake('local');
+    $admin = User::factory()->admin()->create();
+    $parent = User::factory()->parent()->create();
+    $attestation = $parent->volunteerAttestation()->create([
+        'disk_path' => "attestations/{$parent->id}.pdf",
+        'submitted_at' => now(),
+    ]);
+    Storage::disk('local')->put($attestation->disk_path, "%PDF-1.4\n%%EOF");
+
+    $this->actingAs($admin);
+    Livewire::test(VolunteerAttestationsList::class)
+        ->call('delete', $attestation->id);
+
+    expect(VolunteerAttestation::whereKey($attestation->id)->exists())->toBeFalse();
+    Storage::disk('local')->assertMissing("attestations/{$parent->id}.pdf");
+
+    $this->actingAs($parent->fresh())
+        ->withCookies(withAccessCookie())
+        ->post(route('attestation-benevolat.store'), ['pdf' => fakePdfUpload()])
+        ->assertNoContent();
+});
+
+test('a non-administrateur cannot delete an attestation', function () {
+    Storage::fake('local');
+    User::factory()->admin()->create();
+    $parent = User::factory()->parent()->create();
+    $attestation = $parent->volunteerAttestation()->create([
+        'disk_path' => "attestations/{$parent->id}.pdf",
+        'submitted_at' => now(),
+    ]);
+
+    $this->actingAs($parent);
+    Livewire::test(VolunteerAttestationsList::class)
+        ->call('delete', $attestation->id)
+        ->assertForbidden();
+
+    expect(VolunteerAttestation::whereKey($attestation->id)->exists())->toBeTrue();
 });
